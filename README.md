@@ -121,6 +121,10 @@
 	- [Примеры undefined behavior](#примеры-undefined-behavior)
 	- [Более серьёзные, и менее очевидные случаи:](#более-серьёзные-и-менее-очевидные-случаи)
 - [Выведение типов лекция](#выведение-типов-лекция)
+	- [Обзор](#обзор)
+	- [Правила вывода для шаблонов](#правила-вывода-для-шаблонов)
+		- [**Правила вывода типов по значению**](#правила-вывода-типов-по-значению)
+		- [**Правила вывода типов для указателей**](#правила-вывода-типов-для-указателей)
 - [TODO](#todo)
 
 # Атрибуты
@@ -1678,9 +1682,100 @@ int foo(const unsigined char* s)
 }
 ```
 
-++ TODO скользкие места C++ 
-
 # Выведение типов лекция
+
+До С++11 вывод типов применялся только в шаблонах.
+
+Потом приехали новые конструкты языка.
+
+С++11: r-value/forwarding reference, auto, decltype, lambda capture, return type deduction for lambda.
+
+C++14: function return type deduction, lambda caption with initialization.
+
+## Обзор
+
+***
+
+Изначально было 2 типа правил, для вывода шаблонных типов:
++ для указателей и ссылок
++ для обычных типов
+
+В C++11 появились r-value ссылки, которые в шаблонах работают не совсем как r-value, а как forwarding reference и в зависимости от того чем инициализируется становится либо r-value либо l-value ссылкой.
+
+Появилось ключевое слово auto, которое наследует правила вывода всех шаблонных аргументов.
+
+Далее появилось ключевое слово decltype.
+
+Появились списки захвата lambda, которые наследуют правила вывода типов для ссылок и указателей.
+
+Появился вывод типов lambda, который как auto наследует правила вывода шаблонных аргументов.
+
+## Правила вывода для шаблонов
+
+***
+
+### **Правила вывода типов по значению**
+
+Отбрасываются ссылки, const, volatile:
+
+```cpp
+template <typename T>
+void foo(T param); //param типа T
+
+int i = 0; 				// int
+int &ri = i;			// int&
+const int &rci = i; 	// const int&
+volatile int &rvi = i;  // volatile int&
+const volatile int &rcvi = i; // const volatile int&
+
+foo(ri);   //T = int, param имеет тип int
+foo(rci);  //T = int, param имеет тип int
+foo(rvi);  //T = int, param имеет тип int
+foo(rcvi); //T = int, param имеет тип int
+```
+
+```cpp
+//Если заменить на const T:
+template <typename T>
+void foo(const T param); //param типа T
+
+//Тогда:
+foo(ri);   //T = int, param имеет тип const int
+foo(rci);  //T = int, param имеет тип const int
+foo(rvi);  //T = int, param имеет тип const int
+foo(rcvi); //T = int, param имеет тип const int
+
+//Тоже самое для void foo(volatile T param);
+//T = int, param имеет тип volatile int
+```
+
+### **Правила вывода типов для указателей**
+
+Сохраняется модификатор переменной, но отбрасывается модификатор для указателя (const\volatile):
+
+```cpp
+template <typename T>
+void foo(T param); //param типа T
+
+int i = 0; 				//int
+const int* pci = &i;	//const int*
+volatile int* pvi = &i; //volatile int*
+
+//const int * const
+const int* const cpci = &i;
+//volatile int * volatile
+volatile int* volatile vpvi = &i;
+
+//cv int * cv
+const volatile int* const volatile cvpcvi = &i;
+
+foo(pci);    //T = const int*, param имеет тип const int*
+foo(pvi);  	 //T = volatile int*, param имеет тип volatile int*
+foo(cpci);   //T = const int*, param имеет тип const int*
+foo(vpvi); 	 //T = volatile int*, param имеет тип volatile int*
+foo(cvpcvi); //T = cv int*, param имеет тип cv int*
+```
+
 
 ***
 ***
@@ -1715,3 +1810,5 @@ class A
 +++ шпоры filesystem +?
 
 ++ advanced constexpr?
+
+++ TODO скользкие места C++ в UB
