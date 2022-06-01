@@ -296,7 +296,7 @@ double degrees = 0.38__degrees
 ```
 
 
-## C++ 14
+## C++14
 
 ### Строковый литерал
 
@@ -380,7 +380,7 @@ init_list.end()
 init_list.r/c/begin/end() // Начиная с C++14
 
 init_list.empty() // Начиная с C++17
-init_list.data() // Начиная с C++ 17
+init_list.data() // Начиная с C++17
 ```
 
 ## C++14
@@ -506,7 +506,7 @@ extern template void foo<int>(int);
 extern template class SomeClass<int>;
 ```
 
-## C++ 14
+## C++14
 
 #### Шаблон переменной (Variable template)
 
@@ -781,15 +781,96 @@ vec_t_iter<int> it; //ok!
 
 Вызовы new\delete могут оптимизироваться.
 
-
-
-
 ## C++17
 
+### noexcept
 
+Cпецификатор того, что функция не выбрасывает исключения - теперь часть системы типов функции.
 
-## static_assert
-## range based for + другие мелочи
+```cpp
+typdef void (*nef)() noexcept;
+typedef void (*уа)();
+
+void foo() noexcept;
+void bar();
+
+ef pf1 = foo;  // +
+nef pf2 = foo;  // +
+ef = bar;  // +
+nef = bar; //Compile error
+```
+
+### Copy elision
+
+Создание объекта не при выходе из фукнкции, а в месте его последующего применения, там где эта функция вызывалась.
+
+### Structure bindings
+
+Возможность раскрутить группу значений в серию переменных. Можно раскрытить:
+
++ array
++ tuple
++ pair/structure
+
+```cpp
+const auto& [field1, field2, field2] = structure/tupple/..
+```
+
+Можно реализовать для произвольного класса:
+
+```cpp
+template <size_t N>
+decltype(auto) get(const Person&);
+
+template <>
+delctype(auto) get<0>(const Person& p)
+{
+	return p.GetName();
+}
+
+template <>
+decltype(auto) get<1>(const Person& p)
+{
+	return p.GetSurname();
+}
+
+// Далее нужно определить tuple_size в std::
+
+namespace std
+{
+	template <>
+	struct tuple_size<Person> : std::integral_constant<size_t, 2> 
+	{};
+
+	template <>
+	struct tuple_element<0, Person> 
+	{
+		using type = const std::string &;
+	};
+
+	template <>
+	struct tuple_element<1, Person> 
+	{
+		using type = const std::string &;
+	};
+}
+```
+
+### Последовательность операций вызова
+
+```cpp
+a.b
+a->b
+a->*b
+a(b1, b2, b3) 
+// b1, b2, b3 не последовательны
+// их порядок не определен
+b @= a
+a[b]
+a << b << c
+a >> b >> c
+```
+
 
 ## multithreading
 ## chrono
