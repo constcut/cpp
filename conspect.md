@@ -1251,6 +1251,10 @@ for (const auto x: std::exchange(vec, {})
 
 Другая область использоваия это реализация своего move конструктора, или move оператора присваивания.
 
+### rbegin, rend, cbegin, cend, rcbegin, rcend
+
+Константные и реверсивные интераторы для контейнеров.
+
 ## C++17
 
 ***
@@ -1266,6 +1270,46 @@ std::string_view // std::wstring_view
 Может содержать ошибку парсинга.
 
 
+### std::optional
+
+Хранит либо значение, либо nullopt
+
+```cpp
+#incluede <optional>
+
+std::optional<int> opt = 3;
+
+opt.has_value(); // == if (optional)
+opt.value(); // == *optional
+
+//Возвращает значение, если оно есть, или переданный объект:
+opt.value_or({}); 
+
+//Операции сравнения в условиях с нижлежащим классом 
+if (optional > 2) {}
+```
+
+### std::variant
+
+Метод хранения множества разнотипных значений вместе:
+
+```cpp
+#include <variant>
+
+std::get<0>();
+std::get<std::string>();
+
+//Возвращает const type* ptr, или nullptr если не удалось преобразовать к типу
+std::get_if<type>(variant);
+
+//возможность установки базового состояния variant
+//на случай если другие объекты не имеют конструктора по умолчанию
+std::monostate; 
+
+//Можно всё обработать единственной лямбдой с auto аргументом
+std::visit( [](auto arg) { std::cout << arg << ' '; }, v);
+
+```
 
 
 ## multithreading
