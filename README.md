@@ -1728,10 +1728,10 @@ const int &rci = i; 	// const int&
 volatile int &rvi = i;  // volatile int&
 const volatile int &rcvi = i; // const volatile int&
 
-foo(ri);   //T = int, param имеет тип int
-foo(rci);  //T = int, param имеет тип int
-foo(rvi);  //T = int, param имеет тип int
-foo(rcvi); //T = int, param имеет тип int
+foo(ri);   //T = int, param тип = int
+foo(rci);  //T = int, param тип = int
+foo(rvi);  //T = int, param тип = int
+foo(rcvi); //T = int, param тип = int
 ```
 
 ```cpp
@@ -1740,13 +1740,13 @@ template <typename T>
 void foo(const T param); //param типа T
 
 //Тогда:
-foo(ri);   //T = int, param имеет тип const int
-foo(rci);  //T = int, param имеет тип const int
-foo(rvi);  //T = int, param имеет тип const int
-foo(rcvi); //T = int, param имеет тип const int
+foo(ri);   //T = int, param тип = const int
+foo(rci);  //T = int, param тип = const int
+foo(rvi);  //T = int, param тип = const int
+foo(rcvi); //T = int, param тип = const int
 
 //Тоже самое для void foo(volatile T param);
-//T = int, param имеет тип volatile int
+//T = int, param тип = volatile int
 ```
 
 Отбрасывается модификатор для указателя (const\volatile):
@@ -1767,11 +1767,11 @@ volatile int* volatile vpvi = &i;
 //cv int * cv
 const volatile int* const volatile cvpcvi = &i;
 
-foo(pci);    //T = const int*, param имеет тип const int*
-foo(pvi);  	 //T = volatile int*, param имеет тип volatile int*
-foo(cpci);   //T = const int*, param имеет тип const int*
-foo(vpvi); 	 //T = volatile int*, param имеет тип volatile int*
-foo(cvpcvi); //T = cv int*, param имеет тип cv int*
+foo(pci);    //T = const int*, param тип = const int*
+foo(pvi);  	 //T = volatile int*, param тип = volatile int*
+foo(cpci);   //T = const int*, param тип = const int*
+foo(vpvi); 	 //T = volatile int*, param тип = volatile int*
+foo(cvpcvi); //T = cv int*, param тип = cv int*
 ```
 
 ```cpp
@@ -1781,8 +1781,8 @@ void foo(T param);
 void bar();
 int arr[10]; //int[10]
 
-foo(arr); //T = int*, param имеет тип int*
-foo(bar); //T = void(*)(), param имеет тип void(*)()
+foo(arr); //T = int*, param тип = int*
+foo(bar); //T = void(*)(), param тип = void(*)()
 
 foo({1, 2, 3}); //ERROR: fails to deduce type
 ```
@@ -1800,10 +1800,10 @@ const int ci = i;
 volatile int vi = i;
 const colotile int cvi = i;
 
-foo(i); // T = int, param имеет тип int&
-foo(i); // T = const int, param имеет тип const int&
-foo(i); // T = volotile int, param имеет тип volotile int&
-foo(i); // T = cv int, param имеет тип cv int&
+foo(i); // T = int, param тип = int&
+foo(i); // T = const int, param тип = const int&
+foo(i); // T = volotile int, param тип = volotile int&
+foo(i); // T = cv int, param тип = cv int&
 
 //Если добавить ссылки перед ci, vi, cvi
 //То результат не изменится
@@ -1821,10 +1821,10 @@ const int &rci = i; 	// const int&
 volatile int &rvi = i;  // volatile int&
 const volatile int &rcvi = i; // const volatile int&
 
-foo(ri);   //T = int, param имеет тип const int&
-foo(rci);  //T = int, param имеет тип const int&
-foo(rvi);  //T = volatile int, param имеет тип cv int&
-foo(rcvi); //T = cv int, param имеет тип int cv int&
+foo(ri);   //T = int, param тип = const int&
+foo(rci);  //T = int, param тип = const int&
+foo(rvi);  //T = volatile int, param тип = cv int&
+foo(rcvi); //T = cv int, param тип = int cv int&
 ```
 
 Если:
@@ -1833,6 +1833,16 @@ foo(rcvi); //T = cv int, param имеет тип int cv int&
 template <typename T>
 void foo(const T& param);
 
+int i = 0;
+int* pi = &i;
+const int* pci = &i;
+volatile int* pvi = &i;
+const volatile int* pcvi = &i;
+
+foo(pi); // T = int, param тип = int*
+foo(pci); // T = int, param тип = const int*
+foo(pvi); // T = int, param тип = volatile int*
+foo(pcvi); // T = int, param тип = const volatile int*
 ```
 
 
