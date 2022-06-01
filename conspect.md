@@ -1311,16 +1311,101 @@ std::visit( [](auto arg) { std::cout << arg << ' '; }, v);
 
 ```
 
+### std::any
 
-## multithreading
-## chrono
-## random
+Принимает произволный тип, но почти всегда происходит динамическая локация.
+Если возможно, лучше использовать variant.
 
-спецификаторы default\delete и другие
+Пример:
 
-Заменить ## на # и везде уменьшить на 1 звездочку
+```cpp
+std::any x{5};
+x.has_value(); // == true
+std::any_castt<int>(x); // == 5
+```
 
-TODO все возможные модификаторы переменных, const/volotile etc
+### std::filesystem
+
+Позвояет использовать функции доступа к файловой системе:
+
+```cpp
+if (std::filesystem::exists(my_path))
+{
+	const auto fileSize { std::filesystem::file_size(my_path)};
+	std::filesystem::path tmpPath { "/tmp"};
+	if (std::filesystem::space(tmpPath).available > fileSize )
+	{
+		std::filesystem::create_directory(tmpPath.append("example"))
+		std::filesystem::copy_file(my_path, tmpPath.append("newFile"))
+	}
+}
+```
+
+### std::byte
+
+```cpp
+//Новый тип для хранения "сырых" байтов, перегружен
+std::byte a { 0 };
+int x = std::to_integer<int>(a);
+```
+
+### std::apply:
+
+Применение функции к tuple\pair:
+
+```cpp
+auto add = [](int x, int y)
+{
+	return x + y;
+};
+std::apply(add, std::make_tuple(2, 3)); // == 5
+std::apply(add, std::make_pair(1, 2)); // == 3
+```
+
+### std::as_const 
+
+Обертка для получение const-ref.
+
+### std::clamp 
+
+Клипует значение по 2м границам - верхней и нижней.
+
+### Ассоциативыне контейнеры
+
+Добавлены функции: try_emplace, insert_or_assign.
+
+Добавлены функции: extract, insert, merge.
+
+```cpp
+// merge:
+std::set<int> src { 1, 3, 5};
+std::set<int> dst { 2, 4, 5};
+dst.merge(src);
+// dst == {1, 2, 3, 4, 5}
+// src == {5} !!!
+
+// extract\insert - позволяют move'нуть объект из одного контейнера, в другой
+// Или изменить ключ у поля
+std::map m; 
+auto e = m.extract(2); // key == 2
+e.key() = 4;
+m.insert(std::move(e));
+```
+
+### std::size, std::data, std::empty 
+
+Свободные обобщенные функции для всех контейнеров.
+
+### non const std::string::data 
+
+Доступ к сырой памяти строки.
+
+### std::not_fn 
+
+Wrapper возвращающий отрицательное\обратное значение функции.
+
+
+# TODO
 
 ### Forwarding reference
 
@@ -1335,6 +1420,12 @@ class A
 
 допольнить и изучить внимательней
 
-+ inline namespaces тоже в 11 фитчи
+++ inline namespaces тоже в 11 фитчи
 
-++ общие фитчи языка вроде const итд - из конспетов курсеры
+std::invoke - ??? 
+
+++ общие фитчи языка вроде const\volotile итд - из конспетов курсеры
+
++++ Идеомы
+
++++ шпоры filesystem +?
