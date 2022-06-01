@@ -395,14 +395,15 @@ std::complex<double> c2 = std::complex<double>{0.0, 0.0}; //(3)
 initializer_list содержит следующие функции:
 
 ```cpp
-init_list.size()
-init_list.begin()
-init_list.end()
+auto init_list = initializer_list<int> { 1, 2, 3};
+init_list.size();
+init_list.begin();
+init_list.end();
 
-init_list.r/c/begin/end() // Начиная с C++14
+init_list.r/c/begin/end(); // Начиная с C++14
 
-init_list.empty() // Начиная с C++17
-init_list.data() // Начиная с C++17
+init_list.empty(); // Начиная с C++17
+init_list.data(); // Начиная с C++17
 ```
 
 ## C++14
