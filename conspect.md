@@ -136,6 +136,8 @@ int b = generator(); // == 1
 [*this]
 ```
 
+Необходим спецификатор mutable, для того чтобы иметь возможность вызывать неконстантные версии функций класса.
+
 
 ## POD-type
 
@@ -567,8 +569,6 @@ array(T, U...) -> array<T, sizeof...(U) + 1>
 std::array arr {0, 1, 2, 3}; //Вместо std::array<int, 4>;
 ```
 
-#### Fold expressions
-
 
 #### template auto
 
@@ -593,6 +593,48 @@ struct my_sequence
 
 auto seq = std::integer_sequence<int, 0, 1, 2>(); //int задан явно
 auto seq2 = my_sequence<1, 2, 3>(); //int будет выведен из значений
+```
+
+#### Fold expressions (свертка функций)
+
+Позволяет записывать операции для вариативного числа шаблонных аргументов:
+
+```cpp
+template <typename T, typename ..Types>
+constexpr auto sum(T t1, Types ..tN)
+{
+	return (t1 + ... + tN);
+}
+
+constexpr size_t res = sum(0, 1, 2, 3);
+```
+
+Четыре вида свёрток функций:
+
+```cpp
+(pack op ...) = (E_1 op (... op (E_N-1 op E_N)))
+(... op pack) = (((E_1 op E_2) op ...) op E_N)
+(pack op ... op init) = (E_1 op (... op (E_N-1 op (E_N op I))))
+(init op ... op pack) = ((((I op E1) op E2) op ...) op E_N)
+```
+
+Операции:
+```cpp
+op:
++,  -,  *,  /,  %,  ^,  &,  |,  =,  <,  >,  <<,  >>,  
++=,  -=,  *=,  /=,  %=,  ^=, &= |=, 
+<<=, >>=, ==, !=, <=, >=, &&, ||, .*, ->*
+и оператор ,
+```
+
+Начиная с C++17 возможна запись:
+
+```cpp
+template <typename ...Types>
+void print(const Types& ...tN) 
+{
+	std::cout << ... << tN;
+}
 ```
 
 
