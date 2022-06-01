@@ -319,6 +319,16 @@ int a = 1'000'000;
 int b = 3.14'15'92'65;
 ```
 
+#### STL литералы
+
+```cpp
+	auto half_minute = 30s; // std::chrono::duration
+	auto day = 24h; // std::chrono::duration
+
+	auto complex = 1 + 1i; //std::complex
+```
+
+
 ## Initialization
 
 ### C++11
@@ -353,7 +363,38 @@ std::complex<double> cmpl{0.0, 0.0}; //(2)
 std::complex<double> c2 = std::complex<double>{0.0, 0.0}; //(3)
 ```
 
+#### std::initializer_list
 
+Возможность использовать список инициализации для создания конструкторов или операторов присвоения.
+
+Значения задаются между {} и через запятую.
+
+initializer_list содержит следующие функции:
+
+```cpp
+init_list.size()
+init_list.begin()
+init_list.end()
+
+init_list.r/c/begin/end() // Начиная с C++14
+
+init_list.empty() // Начиная с C++17
+init_list.data() // Начиная с C++ 17
+```
+
+### C++14
+
+#### Aggregate initialization with deafult member initializer
+
+```cpp
+struct x 
+{
+	int a,b;
+	char c = '0'; 
+};
+
+x v { 1, 2 }; // До C++14 нельзя было опустить третье поле "c"
+```
 
 
 ## const expr
