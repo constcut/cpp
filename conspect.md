@@ -48,8 +48,8 @@
 		- [**Fold expressions (свертка функций)**](#fold-expressions-свертка-функций)
 		- [**constexpr if**](#constexpr-if)
 - [Спецификаторы](#спецификаторы)
-	- ['default' + 'deleted' specifiers](#default--deleted-specifiers)
-	- ['overrdie' + 'final' sepcifiers](#overrdie--final-sepcifiers)
+	- [***'default' + 'deleted' specifiers***](#default--deleted-specifiers)
+	- [***'overrdie' + 'final' sepcifiers***](#overrdie--final-sepcifiers)
 - [Небольшие нововведения](#небольшие-нововведения)
 	- [C++11](#c11-7)
 		- [**Move semantics**](#move-semantics)
@@ -117,7 +117,6 @@
 		- [**Математические функции**](#математические-функции)
 		- [**Paralel algorithms**](#paralel-algorithms)
 - [TODO](#todo)
-		- [Forwarding reference](#forwarding-reference)
 
 # Атрибуты
 
@@ -814,7 +813,9 @@ decltype(auto) get(const Person& )
 
 # Спецификаторы
 
-## 'default' + 'deleted' specifiers
+## ***'default' + 'deleted' specifiers***
+
+***
 
 Возможность либо пометить удалённой и недопустимой функцию (deleted).
 Либо реализовать стандартное поведение для конструктров\операторов присваения итд.
@@ -828,7 +829,9 @@ decltype(auto) get(const Person& )
 Если компилятор может - он постарается вывести noexcept версии функций
 
 
-##  'overrdie' + 'final' sepcifiers
+##  ***'overrdie' + 'final' sepcifiers***
+
+***
 
 override - указывает на то, что функция переопределяет виртуальную функцию из наследуемого класса.
 
@@ -1552,7 +1555,7 @@ TODO дополнить с примерами.
 # TODO
 
 
-### Forwarding reference
+++ Forwarding reference
 
 ```cpp
 template <class T>
@@ -1567,7 +1570,7 @@ class A
 
 ++ inline namespaces тоже в 11 фитчи
 
-++std::invoke - ??? 
+++std::invoke 
 
 ++ Searcher function objects
 
