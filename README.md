@@ -1697,6 +1697,8 @@ C++14: function return type deduction, lambda caption with initialization.
 
 ***
 
+![image info](images/type_deduction.png)
+
 Изначально было 2 типа правил, для вывода шаблонных типов:
 + для указателей и ссылок
 + для обычных типов
