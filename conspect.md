@@ -265,7 +265,104 @@ UR"delimiter( raw string )delimeter"
 
 
 
+### Пользовательские литералы
+
+Пример пользовательского литерала преобразования радиан в градусы.
+
+```cpp
+long double operator""_degrees(long double value)
+{
+	return value * M_PI / 180.0;
+}
+
+double degrees = 0.38__degrees
+```
+
+Список возможных аргументов, при определении пользовательского литерала:
+
+```cpp
+( const char * )
+( unsigned long long int )	
+( long double )	
+( char )
+( wchar_t )	
+( char16_t )	
+( char32_t )
+( const char * , std::size_t )	
+( const wchar_t * , std::size_t )	
+( const char16_t * , std::size_t )	
+( const char32_t * , std::size_t )
+```
+
+
+### C++ 14
+
+#### Строковый литерал
+
+```cpp
+
+std::string from_literal = "some string"s;
+
+```
+
+#### Бинарные литералы
+
+```cpp
+int a = 0b111; // == 7
+int b = 0B11; // == 3
+```
+
+#### Разделители числовых литералов
+
+```cpp
+int a = 1'000'000;
+int b = 3.14'15'92'65;
+```
+
+## Initialization
+
+### C++11
+
+#### Универсальная инициализация
+
+Везде можно использовать {}:
+
+```cpp
+// До С++11
+
+int a;     		//(1) default init
+int b(2);  		//(2) direct init
+int c = 2; 		//(3) copy init
+int d = int();  //(4) value init
+int arr[] = {1, 2, 3}; //(5) aggregate init
+
+struct Point { double x, y; } point (0.0, 0.0); //(5)
+std::complex<double> cmpl(0.0, 0.0); //(2)
+std::complex<double> c2 = std::complex<double>(0.0, 0.0); //(3)
+
+// Начиная с C++11 можно везде {}
+
+int a;
+int b{2};
+int c = {2};
+int d{};
+int arr[] = {1, 2, 3};
+
+struct Point { double x, y; } point {0.0, 0.0}; //(5)
+std::complex<double> cmpl{0.0, 0.0}; //(2)
+std::complex<double> c2 = std::complex<double>{0.0, 0.0}; //(3)
+```
 
 
 
+
+## const expr
 TODO все возможные модификаторы переменных, const/volotile etc
+
+
+## static_assert
+## range based for
+
+## multithreading
+## chrono
+## random
