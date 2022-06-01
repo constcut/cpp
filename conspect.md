@@ -479,16 +479,122 @@ constexpr auto add = [](int a, int b) { return a + b; }
 
 ### C++11
 
-#### Вариативные шаблоны
+#### Вариативные шаблоны (Variadic template)
 
 Используются для создания функций с переменным числом аргументов:
 
 ```cpp
 template <typename... Args>
 void printf(const char* const format, const Args&... args);
+
+//При вызове
+printf("test", 1, 0.1);
+
+// Произойдёт инстанцирование
+printf<int, double>("test", 1, 0.1);
 ```
 
 Помимо этого, используются в кортежах (tuple).
+
+#### Extern templates
+
+Используются с целью осуществить единичное истанцирование при компиляции, для её ускорения.
+
+```cpp
+extern template void foo<int>(int);
+extern template class SomeClass<int>;
+```
+
+### C++ 14
+
+#### Шаблон переменной (Variable template)
+
+```cpp
+template <class T>
+structure is_reference
+{
+	static constexpr bool value = false;
+};
+
+template <class T>
+structure is_reference<T&>
+{
+	static constexpr bool value = true;
+};
+
+template <class T>
+structure is_reference<T&&>
+{
+	static constexpr bool value = true;
+};
+
+
+template <typename T>
+constexpr bool is_reference_v = is_reference<T>::value;
+
+static_assert(!is_reference_v<SomeType>, " SomeType is reference");
+```
+
+### C++17
+
+#### Выведение типов шаблонных аргументов
+
+Возможность не использовать указание типа шаблонного параметра в <>:
+
+```cpp
+std::piar m {0, 0}; //Вместо std::pair<int, int> { 0, 0};
+std::vector v { 0.0 }; // Вместо std::vector<double> { 0.0; }
+std::lock_guard lock(mutex); // Вместо std::lock_guard<std::mutex>
+```
+
+Так же deduction guide может быть определен вручную. Пример для std::array:
+
+```cpp
+namespace std
+{
+template <class T, size_t N>
+struct array
+{
+	T arr[N];
+};
+
+template <class T, class... U>
+array(T, U...) -> array<T, sizeof...(U) + 1>
+
+};
+
+//Тогда возможно использование 
+std::array arr {0, 1, 2, 3}; //Вместо std::array<int, 4>;
+```
+
+#### Fold expressions
+
+
+#### template auto
+
+Полезно для template not-type параметров.
+
+```cpp
+template <auto Val> // Эквивалент template <decltype(auto) Val> 
+struct integral_const 
+{
+	using value_type = decltype(Val);
+	static constexpr value_type value = Val;
+};
+using true_type = integral_const<true>; //Не требуется задавать тип вручную
+using false_type = integral_const<false>; //integral_const<bool, false>
+
+//Схожий пример:
+template <auto.. seq>
+struct my_sequence 
+{
+	...
+};
+
+auto seq = std::integer_sequence<int, 0, 1, 2>(); //int задан явно
+auto seq2 = my_sequence<1, 2, 3>(); //int будет выведен из значений
+```
+
 
 template<auto>, вариативные шаблоны, другие шаблонные вопросы
 +constexpr if
@@ -497,10 +603,12 @@ template<auto>, вариативные шаблоны, другие шаблон
 + добавить данные из отдельной лекции, помимо 11 14 17
 
 ## static_assert
-## range based for
+## range based for + другие мелочи
 
 ## multithreading
 ## chrono
 ## random
+
+Заменить ## на # и везде уменьшить на 1 звездочку
 
 TODO все возможные модификаторы переменных, const/volotile etc
