@@ -396,10 +396,105 @@ struct x
 x v { 1, 2 }; // До C++14 нельзя было опустить третье поле "c"
 ```
 
+### C++17
 
-## const expr
-TODO все возможные модификаторы переменных, const/volotile etc
+#### auto + std::initializer_list
 
+```cpp
+//	До С++17
+
+auto v1  { 1, 2, 3};  	// std::initializer_list<int>
+auto v2 = { 1, 2, 3, }; // std::initializer_list<int>
+auto v3 {42};  			// std::initializer_list<int>
+auto v4 = { 42 };  		// std::initializer_list<int>
+
+// Начиная с C++17
+
+auto v1  { 1, 2, 3};  	// compile error
+auto v2 = { 1, 2, 3, }; // std::initializer_list<int>
+auto v3 {42};  			// int
+auto v4 = { 42 };  		// std::initializer_list<int>
+
+```
+
+#### Агрегатная инциализация базового класса
+
+Возможность вложенной инициализации:
+
+```cpp
+struct Base 
+{
+	std::string name;
+	std::string sur_name;
+};
+
+stuct Child : public Base
+{
+	int age;
+}
+
+Child ch1; //name, sur_name - empty, age undefined
+Child ch2{}; //all fields empty
+
+Child ch3 {{"name", "sur"}, 99};
+Child ch4 {"name", "sur", 99};
+```
+
+
+## constexpr
+
+### C++11
+
+Функции помеченные constexpr могут вычислять на этапе компиляции.
+Изначально такие функции имели большое количество ограничений, например должны были состоять из только 1 блока return.
+
+### C++14
+
+Ограничения были существенно ослабленны. Запрещенным остались:
+
+```cpp
+__asm__
+goto
+метки, корме case\default в switch,
+блок try,
+переменные нелитерального типа, 
+static \ thread_local переменные,
+переменные без инициализации
+```
+
+Так же они удобны для применения в шаблонной магии, например в вариативных шаблонах, о них ниже.
+
+### C++17
+
+Лямбда может быть помечена как constexpr:
+
+```cpp
+constexpr auto add = [](int a, int b) { return a + b; }
+```
+
+Если она может быть вызванна на этапе компиляции - это будет осуществленно, иначе она будет работать в run-time.
+
+
+## Шаблоны 
+
+### C++11
+
+#### Вариативные шаблоны
+
+Используются для создания функций с переменным числом аргументов:
+
+```cpp
+template <typename... Args>
+void printf(const char* const format, const Args&... args);
+```
+
+Помимо этого, используются в кортежах (tuple).
+
+template<auto>, вариативные шаблоны, другие шаблонные вопросы
++constexpr if
+
+## Выведение типов
++ добавить данные из отдельной лекции, помимо 11 14 17
 
 ## static_assert
 ## range based for
@@ -407,3 +502,5 @@ TODO все возможные модификаторы переменных, co
 ## multithreading
 ## chrono
 ## random
+
+TODO все возможные модификаторы переменных, const/volotile etc
