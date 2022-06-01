@@ -1813,11 +1813,28 @@ foo(i); // T = cv int, param имеет тип cv int&
 
 ```cpp
 template <typename T>
+void foo(const T* param);
+
+int i = 0; 				// int
+int &ri = i;			// int&
+const int &rci = i; 	// const int&
+volatile int &rvi = i;  // volatile int&
+const volatile int &rcvi = i; // const volatile int&
+
+foo(ri);   //T = int, param имеет тип const int&
+foo(rci);  //T = int, param имеет тип const int&
+foo(rvi);  //T = volatile int, param имеет тип cv int&
+foo(rcvi); //T = cv int, param имеет тип int cv int&
+```
+
+Если:
+
+```cpp
+template <typename T>
 void foo(const T& param);
 
 ```
 
-15:20
 
 ***
 ***
