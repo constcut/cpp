@@ -1749,7 +1749,7 @@ foo(rcvi); //T = int, param имеет тип const int
 //T = int, param имеет тип volatile int
 ```
 
-Сохраняется модификатор переменной, но отбрасывается модификатор для указателя (const\volatile):
+Отбрасывается модификатор для указателя (const\volatile):
 
 ```cpp
 template <typename T>
@@ -1789,8 +1789,35 @@ foo({1, 2, 3}); //ERROR: fails to deduce type
 
 ### **Правила вывода типов для указателей и ссылок**
 
-13:02
+Если передаётся значение, у которого есть референс - он отбрасывается, остальные модификаторы сохраняются:
 
+```cpp
+template <typename T>
+void foo(T& param);
+
+int i = 0; 
+const int ci = i;
+volatile int vi = i;
+const colotile int cvi = i;
+
+foo(i); // T = int, param имеет тип int&
+foo(i); // T = const int, param имеет тип const int&
+foo(i); // T = volotile int, param имеет тип volotile int&
+foo(i); // T = cv int, param имеет тип cv int&
+
+//Если добавить ссылки перед ci, vi, cvi
+//То результат не изменится
+```
+
+Если наш параметр должен быть ссылкой на константный объект:
+
+```cpp
+template <typename T>
+void foo(const T& param);
+
+```
+
+15:20
 
 ***
 ***
