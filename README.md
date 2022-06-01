@@ -125,6 +125,7 @@
 	- [Правила вывода для шаблонов](#правила-вывода-для-шаблонов)
 		- [**Правила вывода типов по значению**](#правила-вывода-типов-по-значению)
 		- [**Правила вывода типов для указателей и ссылок**](#правила-вывода-типов-для-указателей-и-ссылок)
+		- [**Правила вывода типов для forwarding reference**](#правила-вывода-типов-для-forwarding-reference)
 - [TODO](#todo)
 
 # Атрибуты
@@ -1813,7 +1814,7 @@ foo(i); // T = cv int, param тип = cv int&
 
 ```cpp
 template <typename T>
-void foo(const T* param);
+void foo(const T& param);
 
 int i = 0; 				// int
 int &ri = i;			// int&
@@ -1824,14 +1825,14 @@ const volatile int &rcvi = i; // const volatile int&
 foo(ri);   //T = int, param тип = const int&
 foo(rci);  //T = int, param тип = const int&
 foo(rvi);  //T = volatile int, param тип = cv int&
-foo(rcvi); //T = cv int, param тип = int cv int&
+foo(rcvi); //T = volatile int, param тип = int cv int&
 ```
 
-Если:
+Для указателей действуют схожие правила:
 
 ```cpp
 template <typename T>
-void foo(const T& param);
+void foo(T* param);
 
 int i = 0;
 int* pi = &i;
@@ -1840,9 +1841,60 @@ volatile int* pvi = &i;
 const volatile int* pcvi = &i;
 
 foo(pi); // T = int, param тип = int*
+foo(pci); // T = const int, param тип = const int*
+foo(pvi); // T = volatile int, param тип = volatile int*
+foo(pcvi); // T = const volatile, param тип = const volatile int*
+```
+
+При добавлении константности для указателей:
+
+
+```cpp
+template <typename T>
+void foo(const T* param);
+
+int i = 0;
+int* pi = &i;
+const int* pci = &i;
+volatile int* pvi = &i;
+const volatile int* pcvi = &i;
+
+foo(pi); // T = int, param тип = const int*
 foo(pci); // T = int, param тип = const int*
-foo(pvi); // T = int, param тип = volatile int*
-foo(pcvi); // T = int, param тип = const volatile int*
+foo(pvi); // T = volatile int, param тип = volatile int*
+foo(pcvi); // T = volatile int, param тип = const volatile int*
+```
+
+```cpp
+template <typename T>
+void foo(T& param);
+
+void bar();
+int arr[10]; //int[10]
+
+foo(arr); //T = int [10], param тип = int(&)[10]
+foo(bar); //T = void(), param тип = void(&)()
+
+foo({1, 2, 3}); //ERROR: fails to deduce type
+```
+
+### **Правила вывода типов для forwarding reference**
+
+```cpp
+template <typename T>
+void foo(const T&& param);
+
+int i = 0; 				// int
+int &ri = i;			// int&
+const int &rci = i; 	// const int&
+volatile int &rvi = i;  // volatile int&
+const volatile int &rcvi = i; // const volatile int&
+
+foo(ri);   //T = int&, param тип = int&
+foo(rci);  //T = const int&, param тип = const int&
+foo(rvi);  //T = volatile int&, param тип = volatile int&
+foo(rcvi); //T = cv int&, param тип = int cv int&
+foo(42);  //T = int, param тип = int&&
 ```
 
 
