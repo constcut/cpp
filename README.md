@@ -126,6 +126,7 @@
 		- [**Правила вывода типов по значению**](#правила-вывода-типов-по-значению)
 		- [**Правила вывода типов для указателей и ссылок**](#правила-вывода-типов-для-указателей-и-ссылок)
 		- [**Правила вывода типов для forwarding reference**](#правила-вывода-типов-для-forwarding-reference)
+	- [Правила вывода для auto](#правила-вывода-для-auto)
 - [TODO](#todo)
 
 # Атрибуты
@@ -1882,6 +1883,10 @@ foo({1, 2, 3}); //ERROR: fails to deduce type
 
 ### **Правила вывода типов для forwarding reference**
 
+Если передается ссылка на объект l-value, т.е. объект у которого есть имя и адрес, тогда аргумент ссылка на l-value.
+
+Если передаётся временный объект, то расскручивается аргумент на r-value ссылка.
+
 ```cpp
 template <typename T>
 void foo(const T&& param);
@@ -1896,9 +1901,56 @@ foo(ri);   //T = int&, param тип = int&
 foo(rci);  //T = const int&, param тип = const int&
 foo(rvi);  //T = volatile int&, param тип = volatile int&
 foo(rcvi); //T = cv int&, param тип = int cv int&
-foo(42);  //T = int, param тип = int&&
+foo(42);   //T = int, param тип = int&&
 ```
 
+Подобное поведение было необходимо для реализации emplace_back.
+
+```cpp
+//Плохо: копирование
+template <class... Args>
+void emplace_back(Args... args); 
+
+//Лучше - ссылки
+template <class... Args>
+void emplace_back(Args&... args);
+
+//Идеально
+template <class... Args>
+void emplace_back(Args&... args) 
+{
+	T* ptr = ....; //Memory region from allocator
+	new (ptr) T { std::forward<Args>(args)...}; //TODO placement new в конспект
+}
+```
+
+TODO более детально про std::forward.
+
+## Правила вывода для auto
+
+***
+
+```cpp
+int i = 0; 				// int
+int &ri = i;			// int&
+const int &rci = i; 	// const int&
+volatile int &rvi = i;  // volatile int&
+const volatile int &rcvi = i; // const volatile int&
+
+//Все auto = int, все типы переменных = int:
+auto a_i = i; 
+auto a_ri = ri;
+auto a_rci = rci;
+auto a_rvi = rvi;
+auto a_rcvi = rcvi;
+
+//Для задания переменной со спецификатором:
+const auto ca_i = i;
+volatile auto va_i = ri;
+volatile auto va_i = rvi;
+const volatile auto cva_i = rcvi;
+//Все auto = int, полынй тип переменной specificators + int
+```
 
 ***
 ***
