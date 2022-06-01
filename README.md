@@ -127,6 +127,10 @@
 		- [**Правила вывода типов для указателей и ссылок**](#правила-вывода-типов-для-указателей-и-ссылок)
 		- [**Правила вывода типов для forwarding reference**](#правила-вывода-типов-для-forwarding-reference)
 	- [Правила вывода для auto](#правила-вывода-для-auto)
+	- [Правила вывода для lambda capture-list](#правила-вывода-для-lambda-capture-list)
+	- [Правила вывода для decltype](#правила-вывода-для-decltype)
+	- [+ , + , +](#----)
+	- [RTTI](#rtti)
 - [TODO](#todo)
 
 # Атрибуты
@@ -1793,6 +1797,7 @@ foo({1, 2, 3}); //ERROR: fails to deduce type
 
 ### **Правила вывода типов для указателей и ссылок**
 
+
 Если передаётся значение, у которого есть референс - он отбрасывается, остальные модификаторы сохраняются:
 
 ```cpp
@@ -1943,14 +1948,89 @@ auto a_ri = ri;
 auto a_rci = rci;
 auto a_rvi = rvi;
 auto a_rcvi = rcvi;
+```
 
+```cpp
 //Для задания переменной со спецификатором:
 const auto ca_i = i;
 volatile auto va_i = ri;
 volatile auto va_i = rvi;
 const volatile auto cva_i = rcvi;
-//Все auto = int, полынй тип переменной specificators + int
+//Полынй тип переменной = specificators + int
 ```
+
+При указании ссылки, работают правила вывода ссылки в шаблонах:
+
+```cpp
+auto& a_i = i;       //auto == int, var type = int&
+auto& a_ri = ri;     //auto == int, var type = int&
+auto& a_rci = rci;   //auto == const int, var type = const int&
+auto& a_rvi = rvi;   //auto == volatile int, var type = volatile int&
+auto& a_rcvi = rcvi; //auto == cv int, var type = cv int&
+```
+
+При добавлении спецификаторов немного меняется поведение:
+
+```cpp
+int i = 0; 				// int
+int &ri = i;			// int&
+const int &rci = i; 	// const int&
+volatile int &rvi = i;  // volatile int&
+const volatile int &rcvi = i; // const volatile int&
+
+auto& a_i = i; //auto = int, var type = int&
+const auto& ca_rci = rci; //auto = int, var type = const int&
+volatile auto& va_rvi = rvi; //auto = int, var type = volatilee int&
+const volatile auto& cva_rcvi = rcvi; //auto = int, var type = cv int&
+```
+
+При применении двойного амперсанда:
+
+```cpp
+int foo();
+int&& bar();
+
+int i = 0; 		// int
+int &ri = i;	// int&
+int &rri = 42;  // int&&
+
+auto&& a_i = i; //auto = int, var type = int&
+auto&& a_ri = ri; //auto = int, var type = int&
+
+auto&& a_foo = foo(); //auto = int, var type = int&&
+auto&& a_bar = bar(); //auto = int, var type = int&&
+```
+
+Пример с массивом и функцией:
+
+```cpp
+void bar();
+int arr[10];
+
+auto& rarr = arr; // auto = int[10], var type = int(&)[10]
+auto& abar = bar; // auto = void(), var type = void(&)()
+
+auto parr = arr; // auto = int*, var type = int*
+auto pbar = bar; // auto = void(*)(), var type = void(*)()
+
+auto init_list1 {1, 2, 3}; // auto = std::initalizer_list<int>
+auto init_list2 = {1, 2, 3}; // auto = std::initalizer_list<int>
+
+auto err_list = {1, 0.2}; // не удастся вывести тип
+```
+
+## Правила вывода для lambda capture-list
+***
+33-46
+
+## Правила вывода для decltype
+***
+
+## + , + , +
+***
+
+## RTTI
+***
 
 ***
 ***
