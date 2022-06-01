@@ -1008,6 +1008,209 @@ n1::n2::n;
 
 ***
 
+### Chrono
+
+Используется для измерения времени:
+
+```cpp
+#include <chrono>
+
+template <class Clock, class Duration = typename Clock::duration>
+std::chrono::time_point; //Тип для хранения момента времени
+
+std::chrono::system_clock; //Возможные типы отсчётов
+std::chrono::high_resolution_clock;
+std::chrono::steady_clock; //Наиболее приоритетный
+
+auto start = std::chrono::steady_clock::now();
+auto end = std::chrono::steady_clock::now();
+
+std::chrono::duration<double> elapsed_seconds = end - start;
+auto durMs = duration_cast<std::chrono::miliseconds>(end - start);
+
+//Другие варианты для std::chrono::duration_cast:
+std::chrono::nanosecods;
+std::chrono::microseconds;
+std::chrono::miliseconds;
+std::chrono::seconds;
+std::chrono::minutes;
+std::chrono::hours;
+```
+
+### Random
+
+Используется для генерации случайных чисел.
+
+```cpp
+Random number engines 
+{
+	linear_congruential_engine, 
+	mersenne_twister_engine,
+	subtract_with_carry_engine
+};
+
+Random number engine adaptors
+{
+	discard_block_engine,
+	independent_bits_engine,
+	shuffle_order_engine	
+};
+
+Predefined generators
+{
+	minstd_rand0,
+	minstd_rand,
+	mt19937,
+	mt19937_64,
+	ranlux24_base,
+	ranlux48_base,
+	ranlux24,
+	ranlux48,
+	knuth_b,
+	default_random_engine
+};
+
+Non-deterministic random numbers : random_device;
+
+//Внутри каждого из них есть несколько вариаций
+Distributions  
+{
+	Uniform distributions,
+	Bernoulli distributions,
+	Poisson distributions,
+	Normal distributions,
+	Sampling distributions
+};
+```
+
+Пример:
+```cpp
+#include <random>
+
+std::mt19937_64 engine { std::random_device{}() };
+std::uniform_int_distribution<> distr { 0, 100 }; 
+std::cout <<  distr(engine);
+auto generator = std::bind(distr, engine);
+std::cout << generator();
+```
+
+### Regex
+
+Регулярные выражения:
+
+```cpp
+#include <regex>
+
+std::regex pattern { R"((\d{2}).(\d{2}).(\d{2,4}))"};
+std::string str{"I was born 01.02.1993"};
+
+for (auto it = std::sregex_iterator {str.begin(), str.end(), pattern},
+		  end = std::sregex_iterator {}; it != end; ++it)
+{
+	auto&& match = *it;
+	std::string day = match[1]; //01
+	std::string day = match[2]; //02
+	std::string day = match[3]; //1993
+	std::string day = match[4]; // ""
+}
+
+//Другой вариант использования - замена:
+
+auto replaced = std::regex_replace(str, pattern, "xx.xx.xxxx");
+```
+
+### Multithreading
+
+Используется для реализации многопоточных или асинхронных приложений.
+
+```cpp
+#include <thread>
+
+	// Потоки и синхронизация:
+	std::thread
+	std::mutex
+	std::recursive_mutex
+	std::timed_mutex
+	std::recursive_timed_mutex
+	std:: conditional_variable
+
+	// Модели и барьеры памяти:
+	std::memory_order
+	std::atomic_thread_fence
+
+	// Атомарные переменные:
+	std::atomic
+
+	// Асинхронные вычисления:
+	std::future
+	std::packaged_task
+	std::promise
+```
+
+
+### Обновления вызванные новым стандартом
+
+
+```cpp
+// конструирование на месте, на подобии как make_pair: только 1 вызов move конструктора
+std::container<T>::emplace();
+std::container<T> ::cbeing, ::cend(), std::begin, std::end;
+
+// если unordered контейнер, когда есть ясность куда вставить значение - это может улучшить скорость
+std::associative_container<T>::emplace_hint();
+
+// обрезать по границе использования
+std::seq_container<T>::shrink_to_fit();
+std::vector<T>::data();
+std::list<T>; // complexity constraints
+```
+
+### std::tuple
+
+Можно использовать функцию make_tuple().
+
+Доставать значения можно std::get<type>(v);
+
+Функция tie - которая может сформировать tupple от левых ссылок,
+std::tie(name, surname) =  get_person(1);
+
+В С++17 он перестаёт быть нужен, но можно им сравнивать группы значений:
+
+std::tie(year, month, day) > std::tie(year2, month2, day2);
+
+### Accosicative unordered containers
+
+unordered_
+_set, _multiset,
+_map, _multimap,
+
+Поиск за O(1), как и вставка\удаление. Но зависит от количества элементов на bucket'е.
+
+### Smart pointers
+
+```cpp
+//Можно настроить делитер - который закроет файл
+std::unique_ptr<FILE, decltype(deleter)>;
+
+std::unique_ptr<T>
+std::shared_ptr<T>
+std::week_ptr<T> //решение для перекрестных ссылок
+```
+
+### std::function
+
+Обертка для callable объекта, которым может выступать лямбда.
+
+Или результат std::bind.
+
+### std::reference_wrapper
+
+Модулирование поведения ссылки.
+Нужны для thread'ов - чтобы протолкнуть объект по ссылке
+
+std::ref + std::cref - функции помогающие сгенерировать объект типа reference_wrapper.
+
+
 ## C++14
 
 ***
