@@ -2278,8 +2278,32 @@ foo(obj);
 ## Вывод типов на runtime: RTTI
 ***
 
+```cpp
+template <typename T>
+void print_type(const T& arg)
+{
+	std::cout << "T = " << typeid(T).name() << "\n";
+	std::cout << "arg = " << typeid(arg).name() << "\n";
+}
 
+SomeClass { ... };
 
+void foo()
+{
+	std::vector<SomeClass> vec { ... };
+	print_type(vec.data());
+}
+
+//Ожидание:
+//T = SomeClass *
+//arg = SomeClass * const&
+
+//Реальность:
+//T = P9SomeClass, demangle - SomeClass*
+//arg = P9SomeClass, demangle - SomeClass*
+```
+
+Если необходимо - можно решить задачу через boost::typeindex.
 
 ***
 ***
@@ -2288,16 +2312,6 @@ foo(obj);
 
 
 ++ Forwarding reference
-
-```cpp
-template <class T>
-class A
-{
-    template <class U>
-    void foo(T&& t, U&& u);
-};
-```
-
 допольнить и изучить внимательней
 
 ++ inline namespaces тоже в 11 фитчи
