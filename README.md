@@ -2467,19 +2467,106 @@ void print<SomeClass>(const SomeClass& obj)
 ## Partial specialization (частичная специализация)
 ***
 
-16-06
+```cpp
+// Шаблонный класс
+template <class T, class Deleter>
+class untique_ptr
+{
+
+public:
+	T* operator->() const noexcept;
+}
+
+// Частичная специализация для шаблонного класса
+// Реалиция unique_ptr для массивов
+template <class T, class Deleter>
+class unique_ptr<T[], Deleter> 
+{
+
+public:
+	T& operator[](size_t idx) noexcept;
+	const T& operator[](size_t idx) const noexcept;
+}
+```
+
+Для функций частичная специализация не доступна.
 
 ## Variadic template (вариативные шаблоны)
 ***
 
-18-22
+```cpp
+template <class T1, class T2, class T3>
+bool equalsAnyOf(const T1& t1, const T2& t2, const T3& t3)
+{
+	return t1 == t2 || t1 == t3;
+}
+// 4,5,6 и больше аргументов - стали уже огромными
+```
 
+Решение:
 
-+++ fold expressions возможно отдельный подзаголовок
+```cpp
+// C++11:
+template <class T1>
+bool equalsAnyOf(const T1& t1) noexcept
+{
+	return false;
+}
+
+template <class T1, class T2, class ...TN>
+bool equalsAnyOf(const T1& t1, const T2& t2, const TN&... tN) noexcept
+{
+// Вызывается первый аргумент и оставшиеся tN
+// каждый раз на 1 меньше, за счёт выбывшего T2
+	return t1 == t2 || EqualsAnyOf(t1, tN...); // рекурсия
+}
+
+// Вызов:
+std::cout << equalsAnyOf(0, 'a', 0.0, 42);
+```
+
+Свертка позволяет избежать рекурсии и переполнение стека, в отличии от решения стандарта 11 года.
+
+```cpp
+// C++17:
+
+template <class T1, class T2, class ...TN>
+bool equalsAnyOf(const T1& t1, const T2& t2, const TN&... tN) noexcept
+{
+	// Лаконичное решение через свертку функций
+	return ((t1 == t2) || ... || (t1 == tN));
+}
+
+std::cout << equalsAnyOf(0, 'a', 0.0, 42);
+```
+
+Пример использования в std::vector:
+
+```cpp
+template <class T, class Alloc = std::allocator<T>>
+class vector
+{
+
+public:
+	template <class ...Args>
+	T& emplace_back(Args&&.. args)
+	{
+		T* ptr = ...; // указатель на новый объект
+		new (ptr) T { std::forward<Args>(args)...}; 
+	//  new (ptr) T { std::forward<Arg1>(arg1), std::forward<Arg2>(arg2), ...};
+		return *ptr;
+	}
+};
+
+```
 
 
 ## Вычисления на этапе компиляции
 ***
+
+```cpp
+
+```
 
 constexpr ?
 
@@ -2572,4 +2659,4 @@ constexpr ?
 
 ++ TODO скользкие места C++ в UB
 
-Как найти выводимый тип?? стоит ли вводить в вывод типов? метод "отладки"
+// TODO placement new
