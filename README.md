@@ -3031,6 +3031,57 @@ inline constexpr bool is_reference_v = is_reference<T>::value;
 ### Type transformations
 ***
 
+Другой вариант использования - это преобразование типа:
+
+```cpp
+template <class T>
+struct remove_reference
+{
+	using type = T;
+};
+
+template <class T>
+struct remove_reference<T&>
+{
+	using type = T;
+};
+
+template <class T>
+struct remove_reference<T&&>
+{
+	using type = T;
+};
+
+//Начиная с C++14
+template <class T>
+using remove_reference_t = typename remove_reference<T>::type;
+```
+
+Список метафункций из стандартной библиотеки:
+
++ remove_const
++ remove_volatile
++ remove_cv
++ add_const
++ add_volatile
++ add_cv
++ remove_reference
++ add_lvalue_reference
++ add_rvalue_reference
++ remove_cvref
++ remove_pointer
++ add_pointer
++ make_signed
++ make_unsigned
++ remove_extent
++ remove_all_extents
++ decay
++ conditional
++ underlying_type
++ common_type
++ result_of
++ invoke_result
+
 И так же шаблонные переменные с постфиксом _v.
 
 ## Curiously recurring template pattern
