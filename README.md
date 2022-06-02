@@ -139,10 +139,24 @@
 	- [Explicit (full) specialization (явная\полная специализация)](#explicit-full-specialization-явнаяполная-специализация)
 	- [Partial specialization (частичная специализация)](#partial-specialization-частичная-специализация)
 	- [Variadic template (вариативные шаблоны)](#variadic-template-вариативные-шаблоны)
-	- [Variadic template (вариативные шаблоны)](#variadic-template-вариативные-шаблоны-1)
 	- [Вычисления на этапе компиляции](#вычисления-на-этапе-компиляции)
 	- [Вычисления на этапе компиляции](#вычисления-на-этапе-компиляции-1)
 	- [Преобразование с типами](#преобразование-с-типами)
+	- [Primary type categories](#primary-type-categories)
+	- [Composite type categories](#composite-type-categories)
+	- [Type properties](#type-properties)
+	- [Supported operations properties](#supported-operations-properties)
+	- [Type relationships](#type-relationships)
+	- [Property queries](#property-queries)
+	- [Type transformations](#type-transformations)
+	- [Curiously recurring template pattern](#curiously-recurring-template-pattern)
+	- [SFINAE (Subsituation Failure Is Not An Error)](#sfinae-subsituation-failure-is-not-an-error)
+	- [Tag dispatch](#tag-dispatch)
+	- [Real example based on SFINAE](#real-example-based-on-sfinae)
+	- [Special metafunctions](#special-metafunctions)
+	- [void_t](#void_t)
+	- [Detectors](#detectors)
+- [TODO](#todo)
 
 # Атрибуты
 
@@ -2461,11 +2475,6 @@ void print<SomeClass>(const SomeClass& obj)
 18-22
 
 
-## Variadic template (вариативные шаблоны)
-***
-
-18-22
-
 +++ fold expressions возможно отдельный подзаголовок
 
 
@@ -2477,9 +2486,72 @@ constexpr ?
 ## Вычисления на этапе компиляции
 ***
 
-***
-## Преобразование с типами
 
+## Преобразование с типами
+***
+
+![image info](images/types.png)
+
+## Primary type categories
+***
+
+Обычное + _v
+
+## Composite type categories
+***
+
+Обычное + _v
+
+## Type properties
+***
+
+Обычное + _v
+
+## Supported operations properties
+***
+
+Обычное + _v
+
+## Type relationships
+***
+
+
+## Property queries
+***
+
+## Type transformations
+***
+
+## Curiously recurring template pattern
+***
+
+## SFINAE (Subsituation Failure Is Not An Error)
+***
+
++ std::enable_if
+
+## Tag dispatch
+***
+
++ if constexpr
+
+## Real example based on SFINAE
+***
+
+## Special metafunctions
+***
+
+## void_t
+***
+
+## Detectors
+***
+
+
+***
+***
+***
+# TODO
 
 ++ Forwarding reference
 допольнить и изучить внимательней
