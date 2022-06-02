@@ -129,8 +129,9 @@
 	- [Правила вывода для auto](#правила-вывода-для-auto)
 	- [Правила вывода для lambda capture-list](#правила-вывода-для-lambda-capture-list)
 	- [Правила вывода для decltype](#правила-вывода-для-decltype)
-	- [+ , + , +](#----)
-	- [RTTI](#rtti)
+	- [Правила вывода для возвращаемого типа](#правила-вывода-для-возвращаемого-типа)
+	- [Как найти\отладить выводимый тип](#как-найтиотладить-выводимый-тип)
+	- [Вывод типов на runtime: RTTI](#вывод-типов-на-runtime-rtti)
 - [TODO](#todo)
 
 # Атрибуты
@@ -2141,30 +2142,145 @@ public:
 ***
 
 ```cpp
-double foo();
-double&& bar();
+int foo();
+int&& bar();
 
 int arr[10];
 
 int v1 = 0.0;  //int
-const int& v2 = v1;  //int double &
+const int& v2 = v1;  //const int &
 int&& v3 = 0; //int&&
 
-decltype(auto) v4 = v1;  //int
-decltype(auto) v5 = (v1);  //int& 
-decltype(auto) v6 = v2;  //const int&
+decltype(auto) v4 = v1;   //int
+decltype(auto) v5 = (v1); //int& 
+decltype(auto) v6 = v2;   //const int&
 
-decltype(auto) v6 = foo(); //double
-decltype(auto) v7 = bar(); //double && 
+decltype(auto) v7 = foo(); //int
+decltype(auto) v8 = bar(); //int && 
+
+decltype(auto) v9 = arr[0]; //int &
+
+//Если не использовать (auto) - compile errors:
+decltype(foo) v10 = foo(); //int ()()
+decltype(bar) v11 = bar(); //int && ()()
+//Исправляется через decltype(foo()), decltype(bar())
 ```
 
-## + , + , +
+## Правила вывода для возвращаемого типа
 ***
 
-## RTTI
+```cpp
+// Будет используется шаблонный вывод типов:
+[capture-list](params) -> T 
+{
+	return ...;
+}
+
+//В C++ не обязательно использовать ->
+//Тогда будут применены правила вывода auto
+
+// Будет используется шаблонный вывод типов:
+auto foo() -> T
+{
+	return ...;
+}
+
+//Не обязательно использовать ->, как выше
+
+// Будет использовать decltype вывод типов:
+decltype(auto) bar()
+{
+	return ...;
+}
+```
+
+Применение механизмов выше, создание обобщенного оператора суммации:
+
+```cpp
+template <typename T1, typename T2>
+auto operator+(T1&& lhs, T2&& rhs)
+{
+	return std::forward<T1>(lhs) + std::forward<T2>(rhs);
+}
+```
+
+```cpp
+template <typename Callable, typename ...Args>
+auto operator+(Callable&& op, Args&& args) // auto не может вернуть ссылку
+{
+	return std::forward<Callable>(op)(std::forward<Args>(args)...);
+}
+
+template <typename Callable, typename ...Args>
+auto&& operator+(Callable&& op, Args&& args) // Могут быть проблемы!
+{
+	return std::forward<Callable>(op)(std::forward<Args>(args)...);
+}
+// Если Callable возвращает просто тип T, тогда вернется ссылка
+// на локальный объект, который погибнет сразу же: undefined behavior
+
+template <typename Callable, typename ...Args>
+decltype(auto) operator+(Callable&& op, Args&& args) // Perfect returning
+{
+	return std::forward<Callable>(op)(std::forward<Args>(args)...);
+}
+```
+
+Но с decltype нужно быть аккуратным:
+
+```cpp
+template <typename T>
+decltype(auto) lookup(T value)
+{
+	static const std::vector<SomeClass> values = {...};
+	size_t idx = ...; // Найти индекс по value
+
+	auto ret = values[idx];
+	return ret; // Возвращаемый тип SomeClass
+}
+
+// НО:
+
+template <typename T>
+decltype(auto) lookup(T value)
+{
+	static const std::vector<SomeClass> values = {...};
+	size_t idx = ...; // Найти индекс по value
+
+	auto ret = values[idx];
+	return (ret); // Возвращаемый тип SomeClass&
+}
+// Из-за лишних скобок вернётся ссылка на локальный объект
+// А это выстрел в ногу
+```
+
+## Как найти\отладить выводимый тип
 ***
 
+Следующий код выведет ошибку компиляции, из которой можно понять выводимый тип:
+
+```cpp
+template <typename T, typename ...Types>
+class TypePrinter;
+
+template<typename T>
+void foo(const T& t)
+{
+	TypePrinter<T, decltype(t)> _;
+}
+
+class SomeClass { ... };
+
+SomeClass obj;
+foo(obj);
+```
+
+## Вывод типов на runtime: RTTI
 ***
+
+
+
+
 ***
 ***
 
@@ -2199,3 +2315,5 @@ class A
 ++ advanced constexpr?
 
 ++ TODO скользкие места C++ в UB
+
+Как найти выводимый тип?? стоит ли вводить в вывод типов? метод "отладки"
