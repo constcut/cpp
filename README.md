@@ -135,7 +135,14 @@
 - [Метапрограммирование](#метапрограммирование)
 	- [Не типовые шаблонные параметры](#не-типовые-шаблонные-параметры)
 	- [Типовые шаблонные параметры](#типовые-шаблонные-параметры)
-- [TODO](#todo)
+	- [Ключевое слово typename](#ключевое-слово-typename)
+	- [Explicit (full) specialization (явная\полная специализация)](#explicit-full-specialization-явнаяполная-специализация)
+	- [Partial specialization (частичная специализация)](#partial-specialization-частичная-специализация)
+	- [Variadic template (вариативные шаблоны)](#variadic-template-вариативные-шаблоны)
+	- [Variadic template (вариативные шаблоны)](#variadic-template-вариативные-шаблоны-1)
+	- [Вычисления на этапе компиляции](#вычисления-на-этапе-компиляции)
+	- [Вычисления на этапе компиляции](#вычисления-на-этапе-компиляции-1)
+	- [Преобразование с типами](#преобразование-с-типами)
 
 # Атрибуты
 
@@ -2384,10 +2391,94 @@ template <class K, class T, template <class, class> class ...Map>
 class MyMap : Map<K, T>... { ... };
 ```
 
-***
+## Ключевое слово typename
 ***
 
-# TODO
+Может быть использованно несколькими разными способами:
+
+```cpp
+template <typename T>
+struct X : B<T> // B<T> is dependent T
+{
+//Если не написать typename T::A может интерпретироваться не верно
+	typename T::A* pa; // T::A is dependent name from T
+
+	void f(B<T>* pb)
+	{
+		static int i = B<T>::i; // B<T>::i is dependent variable on T
+		pb->j++; // pb->j is dependent variable from T ??? B ???
+	}
+}
+```
+
+## Explicit (full) specialization (явная\полная специализация)
+***
+
+Пример для классов:
+
+```cpp
+template <class T>
+class vector // class template
+{
+	...
+};
+
+// full specialization for vector<bool>:
+template<>
+class vector<bool> 
+{
+	....
+};
+```
+
+Пример для функций:
+
+```cpp
+template <class T>
+void print(const T& obj) // function template
+{
+	std::cout << obj;
+};
+
+class SomeClass {...};
+
+// full specialization for print:
+template<>
+void print<SomeClass>(const SomeClass& obj) 
+{
+	std::cout << obj;
+};
+```
+
+## Partial specialization (частичная специализация)
+***
+
+16-06
+
+## Variadic template (вариативные шаблоны)
+***
+
+18-22
+
+
+## Variadic template (вариативные шаблоны)
+***
+
+18-22
+
++++ fold expressions возможно отдельный подзаголовок
+
+
+## Вычисления на этапе компиляции
+***
+
+constexpr ?
+
+## Вычисления на этапе компиляции
+***
+
+***
+## Преобразование с типами
 
 
 ++ Forwarding reference
