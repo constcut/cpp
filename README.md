@@ -2350,13 +2350,38 @@ struct B { .... };
 ## Типовые шаблонные параметры
 ***
 
-```cpp
-template <class> // или template <typename T>
-class FalseVector { ... };
+Три наиболее часто используемых варианта:
 
+```cpp
+template <class> // или <typename T>
+class FalseVector { ... };
 
 template <class T, class Alloc = std::allocator<T>> 
 class TrueVector { ... };
+
+// Начиная с C++11:
+template <class ...> // или <typename ...Types>
+class tuple { .... };
+```
+
+Начиная с C++17 доступны три более экзотических вариантов, шаблон в шаблоне:
+
+```cpp
+template <class K, class T, template <class> class Container>
+class MyMap
+{
+	Container<K> keys;
+	Container<T> values;
+};
+
+template<class T> class my_array { ... };
+
+template<class K, class T, template <class> class Container = my_array>
+class MyMap { ... };
+
+
+template <class K, class T, template <class, class> class ...Map>
+class MyMap : Map<K, T>... { ... };
 ```
 
 ***
