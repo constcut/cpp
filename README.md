@@ -2565,10 +2565,198 @@ public:
 ***
 
 ```cpp
+template <size_t N>
+struct Facrotial;
 
+template <>
+struct Facrotial<0>
+{
+// enum использовались в старых компиляторах
+// так как должны вычисляться на этапе компиляции
+// До С++11
+	enum { value = 1 }; 
+};
+
+template <>
+struct Facrotial<1>
+{
+	enum { value = 1 };
+};
+
+template <>
+struct Facrotial<2>
+{
+	enum { value = 2 };
+};
 ```
 
-constexpr ?
+Более разумное решение, без определения каждой частичной спецификации:
+
+```cpp
+// Если не реализовать <0> и <1>
+// Тогда рекурсия будет бесконечной
+
+template <size_t N>
+struct Facrotial
+{
+	// До С++11
+	enum { value = N * Factorial<N - 1>::value };
+};
+
+template <>
+struct Facrotial<0>
+{
+	enum { value = 1 }; 
+};
+
+template <>
+struct Facrotial<1>
+{
+	enum { value = 1 };
+};
+
+const auto fac5 = Factorial<5>::value;
+```
+
+Однако в данном случае присутствует рекурсия, но её глубина может достигать 1024 вызовов.
+
+Начиная с C++11:
+
+```cpp
+template <size_t N>
+struct Facrotial
+{
+	static constexpr size_t value = N * Facrotial<N - 1>::value;
+};
+
+template <>
+struct Facrotial<0>
+{
+	static constexpr size_t value = 1;
+};
+
+template <>
+struct Facrotial<1>
+{
+	static constexpr size_t value = 1;
+};
+
+const auto fac5 = Factorial<5>::value;
+```
+
+Такие структуры называются метафункции.
+Стандартное название для переменной метафункций ::value - негласное соглашение программистов.
+
+Вариант с использованием функций constexpr:
+
+```cpp
+constexpr size_t Factorial(size_t n) noexcept
+{
+	return n > 1 ? n * Facrotial(n - 1) : 1; // Начиная с C++11
+}
+
+// Не рекурсивный вариант:
+constexpr size_t Facrotial(size_t n) noexcept
+{
+	size_t acc = 1;
+	for (size_t i = 2; i <= n; ++i)
+		acc *= i;
+	
+	return acc; // Начиная с C++14
+}
+```
+
+Возведение некоторого числа, в степень:
+
+```cpp
+template<size_t Exp>
+struct pow1
+{
+	double operator()(double base) const noexcept
+	{
+		return base * pow1<Exp - 1>{}(base);
+	}
+}
+
+template <>
+struct pow1<0>
+{
+	double operator()(double base) const noexcept
+	{
+		return 1.0;
+	}
+}
+```
+
+Возможные оптимизации:
+
+```cpp
+template<size_t Exp>
+struct pow2
+{
+	double operator()(double base) const noexcept
+	{
+		return (Exp % 2 != 0)
+		? base * pow2<(Exp - 1) / 2>{}(base) * pow2<(Exp - 1) / 2>{}(base)
+		: pow2<Exp / 2>{}(base) * pow2<Exp / 2>{}(base);
+	}
+}
+
+template <>
+struct pow2<0>
+{
+	double operator()(double base) const noexcept
+	{
+		return 1.0;
+	}
+}
+```
+
+Так же на C++17 можно записать прошлый вариант короче:
+
+```cpp
+template <size_t Exp>
+struct pow1
+{
+	double operator()(double base) const noexcept
+	{
+		if constexpr(Exp == 0) 
+		{
+			return 1.0;
+		}
+		else
+		{
+			return base * pow1<Exp - 1>{}(base);
+		}
+	}
+};
+```
+
+И для оптимизированной версии:
+
+```cpp
+template <size_t Exp>
+struct pow2
+{
+	double operator()(double base) const noexcept
+	{
+		if constexpr(Exp == 0) 
+		{
+			return 1.0;
+		}
+		else if constexpr (Exp & 1 != 0)
+		{
+			return base * pow2<(Exp - 1) / 2>{}(base)
+						* pow2<(Exp - 1) / 2>{}(base);
+		}
+		else
+		{
+			return pow2<Exp / 2>{}(base) 
+				*  pow2<Exp / 2>{}(base);
+		}
+	}
+};
+```
 
 ## Вычисления на этапе компиляции
 ***
