@@ -3127,6 +3127,73 @@ T& emplace_back(Args ...args)
 ## Curiously recurring template pattern : CRTP
 ***
 
+```cpp
+template <class T>
+struct Base
+{
+};
+
+struct Derived : Base<Derived>
+{
+};
+```
+
+Проблемная ситуация, для которой нужна такая странная композиция:
+
+```cpp
+template <class T = intmax_t>
+class Rational
+{
+	T m_num = T(0), m_denom = T(1);
+
+public:
+	Rational() = default;
+
+	explicit Rational(T num, T denom = T(1)) 
+		: m_num { num }
+		, m_denom { denom } 
+	{ ... }
+
+	friend bool operator<(const Rational<T>& l, const Rational<T>& r) noexcept
+	{
+		const auto lcm = std::lcm(l.m_denom, r.m_denom);
+		return l.m_num * (lcm / l.m_denom)
+			   < r.m_num * (lcm / r.m_denom);
+	}
+}
+//Однако возникает сложность, если требуется оператор >
+```
+
+Пример из boost:
+
+```cpp
+template <class T>
+struct less_than_comparable
+{
+	friend bool operator>(const T& l, const T& r) noexcept
+	{
+		return r < l;
+	}
+	friend bool operator<=(const T& l, const T& r) noexcept
+	{
+		return !(r < l);
+	}
+	friend bool operator>=(const T& l, const T& r) noexcept
+	{
+		return !(l < r);
+	}
+
+	templace <class T = uint64_t>
+	class Rational : less_than_comparable<Rational<T>>
+	{ //Класс объявлен выше с операцией < 
+	};
+
+	//Обобщенная задача решена!
+}
+```
+
+Так же эта идеома применима при статическом полиморфизме, но это не даёт большого прироста производительности.
+
 ## SFINAE (Subsituation Failure Is Not An Error)
 ***
 
