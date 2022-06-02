@@ -140,7 +140,6 @@
 	- [Partial specialization (частичная специализация)](#partial-specialization-частичная-специализация)
 	- [Variadic template (вариативные шаблоны)](#variadic-template-вариативные-шаблоны)
 	- [Вычисления на этапе компиляции](#вычисления-на-этапе-компиляции)
-	- [Вычисления на этапе компиляции](#вычисления-на-этапе-компиляции-1)
 	- [Преобразование с типами](#преобразование-с-типами)
 	- [Primary type categories](#primary-type-categories)
 	- [Composite type categories](#composite-type-categories)
@@ -2688,6 +2687,8 @@ struct pow1<0>
 }
 ```
 
+Компилятор зная степень, подготовит вычисления на этапе компиляции.
+
 Возможные оптимизации:
 
 ```cpp
@@ -2758,8 +2759,86 @@ struct pow2
 };
 ```
 
-## Вычисления на этапе компиляции
-***
+В итоге pow2 почти всегда лучше встроенной функции в компилятор.
+
+Подсчёт бит в числе:
+
+```cpp
+constexpr uint8_t popcount(uint64_t value) noexcept
+{
+	uint8_t res = 0;
+	while (value != 0)
+	{
+		res += value & 1;
+		value >>= 1;
+	}
+
+	return res;
+}
+
+constexpr uint8_t pop_count = popcount(0b010010010); // == 3
+```
+
+Наибольший общий делитель:
+
+```cpp
+constexpr uint64_t gcd(uint64_t a, uint64_t b) noexcept
+{
+	while (a != b)
+	{
+		if (a > b)
+		{
+			a -= b
+		}
+		else
+		{
+			b -= a;
+		}
+	}
+	return a;
+}
+
+constexpr auto gcd_a_b = gcd(15, 125); // == 5
+```
+
+Решето Эратосфена:
+
+```cpp
+template <uint64_t N, size_t ...Idx>
+constexpr std::array<bool, N + 1> sieve_impl(std::index_sequence<Idx...>) noexcept
+{
+	//Нужно просто чтобы заполнить массив true:
+	std::array<bool, N + 1> primes { (Idx, true)... };
+	//В С++20 можно использовать вектора, и это не понадобится.
+
+	primes[0] = primes[1] = false;
+
+	for (size_t i  = 2; i * i <= N; ++i)
+	{
+		if (primes[i])
+		{
+			for (size_t j = i * i; j <= N; j += i)
+				primes[j] = false;
+		}
+	}
+	return primes;
+}
+
+template <uint64_t N, typename Idx = std::make_index_sequence<N + 1>>
+constexpr std::array<bool, N + 1> sieve() noexcept
+{
+	return sieve_impl<N>(Idx {});
+}
+
+constexpr auto primes = seive<5>();
+// 0, 1, 4 == false
+// 2, 3, 5 == true
+
+//Вывод в поток:
+std::copy(primes.begin(), primes.end(),
+	std::ostream_iterator<bool> {std::cout, " " });
+//0 0 1 1 0 1
+```
 
 
 ## Преобразование с типами
