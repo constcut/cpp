@@ -3197,7 +3197,127 @@ struct less_than_comparable
 ## SFINAE (Subsituation Failure Is Not An Error)
 ***
 
-+ std::enable_if
+```cpp
+templace <class Container>
+void printContainer(const Container& cont)
+{
+	if (!cont.empty())
+	{
+		std::cout << "(";
+		
+		for (const auto& value: cont)
+		{
+			std::cout << " " << value;
+		}
+
+		std::cout << ")";
+	}
+}
+```
+
+Примитивные типы элементов из листа\вектора\дека - работают из коробки.
+
+Для своего класса потребуется только определить оператор <<.
+
+Для set\unordered всё работает из коробки.
+
+Для map\unordered потребуется определить оператор << для пары.
+
+Однако если попробовать использовать std::stack<int> в качестве контейнера - возникнет ошибка компиляции. Это произойдёт потому что у него нет функций begin\end.
+
+Нужно сделать защиту, чтобы нельзя был использовать не итерируемый тип Container:
+
+```cpp
+template <class Container,
+		  class It = typename Container::const_iterator>
+void printContainer(const Container& cont)
+{
+	if (!cont.empty())
+	{
+		std::cout << "(";
+		
+		for (const auto& value: cont)
+		{
+			std::cout << " " << value;
+		}
+
+		std::cout << ")";
+	}
+}
+
+//Использование It не даст собраться нежелательным вызовам:
+void printContainer(1);
+void printContainer(std::stack<int>{1});
+//И будут выведены понятные сообщения об ошибке
+```
+
+Альтернативный метод реализации SFINAE через std::enable_if:
+
+```cpp
+template <bool Cond, class T = void>
+struct enable_if {};
+
+template <class T>
+struct enable_if<true, T>
+{
+	using type = T;
+};
+
+template <bool Cond, class T = void>
+using enable_if_t = typename enable_if<Cond, T>::type;
+```
+
+Где это необходимо:
+
+```cpp
+template <typename It>
+using ItTag = typename std::iterator_traits<It>::iterator_category;
+
+// Не будет работать с итераторами не random access
+template <class It, class Diff,
+			std::enable_if_t<std::is_base_of_v<
+			std::random_access_iterator_tag, ItTag<It>>,
+			int> = 0>
+
+It next(It it, Diff n) noexcept
+{
+	return it + n;
+}
+
+// Данный экземпляр будет вызван например для list
+template <class It, class Diff,
+			std::enable_if_t<std::is_same_v<
+			std::bidirectional_iterator_tag, ItTag<It>>,
+			int> = 0>
+
+It next(It it, Diff n) noexcept
+{
+	for (; n > Diff(0); --n)
+		++it;
+
+	for (; n < Diff(0); ++n)
+		--it;
+
+	return it;	
+}
+
+
+// input или forward итераторы
+template <class It, class Diff,
+			std::enable_if_t<std::is_same_v<std::input_iterator_tag, ItTag<It>>
+							|| std::is_same_v<std::forward_iterator_tag, ItTag<It>>>,
+			int> = 0>
+
+It next(It it, Diff n) noexcept
+{
+	assert(n >= 0);
+	for (; n != Diff(0); --n)
+		++it;
+
+	return it;	
+}
+
+```
 
 ## Tag dispatch
 ***
