@@ -140,14 +140,14 @@
 	- [Partial specialization (частичная специализация)](#partial-specialization-частичная-специализация)
 	- [Variadic template (вариативные шаблоны)](#variadic-template-вариативные-шаблоны)
 	- [Вычисления на этапе компиляции](#вычисления-на-этапе-компиляции)
-	- [Преобразование с типами](#преобразование-с-типами)
-	- [Primary type categories](#primary-type-categories)
-	- [Composite type categories](#composite-type-categories)
-	- [Type properties](#type-properties)
-	- [Supported operations properties](#supported-operations-properties)
-	- [Type relationships](#type-relationships)
-	- [Property queries](#property-queries)
-	- [Type transformations](#type-transformations)
+	- [Compile-time type manipulation (Преобразование с типами)](#compile-time-type-manipulation-преобразование-с-типами)
+		- [Primary type categories](#primary-type-categories)
+		- [Composite type categories](#composite-type-categories)
+		- [Type properties](#type-properties)
+		- [Supported operations properties](#supported-operations-properties)
+		- [Type relationships](#type-relationships)
+		- [Property queries](#property-queries)
+		- [Type transformations](#type-transformations)
 	- [Curiously recurring template pattern](#curiously-recurring-template-pattern)
 	- [SFINAE (Subsituation Failure Is Not An Error)](#sfinae-subsituation-failure-is-not-an-error)
 	- [Tag dispatch](#tag-dispatch)
@@ -2841,40 +2841,197 @@ std::copy(primes.begin(), primes.end(),
 ```
 
 
-## Преобразование с типами
+## Compile-time type manipulation (Преобразование с типами)
 ***
 
+С++ типы:
 ![image info](images/types.png)
 
-## Primary type categories
+Чтобы проверить является ли тип ссылкой - определим метафункцию:
+
+```cpp
+template<class T>
+struct is_reference
+{
+	static constexpr bool value = false;
+};
+
+template<class T>
+struct is_reference<T&>
+{
+	static constexpr bool value = true;
+};
+
+template<class T>
+struct is_reference<T&&>
+{
+	static constexpr bool value = true;
+};
+```
+
+Может потребоваться вытянуть это значение иначе. 
+Например через вызов функции и cast is_reference в bool.
+
+Чтобы не писать вручную такой код - применяют шаблонную магию integral_constant:
+
+```cpp
+template<class T, T v>
+struct integral_constant
+{
+	using value_type = T;
+	using type = std::integral_constant<T, v>;
+
+	static constexpr value_type value = v;
+
+	constexpr operator value_type() { return v; } const noexcept
+	constexpr value_type operator()() { return v; } const noexcept
+};
+
+using true_type = integral_constant<bool, true>;
+using false_type = integral_constant<bool, false>;
+
+//Теперь перепишем прошлый код:
+template <class T>
+struct is_reference : false_type {};
+
+template <class T>
+struct is_reference<T&> : true_type {};
+
+template <class T>
+struct is_reference<T&&>  : true_type {};
+//Теперь у нас будет не только ::value 
+//Но и все необходимые перегрузки в каждом варианте
+```
+
+В С++17 ввели шаблонные переменные, в данной ситуации они могут помочь, чтобы каждый раз не писать is_reference<T>::value.
+
+```cpp
+template<class T>
+inline constexpr bool is_reference_v = is_reference<T>::value;
+```
+
+Рассмотрим функции, которые есть в стандартной библиотеке:
+
+### Primary type categories
 ***
 
-Обычное + _v
++ is_void
++ is_null_pointer
++ is_integral
++ is_floating_point
++ is_array
++ is_enum
++ is_union
++ is_class
++ is_function
++ is_pointer
++ is_lvalue_reference
++ is_rvalue_reference
++ is_member_object_pointer
++ is_member_function_pointer
 
-## Composite type categories
+И так же шаблонные переменные с постфиксом _v.
+
+### Composite type categories
 ***
 
-Обычное + _v
++ is_fundamental
++ is_arithmetic
++ is_scalar
++ is_object
++ is_compound
++ is_reference
++ is_member_pointer
 
-## Type properties
+И так же шаблонные переменные с постфиксом _v.
+
+### Type properties
 ***
 
-Обычное + _v
++ is_const
++ is_volatile
++ is_trivial
++ is_trivial_copyable
++ is_standard_layout
++ is_pod
++ is_literal_type
++ has_unique_object_representations
++ is_empty
++ is_polymorphic
++ is_abstract
++ is_final
++ is_aggregate
++ is_signed
++ is_unsigned
++ is_bounded_array
++ is_unbounded_array
 
-## Supported operations properties
+
+И так же шаблонные переменные с постфиксом _v.
+
+### Supported operations properties
 ***
 
-Обычное + _v
++ is_constructible
++ is_trivially_constructible
++ is_nothrow_constructible
++ is_default_constructible
++ is_trivially_default_constructible
++ is_nothrow_default_constructible
++ is_copy_constructible
++ is_trivially_copy_constructible
++ is_nothrow_copy_constructible
++ is_move_constructible
++ is_trivially_move_constructible
++ is_nothrow_move_constructible
++ is_assignable
++ is_trivially_assignable
++ is_nothrow_assignable
++ is_copy_assignable
++ is_trivially_copy_assignable
++ is_nothrow_copy_assignable
++ is_move_assignable
++ is_trivially_move_assignable
++ is_nothrow_move_assignable
++ is_destructible
++ is_trivially_destructible
++ is_nothrow_destructible
++ is_default_destructible
++ has_virtual_destructor
++ is_swappable_with
++ is_swappable
++ is_nothrow_swappable_with
++ is_nothrow_swappable
 
-## Type relationships
+
+И так же шаблонные переменные с постфиксом _v.
+
+### Type relationships
 ***
 
++ is_same
++ is_base_of
++ is_convertible
++ is_nothrow_convertible
++ is_invocable
++ is_invocable_r
++ is_nothrow_invocable
 
-## Property queries
+И так же шаблонные переменные с постфиксом _v.
+
+### Property queries
 ***
 
-## Type transformations
++ alligment_of - работает как allignof
++ rank - число элементов массива
++ extent - сколько размерностей внутри массива
+
+И так же шаблонные переменные с постфиксом _v.
+
+### Type transformations
 ***
+
+И так же шаблонные переменные с постфиксом _v.
 
 ## Curiously recurring template pattern
 ***
