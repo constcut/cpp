@@ -148,7 +148,7 @@
 		- [Type relationships](#type-relationships)
 		- [Property queries](#property-queries)
 		- [Type transformations](#type-transformations)
-	- [Curiously recurring template pattern](#curiously-recurring-template-pattern)
+	- [Curiously recurring template pattern : CRTP](#curiously-recurring-template-pattern--crtp)
 	- [SFINAE (Subsituation Failure Is Not An Error)](#sfinae-subsituation-failure-is-not-an-error)
 	- [Tag dispatch](#tag-dispatch)
 	- [Real example based on SFINAE](#real-example-based-on-sfinae)
@@ -3057,6 +3057,8 @@ template <class T>
 using remove_reference_t = typename remove_reference<T>::type;
 ```
 
+Наподобии с неявным правилом constexpr value, здесь так же есть неявное правило using type.
+
 Список метафункций из стандартной библиотеки:
 
 + remove_const
@@ -3082,9 +3084,47 @@ using remove_reference_t = typename remove_reference<T>::type;
 + result_of
 + invoke_result
 
-И так же шаблонные переменные с постфиксом _v.
+И так же есть специальные перегрузки с постфиксом _t.
 
-## Curiously recurring template pattern
+Для чего это может быть нужно:
+
+```cpp
+template <class T, class Alloc = std::allocator<T>>
+class vector
+{
+public:
+	template <class ...Args>
+	T& emplace_back(Args ...args);
+};
+
+template <class ...Args>
+T& emplace_back(Args ...args)
+{
+	if (size() == capacity())
+	{
+		const auto oldCap = capacity();
+		const auto newCap = computeGrowth(oldCap + 1);
+		auto *newVec = allocator_traits<Alloc>::allocate(al, newCap);
+		allocator_traits<Alloc>::construct(al, newVec, oldCap + 1,
+			 								forward<Args>(args)...);
+		
+		if constexpr (is_nothrow_move_constructible_v<T> 
+					 || !is_copy_constructible_v<T>)
+		{
+			uninitialized_move(begin(), end(), ptr);
+		}
+		else
+		{
+			uninitialized_copy(begin(), end(), ptr);
+		}
+
+		//Освобождение старых объектов и региона памяти
+		change_array(newVec, size() + 1, newCap);
+	}
+}
+```
+
+## Curiously recurring template pattern : CRTP
 ***
 
 ## SFINAE (Subsituation Failure Is Not An Error)
