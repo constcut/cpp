@@ -384,7 +384,7 @@ decltype(auto) v4 = (v1);  //double&
 decltype(auto) v5 = v2;  //const double&
 
 decltype(auto) v6 = foo(); //double
-decltype(auto) v7=bar(); //double && 
+decltype(auto) v7 = bar(); //double && 
 ```
 
 
@@ -2021,10 +2021,142 @@ auto err_list = {1, 0.2}; // не удастся вывести тип
 
 ## Правила вывода для lambda capture-list
 ***
-33-46
+
+Список типов захвата:
+
+```cpp
+[=]
+[&]
+[this]
+[*this] // C++17
+[identifier]
+[&identifier]
+[identifier initializer] // C++14
+[&identifier initializer] // C++14
+```
+
+Захват по копии:
+
+```cpp
+const int cx = 42;
+auto lambda = [cx] { ... };
+
+// При раскручивании в компиляторе:
+class LambdaCompilerRepresentation
+{
+	// Сохраняется const\volatile:
+	const int cx;
+public:
+	auto operator()() const { ... }
+}
+```
+
+Влияние mutable спецификатора:
+
+```cpp
+int x = 42;
+// Compile error:
+auto lambda = [x] { x = 0; }; // Нехватает mutable
+
+class LambdaCompilerRepresentation
+{
+	int x;
+public:
+	// const модификатор причина проблемы выше
+	auto operator()() const { ... }
+	// требуется модификатор mutable в lambda
+}
+```
+
+```cpp
+const int x = 42;
+// Compile error:
+auto lambda = [x] mutable { x = 0; }; 
+
+class LambdaCompilerRepresentation
+{
+	// const модификатор причина проблемы выше:
+	const int x;
+public:
+	auto operator()() { x = 0; }
+}
+```
+
+Захват по ссылке:
+
+```cpp
+int x = 42;
+auto lambda = [&x] { x = 0; }; // ok
+
+class LambdaCompilerRepresentation
+{
+	int& x;
+public:
+	auto operator()() const { x = 0; }
+}
+```
+
+```cpp
+const int x = 42;
+auto lambda = [&x] { x = 0; }; // compile error
+
+class LambdaCompilerRepresentation
+{
+	const int& x;
+public:
+	auto operator()() const { x = 0; }
+}
+```
+
+Список захвата с инициализацией:
+
+```cpp
+auto p = std::make_unique<SomeClass>();
+
+auto lambda = [p = std::move(p)] { ... }; // ok
+
+class LambdaCompilerRepresentation
+{
+//Если захват не по ссылке const\volatile отбросятся
+	std::make_unique<SomeClass> p; 
+public:
+	auto operator()() const { ... }
+}
+```
+
+```cpp
+int x = 42;
+auto lambda = [&rx = x] { rx = 0; }; // ok
+
+class LambdaCompilerRepresentation
+{
+//Если захват по ссылке const\volatile сохранятся
+	int& rx;
+public:
+	auto operator()() const { rx = 0; }
+}
+```
 
 ## Правила вывода для decltype
 ***
+
+```cpp
+double foo();
+double&& bar();
+
+int arr[10];
+
+int v1 = 0.0;  //int
+const int& v2 = v1;  //int double &
+int&& v3 = 0; //int&&
+
+decltype(auto) v4 = v1;  //int
+decltype(auto) v5 = (v1);  //int& 
+decltype(auto) v6 = v2;  //const int&
+
+decltype(auto) v6 = foo(); //double
+decltype(auto) v7 = bar(); //double && 
+```
 
 ## + , + , +
 ***
