@@ -3555,14 +3555,92 @@ decltype(Default.foo()) i1 = 1; // type = int
 decltype(NonDefault().foo()) i2 = i1; // Compile error
 
 decltype(std::declval<NonDefault>().foo()) i2 = i1; // type = int
-
 ```
 
+Важно! declval работает только внутри:
+
++ decltype
++ sizeof
++ typeid
++ noexcept
+
+Т.е. в тех операторах, где выражение не вычисляется.
 
 ## Detectors
 ***
 
+Проверка на то, что контейнер может итерироваться:
 
+```cpp
+template <class T, typename = void>
+struct is_iterable: std::false_value
+{
+};
+
+template <class T>
+struct is_iterable<T, std::void_t<
+				   decltype(std::begin(std::declval<T&>())),
+				   decltype(std::end(std::declval<T&>()))>>
+	: std::true_type
+{
+};
+
+template <class T>
+inline constexpr auto is_iterable = is_iterable<T>::value;
+
+static_assert(is_iterable<std::vector<int>>); // ok
+static_assert(is_iterable<std::list<int>>);  // ok
+static_assert(is_iterable<std::map<int, int>>);  // ok
+static_assert(is_iterable<std::stack<int>>); // compile time error
+```
+
+Если трубется так же проверять есть ли возможность rbegin\rend:
+
+```cpp
+template <class T, typename = void>
+struct is_reverse_iterable: std::false_value
+{
+};
+
+template <class T>
+struct is_reverse_iterable<T, std::void_t<
+				   decltype(std::begin(std::declval<T&>())),
+				   decltype(std::end(std::declval<T&>())),
+				   decltype(std::rbegin(std::declval<T&>())),
+				   decltype(std::rend(std::declval<T&>()))>>
+	: std::true_type
+{
+};
+
+template <class T>
+inline constexpr auto is_reverse_iterable_v = is_reverse_iterable<T>::value;
+
+static_assert(is_iterable<std::vector<int>>); // ok
+static_assert(is_iterable<std::list<int>>);  // ok
+static_assert(is_iterable<std::map<int, int>>);  // ok
+static_assert(is_iterable<std::forward_list<int>>); // compile time error
+```
+
+Для того чтобы сделал обобщенный вариант, когда не нужно будет определять 2 структуры каждый раз, придумали детекторы:
+
+```cpp
+
+
+template <class Default, class AlwaysVoid, template <class...> class Op, class ...Args>
+struct detector
+{
+	using value_t = std::false_type;
+	using type = Default;
+}
+
+template <class Default, template<class ...>, class Op, class... Args>
+struct dectector<Default, std::void_t<Op<Args...>>, Op, Args>
+{
+	using value_t = std::true_type;
+	using type = Op<Args...>;
+}
+
+```
 
 ***
 ***
@@ -3588,3 +3666,5 @@ decltype(std::declval<NonDefault>().foo()) i2 = i1; // type = int
 ++ TODO скользкие места C++ в UB
 
 // TODO placement new
+
+++ std::true_type пометить о существовании этих функций, где есть пример их реализации
