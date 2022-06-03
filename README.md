@@ -154,7 +154,14 @@
 	- [void_t](#void_t)
 	- [Detectors](#detectors)
 - [STL](#stl-1)
-	- [Концепция, контейнеры, итераторы](#концепция-контейнеры-итераторы)
+	- [Базовая структура STL](#базовая-структура-stl)
+	- [Контейнеры](#контейнеры)
+		- [**std::allocator**](#stdallocator)
+		- [**Последовательные контейнеры**](#последовательные-контейнеры)
+			- [**std::vector**](#stdvector)
+			- [**std::array**](#stdarray)
+			- [**std::forward_list**](#stdforward_list)
+			- [**std::**](#std)
 - [TODO](#todo)
 
 # С++11, C++14, C++17
@@ -3719,8 +3726,237 @@ inline constexpr bool has_foo = is_detected_v<v_foo_v, T>
 
 # STL
 
-## Концепция, контейнеры, итераторы
+## Базовая структура STL
 
+***
+
++ Контейнеры
++ Итераторы
++ Алгоритмы
++ Адаптеры
++ Функциональные объекты
+
+***
+
+## Контейнеры
+
++ Последовательные
++ Упорядоченные ассоциативные
++ Неупорядоченные ассоциативные
++ Адаптеры
+
+
+### **std::allocator**
+
+Изначально алокаторы появились для того чтобы проще было работать со старой моделью памяти, в которой существовали ближние и дальние указатели.
+Но на текущий момент у них другие задачи. Рассмотрим пример реализации:
+
+```cpp
+template <class T>
+struct allocator { ... };
+
+template <class Alloc>
+struct allocator_traits
+{
+	using allocator_type = Alloc;
+	using value_type = Alloc::value_type;
+	using pointer = Alloc::pointer;
+	using const_pointer = Alloc::const_pointer;
+	using difference_type = Alloc::difference_type;
+	using size_type = Alloc::size_type;
+
+	[[nodiscard]] static pointer allocate(Alloc& a, size_type n);
+
+	static void deallocate(Alloc& a, pointer p, size_type n);
+
+	template <class T, class... Args>
+	static void construct(Alloc& a, T* p, Args&&... args);
+
+	template<class T>
+	static void destroy(Alloc& a, T* p);
+}
+```
+
+Allocator умеет:
+
++ Аллоцировать кусок памяти через функцию allocate
++ Очищаять аллоцированную память через deallocate
++ Через функцию construct формируется объект (placement new)
++ Разрушать объект, через функцию destroy
+
+Начиная с C++11 эти функции были перенесены в allocator_traits, а так же были добавленны using'и для шаблонной магии.
+
+Пример использования:
+
+```cpp
+#include <memory>
+
+std::allocator<int> a1; //Стандартный алокатор для int
+int* p = a1.allocate(1); //алокация памяти для 1 элемента
+a1.construct(p, 7); //Конструирование и инициализация
+
+std::cout << *p; // 7
+
+using prev_alloc = decltype(a1);
+std::allocator<std::allocator_traits<prev_alloc>::value_type> a2;
+
+a2.deallocate(p, 1); //Этот код корректен, алокаторы не хранят состояния
+```
+
+Контейнеры используют алокаторы как второй шаблонный параметер.
+
+### **Последовательные контейнеры**
+
+#### **std::vector**
+
+Вектор хранит объекты типа T в динамически выделенной памяти.
+ 
+```cpp
+template <class T, class Alloc = std::allocator<T>>
+class vector
+{
+	using value_type = T;
+	using allocator_type = Alloc;
+	using size_type = std::size_t;
+	using difference_type = std::ptrdiff_t;
+	using reference = value_type&;
+	using const_reference = const value_type&;
+	using pointer = std::allocator_traits<Alloc>::pointer;
+	using const_pointer = std::allocator_traits<Alloc>::const_pointer;
+
+	//+ итераторы (о них позже)
+};
+```
+
+Функции класса вектор можно разбить на 4 типа.
+
+Доступ к элементам:
+
++ at, operator[] - асимптотическая сложность O(1)
++ data - асимптотическая сложность O(1)
++ front, back - асимптотическая сложность O(1)
+
+Функция at может бросить исключение, если вышли за границы, operator[] - нет.
+
+Размеры (capacity):
+
++ empty - асимптотическая сложность O(1)
++ size, max_size, capacity - асимптотическая сложность O(1)
++ resize, reserve, shrink_to_fit - асимптотическая сложность O(n)
+
+При инициализации вектора при помощи std::initializer_list или {} - capacity равно его размеру.
+
+При resize происходит изменение размера вектора, новые элементы (выше прошлого size()) заполняются дефолтным значением.
+
+При reserve происходит увеличение capacity, но не size.
+
+Функция shrink_to_fit делает capasity = size, т.е. обрезает лишнюю память.
+
+Модицикаторы (modifiers):
+
++ clear, erase - асимптотическая сложность O(n)
++ insert, emplace, push_back - асимптотическая сложность O(1) или O(n)
++ emplace_back, pop_back - асимптотическая сложность O(1)
++ swap - асимптотическая сложность O(1)
+
+Разница в асимптотической сложности push_back итд связанна с тем нужна ли реалокация, или нет.
+Если требуется сделать вставку не в конец, insert\emplace тоже работают за O(n), иначе O(1).
+
+Emplace и emplace_back формируют объект при помощи preferct forwarding.
+
+Аллокатор:
+
++ get_allocator - асимптотическая сложность O(1)
+
+
+#### **std::array**
+
+Отличается от вектора там, что хранит элементы на стеке, а не в динамически выделенной памяти.
+
+```cpp
+template <class T, size_t N>
+struct array
+{
+	using value_type = T;
+	using size_type = std::size_t;
+	using difference_type = std::ptrdiff_t;
+	using reference = value_type&;
+	using const_reference = const value_type&;
+	using pointer = T*;
+	using const_pointer = const T*;
+
+	//+ итераторы (о них позже)
+};
+```
+
+В отличии от сырых массивов его можно передавать как по значению, так и по ссылки, и в первом случае он будет копироваться.
+
+std::array содержит 3 группы функций.
+
+Доступ к элементам:
+
++ at, operator[] - асимптотическая сложность O(1)
++ data - асимптотическая сложность O(1)
++ front, back - асимптотическая сложность O(1)
+
+Размер (capacity):
+
++ empty - асимптотическая сложность O(1)
++ size, max_size - асимптотическая сложность O(1)
+
+Модификаторы:
+
++ swap - асимптотическая сложность O(n)
+
+
+#### **std::forward_list**
+
+Представляет однонаправленный список. Так же использует аллокатор как вектор и содержит все те же using'и, для метапрограммирования.
+
+У него есть 5 групп функций.
+
+Доступ к элементам:
+
++ front - асимптотическая сложность O(1)
+
+Размер:
+
++ empty - асимптотическая сложность O(1)
++ max_size - асимптотическая сложность O(1)
++ resize - асимптотическая сложность O(n)
+
+Модификаторы:
+
++ clear - асимптотическая сложность O(n)
++ erase_after - асимптотическая сложность O(1)-O(n)
++ insert_after - асимптотическая сложность O(1)-O(n)
++ push_front, emplace_after, emplace_front - асимптотическая сложность O(1)
++ pop_front - асимптотическая сложность O(1)
++ swap - асимптотическая сложность O(1)
++ merge - асимптотическая сложность O(n)
+
+Merge перености все элементы из листа переданного в качестве аргумента функции, второй лист становится пустым.
+
+Встроенные алгоритмы:
+
++ splice_after - асимптотическая сложность O(1)-O(n)
++ remove, remove_if - асимптотическая сложность O(n)
++ reverse - асимптотическая сложность O(n)
++ sort -  - асимптотическая сложность O(n log n)
++ unique - асимптотическая сложность O(n)
+
+Функция splice_after работает схоже с merge, но можно задать позицию для вставки.
+
+Функции remove\remove_if - удаление диапазона.
+
+Функция unique - оставляет только уникальные значения, однако перед тем как её вызвать нужно обязательно отсортировать элементы, функцией sort.
+
+Аллокатор:
+
++ get_allocator - асимптотическая сложность O(1)
+
+
+#### **std::**
 
 # TODO
 
