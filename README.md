@@ -3624,8 +3624,6 @@ static_assert(is_iterable<std::forward_list<int>>); // compile time error
 Для того чтобы сделал обобщенный вариант, когда не нужно будет определять 2 структуры каждый раз, придумали детекторы:
 
 ```cpp
-
-
 template <class Default, class AlwaysVoid, template <class...> class Op, class ...Args>
 struct detector
 {
@@ -3640,7 +3638,77 @@ struct dectector<Default, std::void_t<Op<Args...>>, Op, Args>
 	using type = Op<Args...>;
 }
 
+struct nonesuch
+{
+	nonesuch() = delete;
+	nonsuch(const nonesuch&) = delete;
+	nonsuch(nonesuch&&) = delete;
+	nonesuch& operator=(const nonesuch&) = delete;
+	nonesuch& operator=(nonesuch&&) = delete;
+};
 ```
+
+Где Op - это метафункция, например std::is_same, а Args - это наши типы, например T1\T2.
+
+Далее:
+
+```cpp
+template <template <class ...> class Op, class... Args>
+using is_detected = typename detector<nonesuch, void, Op, Args...>::value_t;
+
+template <template<class..> class Op, class... Args>
+inline constexpr bool is_detected_v = is_detected<Op, Args...>::value;
+
+template<template<class..> class Op, class.. Args>
+using detected_t = typename detector<nonesuch, void, Op, Args..>::type;
+
+template <class Default, template<class...> class Op, class... Args>
+using detected_or = detector<Default, void, Op, Args...>;
+
+template <class Default, template<class ...> class Op, class... Args>
+using detected_or_t = typename detected_or<Default, Op, Args...>::type;
+```
+
+Как это использовать:
+
+```cpp
+template <class T>
+using free_begin = decltype(std::begin(std::declval<T>()));
+
+template <class T>
+using free_end = decltype(std::end(std::declval<T>()));
+
+template <class T>
+using free_rbegin = decltype(std::rbegin(std::declval<T>()));
+
+template <class T>
+using free_rend = decltype(std::rend(std::declval<T>()));
+
+template <class T>
+inline constexpr auto is_iterable_v = is_detected_v<free_begin, T>
+								  	&& is_detected_v<free_end, T>;
+
+template <class T>
+inline constexpr auto is_reverse_iterable_v = is_detected_v<free_rbegin, T>
+								  	&& is_detected_v<free_rend, T>;		  
+```
+
+Для того чтобы проверить, что в нашем классе есть функция foo:
+
+```cpp
+template <class T>
+using v_foo_v = decltype(std::declval<T&>().foo());
+
+template <class T>
+using v_foo_i = decltype(std::declval<T&>().foo(std::declval<int>()));
+
+template <class T>
+inline constexpr bool has_foo = is_detected_v<v_foo_v, T>
+							 && is_detected_v<v_foo_i, T>;
+```
+
+Детекторы позволяют делать проверку, что наши объекты соответствуют нашим ожиданиям.
+В C++20 появятся концепты, которые так же позволяют решать данные задачи.
 
 ***
 ***
