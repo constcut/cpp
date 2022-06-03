@@ -1,6 +1,4 @@
-# C++
-
-- [C++](#c)
+- [С++11, C++14, C++17](#с11-c14-c17)
 - [Атрибуты](#атрибуты)
 	- [C++11](#c11)
 	- [C++14](#c14)
@@ -155,7 +153,13 @@
 	- [Special metafunctions](#special-metafunctions)
 	- [void_t](#void_t)
 	- [Detectors](#detectors)
+- [STL](#stl-1)
+	- [Концепция, контейнеры, итераторы](#концепция-контейнеры-итераторы)
 - [TODO](#todo)
+
+# С++11, C++14, C++17
+
+Ниже рассмотрены нововведения 3х стандартов языка C++.
 
 # Атрибуты
 
@@ -3712,6 +3716,12 @@ inline constexpr bool has_foo = is_detected_v<v_foo_v, T>
 
 ***
 ***
+
+# STL
+
+## Концепция, контейнеры, итераторы
+
+
 # TODO
 
 ++ Forwarding reference
@@ -3736,3 +3746,8 @@ inline constexpr bool has_foo = is_detected_v<v_foo_v, T>
 // TODO placement new
 
 ++ std::true_type пометить о существовании этих функций, где есть пример их реализации
+
+++ Изучить мелкие фитчи, например
+
+int* pArr = new int[N]{}; - создаёт массив с дефолтными значениями
+(+ массивы на умных указателях)
