@@ -150,8 +150,8 @@
 		- [Type transformations](#type-transformations)
 	- [Curiously recurring template pattern : CRTP](#curiously-recurring-template-pattern--crtp)
 	- [SFINAE (Subsituation Failure Is Not An Error)](#sfinae-subsituation-failure-is-not-an-error)
-	- [Tag dispatch](#tag-dispatch)
-	- [Real example based on SFINAE](#real-example-based-on-sfinae)
+		- [Tag dispatch](#tag-dispatch)
+		- [Практический пример основанный на SFINAE](#практический-пример-основанный-на-sfinae)
 	- [Special metafunctions](#special-metafunctions)
 	- [void_t](#void_t)
 	- [Detectors](#detectors)
@@ -3318,15 +3318,122 @@ It next(It it, Diff n) noexcept
 }
 ```
 
-## Tag dispatch
+### Tag dispatch
 ***
 
-1-12-30
+Был придуман, чтобы выглядить удобнее.
 
-+ if constexpr
+Подготовка функций:
 
-## Real example based on SFINAE
+```cpp
+template <typename It, class Diff>
+It next_impl(It it, Diff n, std::input_iterator_tag)
+{
+}
+
+template <typename It, class Diff>
+It next_impl(It it, Diff n, std::bidirectional_iterator_tag)
+{
+}
+
+
+template <typename It, class Diff>
+It next_impl(It it, Diff n, std::random_access_iterator_tag)
+{
+}
+```
+
+Основная функция:
+
+```cpp
+template<typename It>
+using ItTag = typename std::iterator_traits<It>::iterator_category;
+
+template <typename It, class Diff>
+It next(It it, Diff n)
+{
+	return (it, n, ItTag<It>{});
+}
+```
+
+Вариант реализации, с использованием if constexpr:
+
+```cpp
+template<typename It>
+using ItTag = typename std::iterator_traits<It>::iterator_category;
+
+template <typename It, class Diff>
+It next(It it, Diff n)
+{
+	if constexpr(std::is_base_of_v<std::random_access_iterator_tag, ItTag<It>>)
+	{} //Для random access итераторов
+	else if constexpr(std::is_same_v<std::bidirectional_iterator_tag, ItTag<It>>)
+	{} //Для bidirectional итераторов
+	else
+	{} //Для input and forward итераторов
+}
+```
+
+### Практический пример основанный на SFINAE
 ***
+
+Ленивые вычисления. У нас функтор инициализатор, и есть optional - в котором значение либо уже проинициализированно, либо ещё нет. Есть потребность проверить, является возвращаемый результат void или ссылкой, т.е. optional не умеет работать со ссылками, для этого используем reference_wrapper. Всё это реализуется кодом ниже:
+
+```cpp
+#include <optional>
+#include <functional>
+
+template <class T>
+using OptRefType = std::optional<std::reference_wrapper<std::remove_reference_t<T>>>;
+
+template <class Func>
+class Lazy
+{
+	using ResultType = std::invoke_result_t<Func>;
+	using OptionalType = std::conditional_t<std::is_void_v<ResultType>, bool,
+						 std::conditional_t<std::is_reference_v<ResultType>,
+						 OptRefType<ResultType>, std::optional<ResultType>>>;
+
+	Func m_initializer;
+	OptionalType m_value;
+
+public:
+
+	Lazy(Func&& init) : m_initializer { std::forward<Func>(init) } 
+	{}
+
+};
+```
+
+Теперь, как возвращать значение: оно может быть результирующим типом или void. Для этого используем SFINAE
+
+```cpp
+template <class Func>
+class Lazy
+{
+
+public:
+
+	template <class T = ResultType, std::enable_if_t<!std::is_void_v<T>, int> = 0>
+	ResultType operator()()
+	{
+		if (m_value)
+			return *m_value;
+
+		return m_value.emplace(m_initializer());
+	}
+
+	template <class T = ResultType, std::enable_if_t<std::is_void_v<T>, int> = 0>
+	void operator()()
+	{
+		if (m_value)
+			return;
+
+		m_value = true;
+		m_initializer();
+	}
+};
+```
 
 ## Special metafunctions
 ***
