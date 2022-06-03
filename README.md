@@ -3435,11 +3435,129 @@ public:
 };
 ```
 
+Пример использования:
+
+```cpp
+// С++ 14: Не удастся автоматически deduce типа Func
+// Потому необходим CreateLazy + auto idx = CreateLazy([]{});
+template <class Func>
+Lazy<Func> CreateLaxy(Func&& f)
+{
+	return { std::forward<Func>(f); }; 
+}
+
+auto idx = CreateLazy([] {auto i = 0; return i;});
+
+// C++ 17: может вывести всё без templatre CreateLazy
+Lazy idx { []{...} };
+
+// Использование: (оба стандарта языка)
+if (.... & idx())
+{
+	....
+}
+```
+
 ## Special metafunctions
 ***
 
+В примерах выше была реализованна функция equalsAny, которая сравнивала произвольное количество, произвольных типов.
+
+Теперь реализуем её вариант, когда необходимо чтобы все типы были идентичными:
+
+```cpp
+template <class T1, class T2, class ...TN,
+		  class = std::enable_if_t< (std::is_same_v<T1, T2>
+		  		  && ... && std::is_same<T1, TN>)>
+
+bool equalsAny(const T1& t1, const T2& t2, const TN&... tN) noexcept
+{
+}
+```
+
+Проблема такого метода в раскрутке свертки, она может быть дорого стоит компилятору.
+
+Решаются подобные задачи с помощью функций из C++17:
++ std::conjuction_v - коньюнкция (соединение через логическое И)
++ std::disjunction - дизюнкция (соединение через логическое ИЛИ)
++ std::negation - отрицание
+
+Метод исправить этот недостаток:
+
+```cpp
+template <class T1, class T2, class ...TN,
+		  class = std::enable_if_t< std::conjuction_v<std::is_same<T1,T2>,
+		  		  std::is_same<T1, TN>...>>
+
+bool equalsAny(const T1& t1, const T2& t2, const TN&... tN) noexcept
+{
+}
+```
+
 ## void_t
 ***
+
+```cpp
+//Не именованный шаблон pack
+template <class ...>
+using void_t = void;
+
+//Если в него протолкнуть что угодно, он вернёт void:
+void_t<int, unsigned long long, float,
+	   double, SomeClass, std::vector<int>,
+	   std::stack<bool>>; //void
+```
+
+Проблема:
+
+```cpp
+int* pi = nullptr;
+fload* pf = nullptr;
+
+std::vector<int*> vi;
+std::vector<float*> vf;
+
+// Допустим нам нужна перегрузка, чтобы вектор мог сравнивался
+// с нижележайшим типом: Некоторая реализация std::all_of
+bool result = equalsAny(nullptr, pi, pf, vi, vf);
+//Из коробки, это не будет работать
+```
+
+Чтобы защититься от проблем, нужно применить SFINAE, который позволит получать лаконичные сообщения об ошибке:
+
+```cpp
+template <class T1, class T2, class... TN,
+		  class = void_t<decltype(std::declval<T1&>() == std::declval<T2&>()),
+		  		  decltype(std::declval<T1&>() == std::declval<T2&>())...>
+
+bool equalsAny(const T1& t1, const T2& t2, const TN&... tN) noexcept
+{
+	//Начиная с C++17 можно обрамить выражение в скобки ( )
+	return ( (t1 == t2) || ... || (t1 == tN) );
+}
+```
+
+declval это шаблонная функция без тела.
+Рассмотрим применение declval. Допустим у нас есть две структуры Default и NonDefault:
+
+```cpp
+template <class T>
+std::add_rvalue_reference<T>_t declval();
+
+struct Default { int foo() const { return 1; }};
+
+struct NonDefault {
+	NonDefault(const NonDefault&) {}
+	int foo() const { return 1 };
+}
+
+decltype(Default.foo()) i1 = 1; // type = int
+decltype(NonDefault().foo()) i2 = i1; // Compile error
+
+decltype(std::declval<NonDefault>().foo()) i2 = i1; // type = int
+
+```
+
 
 ## Detectors
 ***
