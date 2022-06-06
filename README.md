@@ -175,6 +175,11 @@
 			- [**std::priority_queue**](#stdpriority_queue)
 		- [Итераторы](#итераторы)
 			- [**InputIterator**](#inputiterator)
+			- [**ForwardIterator**](#forwarditerator)
+			- [**BidirectionalIterator**](#bidirectionaliterator)
+			- [**RandomAccessIterator**](#randomaccessiterator)
+			- [**OutputIterator**](#outputiterator)
+			- [**std::iterator_trait**](#stditerator_trait)
 - [TODO](#todo)
 
 # С++11, C++14, C++17
@@ -4404,6 +4409,103 @@ std::vector<int> v { std::istreambuf_iterator<int> { is },
 					 std::istreambuf_iterator<int> {}};
 ```
 
+#### **ForwardIterator**
+
+У него есть перегруженная функция ++, но отсутствует --.
+
+Оператор += не перегружен, но его эффекта можно достичь при помощи std::next \ std::advance.
+
+Любой контейнер можно сконструировать используя итераторы, таким образом можно из std::forward_list или std::unordered_map создать вектор, с соответствующей нижележащей структурой.
+
+
+#### **BidirectionalIterator**
+
+В дополнение имеет перегрузку --. Для смещения на несколько элементов можно использовать std::prev // std::advance.
+
+Контейнеры имеют реверсированыне итераторы rbegin \ rend.
+
+
+#### **RandomAccessIterator**
+
+В дополнение перегружены операторы +=, -=. Но prev\next\advance - работают так же.
+
+#### **OutputIterator**
+
+```cpp
+std::string buf { "text" };
+
+std::ostream& os;
+
+std::copy(buf.begin(), buf.end(), os); //Копирует строку в поток
+```
+
+#### **std::iterator_trait**
+
+Структуры для метапрограммирования, позволяющие узнать тип итератора.
+
+```cpp
+template <class Iter>
+struct iterator_traits
+{
+	using difference_type = typename Iter::difference_type;
+	using value_type = typename Iter::value_type;
+	using pointer = typename Iter::pointer;
+	using reference = typename Iter::reference;
+	using iterator_category = typename Iter::iterator_category;
+};
+
+template <class T>
+struct iterator_traits<T*>
+{
+	using difference_type = ptrdiff_t;
+	using value_type = T;
+	using pointer = T*;
+	using reference = T&;
+	using iterator_category = random_access_iterator_tag;
+}
+```
+
+Существует 6 типов итератор тэгов:
+
++ input_interator_tag
++ forward_iterator_tag - наследуюет предшествующий
++ bidirectional_iterator_tag - наследуюет предшествующий
++ random_access_iterator_tag - наследуюет предшествующий
++ continues_iterator_tag - наследуюет предшествующий
+
++ output_iterator_tag
+
+```cpp
+template <typename It>
+using it_cat = typename std::iterator_trait<It>::iterator_category;
+
+template <typename It>
+using it_diff = typename std::iterator_trait<It>::difference_type;
+
+template <class It>
+auto distance(It first, It last, std::input_iterator_tag)
+{
+	it_diff<It> dist = 0;
+	for (; frist != last; ++first, ++dist);
+
+	return dist;
+}
+
+template <class It>
+auto distance(It first, It last, std::random_access_iterator_tag)
+{
+	return first < last ? (last - first) : -(first - last);
+}
+
+template <class It>
+auto distance(It first, It last)
+{
+	return distance(first, last, it_cat<It>{});
+}
+```
+
+***
+***
 
 # TODO
 
