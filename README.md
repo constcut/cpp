@@ -4573,6 +4573,8 @@ std::copy(std::move_iterator<iter_t> {v.begin() }, //<iter_t> не нужно д
 + Функторы - структуры с перегруженным operator()
 + Lambda
 
+![image info](images/functors.png)
+
 ####
 
 ***
