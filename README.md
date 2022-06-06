@@ -186,6 +186,8 @@
 			- [**std::back_insert_iterator**](#stdback_insert_iterator)
 			- [**std::move_iterator**](#stdmove_iterator)
 		- [Функциональные объекты (Function objects)](#функциональные-объекты-function-objects)
+			- [**std::hash**](#stdhash)
+			- [Частичное применение функций](#частичное-применение-функций)
 - [TODO](#todo)
 
 # С++11, C++14, C++17
@@ -4575,7 +4577,67 @@ std::copy(std::move_iterator<iter_t> {v.begin() }, //<iter_t> не нужно д
 
 ![image info](images/functors.png)
 
-####
+#### **std::hash**
+
+Функтор вычисляющий значения хэш функции для встроенных типов, включая std::string и многие другие. 
+Используется в неупорядоченных ассоциативных контейнерах, а так же может быть удобна при создании хэш функции из структур, содержащих несколько типов, которые умеет обрабатывать std::hash.
+
+![image info](images/hash.png)
+
+```cpp
+struct Person
+{
+	std::string name, surname;
+	uint8_t age;
+}
+
+template <typename T, typename... Rest>
+size_t hash_combine(const T& obj1, const Rest&... objN) 
+{
+	size_t res = 0; //Шаблонный сатанизм из boost:
+	res ^= std::hash<T>{}(obj1) + 0x9e3779b9 + (res << 6) + (res >> 2);
+	(..., (res ^= std::hash<Rest>{}(objN) + 0x9e3779b9 + (res << 6) + (res >> 2)) );
+
+	return res;
+}
+
+namespace std 
+{
+	template <>
+	struct hash<Person>
+	{
+		size_t operator()(const SomeClass& obj) const noexcept
+		{
+			return hash_combine(obj.name, obj.surname, obj.age);
+		}
+	};
+}
+
+Person p { "A", "B", 7};
+const auto hash_value = std::hash<decltype(obj)>{}(obj);
+```
+
+#### Частичное применение функций
+
+Если у нас есть функция с большим количеством аргументов, и мы хотим сделать вторую, которая будет вызывать изначальную, но принимать только част её аргументов, а остальные проталкивать в соответствии с требуемыми условими.
+
+Для этого используется std::bind.
+
+Она принимает функциональный объект и список аргументов.
+
+```cpp
+void f(int a1, int a2, int a3, int a4, double a5)
+{...}
+
+using namespace std::placeholders;
+
+int n = 7;
+auto f2 = std::bind(f, _1, 42, _2, std::cref(n), 24);
+
+f(1, 2, 3); //1 связано _1, 2 связано _2, 3 не используется
+//вызовется f1(1, 42, 2, n, 24);
+```
+
 
 ***
 ***
