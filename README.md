@@ -180,6 +180,12 @@
 			- [**RandomAccessIterator**](#randomaccessiterator)
 			- [**OutputIterator**](#outputiterator)
 			- [**std::iterator_trait**](#stditerator_trait)
+	- [Алгоритмы и функциональные объекты](#алгоритмы-и-функциональные-объекты)
+		- [Адаптеры итераторов](#адаптеры-итераторов)
+			- [**std::reverse_iterator**](#stdreverse_iterator)
+			- [**std::back_insert_iterator**](#stdback_insert_iterator)
+			- [**std::move_iterator**](#stdmove_iterator)
+		- [Функциональные объекты (Function objects)](#функциональные-объекты-function-objects)
 - [TODO](#todo)
 
 # С++11, C++14, C++17
@@ -4503,6 +4509,71 @@ auto distance(It first, It last)
 	return distance(first, last, it_cat<It>{});
 }
 ```
+
+
+## Алгоритмы и функциональные объекты
+
+### Адаптеры итераторов
+
+#### **std::reverse_iterator**
+
+```cpp
+std::string str {"text"};
+
+std::reverse_iterator<std::string::iterator> rit {str.end()}; // C++11
+auto rit = std::make_reverse_iterator(str.end()); // C++14
+std::reverse_iterator rit{str.end()}; // C++17
+auto rit = str.rbegin();
+
+std::reverse_iterator<std::string::iterator> rend {str.begin()}; // C++11
+auto rend = std::make_reverse_iterator(str.begin()); // C++14
+std::reverse_iterator rend{str.begin()}; // C++17
+auto rend = str.rend();
+
+std::string reversed {rit, rend}; // == "txet"
+``` 
+
+#### **std::back_insert_iterator**
+
+Данный адаптер при резименовании приводит к вставке элемента в конец, в данном случае вызовется std::vector::push_back:
+
+```cpp
+std::vector<uint64_t> generate_vector(size_t n, std::functional<uint64_t()> g)
+{
+	std::vector<uint64_t> res;
+	res.reserve(n);
+	//Функция заполнен n элементов, функтором g
+	std::generate_n(std::back_insert_iterator<std::vector<uint64_t>> {res}, n, g); //C++11
+	std::generate_n(std::back_inserter(res), n, g); //альтернатива
+	std::generate_n(std::back_insert_iterator{res}, n, g); //C++17
+}
+```
+
+#### **std::move_iterator**
+
+При разименовывании адаптера std::move_iterator нижележащий тип кастится к r-value&, т.е. будут извлекаться ресурсы.
+
+```cpp
+std::vector<std::string> v1 { "Hello", "my", "beautiful", "world" };
+std::vector<std::string> v2;
+v2.reserve(v1.size());
+
+using iter_t = decltype(v1)::iterator;
+std::copy(std::move_iterator<iter_t> {v.begin() }, //<iter_t> не нужно для C++17
+		  std::move_iterator<iter_t> {v1.end()}, //<iter_t> не нужно для C++17
+		  std::back_inserter(v2));
+
+//v1 {"", "", "", ""}
+//v2  { "Hello", "my", "beautiful", "world" }
+```
+
+### Функциональные объекты (Function objects)
+
++ Функции
++ Функторы - структуры с перегруженным operator()
++ Lambda
+
+####
 
 ***
 ***
