@@ -188,6 +188,7 @@
 		- [Функциональные объекты (Function objects)](#функциональные-объекты-function-objects)
 			- [**std::hash**](#stdhash)
 			- [Частичное применение функций](#частичное-применение-функций)
+		- [Алгоритмы](#алгоритмы)
 - [TODO](#todo)
 
 # С++11, C++14, C++17
@@ -4632,11 +4633,39 @@ void f(int a1, int a2, int a3, int a4, double a5)
 using namespace std::placeholders;
 
 int n = 7;
-auto f2 = std::bind(f, _1, 42, _2, std::cref(n), 24);
+auto f2 = std::bind(f, _1, 42, _2, std::cref(n), 24); 
+//без cref мы передадим 7 и она всегда будет такой (копия)
 
 f(1, 2, 3); //1 связано _1, 2 связано _2, 3 не используется
 //вызовется f1(1, 42, 2, n, 24);
 ```
+
+Это может быть полезно, например, для функции возвращающей вектор случайных чисел.
+
+```cpp
+std::vector<int64_t> foo(int64_t a, int64_t b, size_t n)
+{
+	std::mt19937_64 engine { std::random_device{}() };
+	std::uniform_int_distribution<int64_t> {a, b};
+
+	std::vector<int64_t> res;
+	res.reserve(n);
+
+	std::generate_n(std::back_inserter(res), n, 
+					[dirst, engine]() mutable { return distr(engine); })
+	//Если сделать захват по ссылкам &disrt, &engine и тогда не mutable
+
+	//Вариант с bind:
+	std::generate_n(std::back_inserter(res), n, 
+					std::bind(std::ref(distr), std::ref(engine)));
+
+	return res;
+}
+```
+
+### Алгоритмы
+
+
 
 
 ***
