@@ -4387,6 +4387,23 @@ OutputIterator:
 
 #### **InputIterator**
 
+```cpp
+//std::istream& is;
+
+std::istreambuf_iterator it {is};
+std::istreambuf_iterator<char> end;
+
+//size_t count = std::distance(it, end); //O(n)
+//Если строчку выше раскоментить, то buf окажется пустой, т.к. it смещён!
+
+std::string buf {it, end};
+```
+
+```cpp
+std::vector<int> v { std::istreambuf_iterator<int> { is }, 
+					 std::istreambuf_iterator<int> {}};
+```
+
 
 # TODO
 
