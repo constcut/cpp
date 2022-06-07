@@ -5046,13 +5046,35 @@ std::inplace_merge - отличается тем, что части находя
 
 #### Алгоритмы с неинциализованной памятью
 
++ std::unitialized_copy
++ std::unitialized_copy_n
 
+Вызывается конструктор от элемента на последовательности. (???)
 
++ std::unitialized_fill
++ std::unitialized_fill_n
 
+Действует схоже, но конструирует объекты по передаваемому значению в функцию.
 
++ std::unitialized_move
++ std::unitialized_move_n
 
+Как и выше, но перемещение.
 
-+ std::
++ std::unitialized_default_construct
++ std::unitialized_default_construct_n
+
+Вызывает дефолтные конструкторы на последовательности.
+
++ std::unitialized_value_construct
++ std::unitialized_value_construct_n
+
+Делает value initialization (???).
+
++ std::destroy
++ std::destroy_n
+
+Разрушает объекты (вызывает деструктор) на последовательности.
 
 ***
 ***
