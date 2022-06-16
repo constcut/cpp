@@ -223,14 +223,20 @@
 		- [**Переменные**](#переменные)
 		- [**Указатели**](#указатели)
 		- [**Функции классов**](#функции-классов)
+		- [**Многопоточность**](#многопоточность)
 	- [**volatile**](#volatile)
 	- [**memory: new \ delete**](#memory-new--delete)
-		- [**default initialization**](#default-initialization)
+		- [**new default initialization**](#new-default-initialization)
 		- [**placement new**](#placement-new)
 		- [**smart ptr массивы**](#smart-ptr-массивы)
 - [Идеомы](#идеомы)
 	- [RAII](#raii)
 	- [IILE](#iile)
+- [Шоргалки](#шоргалки)
+	- [filesystem](#filesystem)
+	- [threads](#threads)
+	- [regex](#regex-1)
+	- [streams](#streams)
 
 
 # Lambda
@@ -570,6 +576,7 @@ virtual void foo(int) const final {}
 Для того чтобы перенести такое значение без копирования введена специальная функция std::move().
 
 Move семантика полезна когда объект тяжелый для копирования, но легкий для перемещения. Или же когда объект запрещено копировать, например unique_ptr.
+Но если у объекта много данных на стеке - они будут копироваться и std::move может оказаться не так эффективен.
 
 ## **noexcept**
 
@@ -590,6 +597,7 @@ for (const auto& element: containter)
 
 Где container это класс с функциями begin\end, возвращающих итератороподобный объект, который должен уметь инкрементироваться и разыменовываться как указатель.
 
+Важно отметить: если требуется модифировать объект - его тип должен быть auto&.
 
 ## **Delegate constructors**
 
@@ -5220,16 +5228,36 @@ public:
 //Функции помеченные const могут вызывать только функции помеченные const
 ```
 
+### **Многопоточность**
+
+Константные объекты потокобезопасны.
+
 
 ## **volatile**
 
 ## **memory: new \ delete**
 
-### **default initialization**
+### **new default initialization**
 
 int* pArr = new int[N]{}; - создаёт массив с дефолтными значениями
 
 ### **placement new**
+
+Конструирование объектов в уже выделенной памяти:
+
+```cpp
+unsigned char bufer[sizeof(int)] ;
+
+int *pInt = new (bufer) int(42);
+```
+
+При использовании placement new не вызывается delete, но требуется вызывать конструктор, если он есть у объекта.
+
+```cpp
+unsigned char bufer[sizeof(NewClass)] ;
+NewClass *pClass = new (bufer) NewClass(42);
+pClass->~NewClass(); //Без этой строчки объект не будет разрушен
+```
 
 ### **smart ptr массивы**
 
@@ -5242,6 +5270,17 @@ int* pArr = new int[N]{}; - создаёт массив с дефолтными 
 ## IILE
 
 
+# Шоргалки
+
+## filesystem
+
+## threads
+
+## regex
+
+## streams
+
+
 ***
 ***
 
@@ -5249,8 +5288,6 @@ int* pArr = new int[N]{}; - создаёт массив с дефолтными 
 допольнить и изучить внимательней
 
 ++ Searcher function objects
-
-+++ шпоры filesystem\threads etc +?
 
 ++ advanced constexpr?
 
@@ -5261,3 +5298,13 @@ int* pArr = new int[N]{}; - создаёт массив с дефолтными 
 ++ узнать больше о multiset \ multimap
 TODO при описании контейнеров выводить только разницу между ними (не дублировать море лишнего кода и названий полей)
 А может лучше всего даже сделать сводную таблицу, чтобы видеть сразу разницу между всеми контейнерами
+
+++ STL 
+https://hackingcpp.com/cpp/cheat_sheets.html
+
+++ make_move_iterator - перепроверить
+
+++ Рекомендации по Hash функции
+
+
++++ Инвалидация ссылок и итераторов в UB
