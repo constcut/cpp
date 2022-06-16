@@ -2581,6 +2581,8 @@ std::copy(std::move_iterator<iter_t> {v.begin() }, //<iter_t> не нужно д
 
 #### Функциональные объекты (Function objects)
 
+std::function могут быть:
+
 + Функции
 + Функторы - структуры с перегруженным operator()
 + Lambda
@@ -2731,6 +2733,8 @@ std::all_of вернёт true, если все элементы удовлетв
 Находит первое вхождение группы элементов. Т.е. почти как std::find_end.
 
 В C++17 подвезли версию алгоритма с searcher. Например для строки появились searcher'ы, которые работают с алгоритмами Бойера-Мура-Хорспула и Бойера-Мура.
+
+Для их применения используются: std::boyer_moore_searcher, std::boyer_moore_horspool_searcher, std::default_searcher.
 
 + std::search_n
 
@@ -5434,9 +5438,6 @@ std::unique_ptr<int[]> unique_array(new int[10]);
 А может лучше всего даже сделать сводную таблицу, чтобы видеть сразу разницу между всеми контейнерами
 
 ++ STL 
-
-1) Функциональные объекты: https://en.cppreference.com/w/cpp/utility/functional в т.ч. и Searcher function objects
-
 
 https://hackingcpp.com/cpp/cheat_sheets.html
 https://hackingcpp.com/cpp/std/algorithms.png
