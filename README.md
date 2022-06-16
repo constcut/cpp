@@ -103,6 +103,7 @@
 			- [**std::filesystem**](#stdfilesystem)
 			- [**std::byte**](#stdbyte)
 			- [**std::apply**](#stdapply)
+			- [**std::invoke**](#stdinvoke)
 			- [**std::as_const**](#stdas_const)
 			- [**std::clamp**](#stdclamp)
 			- [**Ассоциативыне контейнеры**](#ассоциативыне-контейнеры)
@@ -220,7 +221,10 @@
 - [Важные особенности языка](#важные-особенности-языка)
 	- [**const**](#const)
 	- [**volatile**](#volatile)
-	- [**placement new**](#placement-new)
+	- [**memory: new \ delete**](#memory-new--delete)
+		- [**default initialization**](#default-initialization)
+		- [**placement new**](#placement-new)
+		- [**smart ptr массивы**](#smart-ptr-массивы)
 - [Идеомы](#идеомы)
 	- [RAII](#raii)
 	- [IILE](#iile)
@@ -1626,6 +1630,14 @@ auto add = [](int x, int y)
 };
 std::apply(add, std::make_tuple(2, 3)); // == 5
 std::apply(add, std::make_pair(1, 2)); // == 3
+```
+
+#### **std::invoke**
+
+Обобщенный вызов функтора.
+
+```cpp
+std::invoke(functor, arguments_list);
 ```
 
 #### **std::as_const**
@@ -5164,10 +5176,21 @@ inline constexpr bool has_foo = is_detected_v<v_foo_v, T>
 
 ## **const**
 
+Модификатор может использоваться для переменных, указателей и функций классов.
+
+//Константная ссылка?
+
 ## **volatile**
 
-## **placement new**
+## **memory: new \ delete**
 
+### **default initialization**
+
+int* pArr = new int[N]{}; - создаёт массив с дефолтными значениями
+
+### **placement new**
+
+### **smart ptr массивы**
 
 
 
@@ -5184,13 +5207,7 @@ inline constexpr bool has_foo = is_detected_v<v_foo_v, T>
 ++ Forwarding reference
 допольнить и изучить внимательней
 
-++ inline namespaces тоже в 11 фитчи
-
-++ std::invoke 
-
 ++ Searcher function objects
-
-++ общие фитчи языка вроде const\volotile итд - из конспетов курсеры
 
 +++ шпоры filesystem +?
 
@@ -5200,12 +5217,8 @@ inline constexpr bool has_foo = is_detected_v<v_foo_v, T>
 
 ++ std::true_type пометить о существовании этих функций, где есть пример их реализации
 
-++ Изучить мелкие фитчи, например
-
-int* pArr = new int[N]{}; - создаёт массив с дефолтными значениями
 (+ массивы на умных указателях)
 
 ++ узнать больше о multiset \ multimap
-
 TODO при описании контейнеров выводить только разницу между ними (не дублировать море лишнего кода и названий полей)
 А может лучше всего даже сделать сводную таблицу, чтобы видеть сразу разницу между всеми контейнерами
