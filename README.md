@@ -21,6 +21,7 @@
 		- [***'default' + 'deleted' specifiers***](#default--deleted-specifiers)
 		- [***'overrdie' + 'final' sepcifiers***](#overrdie--final-sepcifiers)
 	- [**Move semantics**](#move-semantics)
+	- [**Perfect forwarding**](#perfect-forwarding)
 	- [**noexcept**](#noexcept)
 	- [**Range based for cycle**](#range-based-for-cycle)
 	- [**Delegate constructors**](#delegate-constructors)
@@ -229,10 +230,12 @@
 		- [**new default initialization**](#new-default-initialization)
 		- [**placement new**](#placement-new)
 		- [**std::shared_ptr \ std::unique_ptr массивы**](#stdshared_ptr--stdunique_ptr-массивы)
-	- [**Исплючения**](#исплючения)
+	- [**Исключения**](#исключения)
+	- [**Преобразование типов**](#преобразование-типов)
 - [Идеомы](#идеомы)
 	- [RAII](#raii)
 	- [IILE](#iile)
+	- [pImpl](#pimpl)
 - [Шоргалки](#шоргалки)
 	- [filesystem](#filesystem)
 	- [threads](#threads)
@@ -599,6 +602,13 @@ virtual void foo(int) const final {}
 
 Move семантика полезна когда объект тяжелый для копирования, но легкий для перемещения. Или же когда объект запрещено копировать, например unique_ptr.
 Но если у объекта много данных на стеке - они будут копироваться и std::move может оказаться не так эффективен.
+
+## **Perfect forwarding**
+
+Позволяет создать функциональный шаблон, который принимает произвольные аргументы с фиксацией их типов и основных свойств (rvalue или lvalue). Сохранение этой информации предопределяет возможность передавать данные аргументы при вызове других функций и методов.
+
+Используется в таких функциях как emplace_back.
+Особенно полезно при использовании в variadic templates.
 
 ## **noexcept**
 
@@ -5301,7 +5311,9 @@ std::shared_ptr<int> sp(new int[10], [](int *p) { delete[] p; });
 std::unique_ptr<int[]> unique_array(new int[10]);
 ```
 
-## **Исплючения**
+## **Исключения**
+
+## **Преобразование типов**
 
 
 # Идеомы
@@ -5309,6 +5321,8 @@ std::unique_ptr<int[]> unique_array(new int[10]);
 ## RAII
 
 ## IILE
+
+## pImpl
 
 
 # Шоргалки
@@ -5325,15 +5339,8 @@ std::unique_ptr<int[]> unique_array(new int[10]);
 ***
 ***
 
-++ Forwarding reference
-допольнить и изучить внимательней
-
-++ Searcher function objects
-
-++ advanced constexpr?
-++ https://miro.com/app/board/o9J_lpap34Q=/
-
 ++ TODO скользкие места C++ в UB
++++ Инвалидация ссылок и итераторов в UB
 
 ++ std::true_type пометить о существовании этих функций, где есть пример их реализации
 
@@ -5343,10 +5350,13 @@ std::unique_ptr<int[]> unique_array(new int[10]);
 А может лучше всего даже сделать сводную таблицу, чтобы видеть сразу разницу между всеми контейнерами
 
 ++ STL 
+
+1) Функциональные объекты: https://en.cppreference.com/w/cpp/utility/functional в т.ч. и Searcher function objects
+
+
 https://hackingcpp.com/cpp/cheat_sheets.html
 https://hackingcpp.com/cpp/std/algorithms.png
 ++ make_move_iterator - перепроверить
 ++ Рекомендации по Hash функции
 ++ https://cppcheatsheet.com/
-
-+++ Инвалидация ссылок и итераторов в UB
+++ parallel http://www.modernescpp.com/index.php/performance-of-the-parallel-stl-algorithmn
