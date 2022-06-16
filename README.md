@@ -228,7 +228,7 @@
 	- [**memory: new \ delete**](#memory-new--delete)
 		- [**new default initialization**](#new-default-initialization)
 		- [**placement new**](#placement-new)
-		- [**smart ptr массивы**](#smart-ptr-массивы)
+		- [**std::shared_ptr \ std::unique_ptr массивы**](#stdshared_ptr--stdunique_ptr-массивы)
 - [Идеомы](#идеомы)
 	- [RAII](#raii)
 	- [IILE](#iile)
@@ -5265,7 +5265,7 @@ NewClass *pClass = new (bufer) NewClass(42);
 pClass->~NewClass(); //Без этой строчки объект не будет разрушен
 ```
 
-### **smart ptr массивы**
+### **std::shared_ptr \ std::unique_ptr массивы**
 
 ```cpp
 // C++17:
@@ -5308,21 +5308,22 @@ std::unique_ptr<int[]> unique_array(new int[10]);
 ++ Searcher function objects
 
 ++ advanced constexpr?
+++ https://miro.com/app/board/o9J_lpap34Q=/
 
 ++ TODO скользкие места C++ в UB
 
 ++ std::true_type пометить о существовании этих функций, где есть пример их реализации
 
 ++ узнать больше о multiset \ multimap
-TODO при описании контейнеров выводить только разницу между ними (не дублировать море лишнего кода и названий полей)
+
+++TODO при описании контейнеров выводить только разницу между ними (не дублировать море лишнего кода и названий полей)
 А может лучше всего даже сделать сводную таблицу, чтобы видеть сразу разницу между всеми контейнерами
 
 ++ STL 
 https://hackingcpp.com/cpp/cheat_sheets.html
-
+https://hackingcpp.com/cpp/std/algorithms.png
 ++ make_move_iterator - перепроверить
-
 ++ Рекомендации по Hash функции
-
+++ https://cppcheatsheet.com/
 
 +++ Инвалидация ссылок и итераторов в UB
