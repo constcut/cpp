@@ -2,64 +2,63 @@
 	- [C++11](#c11)
 	- [C++14](#c14)
 	- [C++17](#c17)
-- [POD-type](#pod-type)
 - [auto/decltype](#autodecltype)
 	- [C++11](#c11-1)
 		- [**Альтернативный синтаксис шаблонных функций**](#альтернативный-синтаксис-шаблонных-функций)
 	- [C++14](#c14-1)
-- [Literals](#literals)
-	- [C++11](#c11-2)
-		- [**Строковые литералы**](#строковые-литералы)
-		- [**Пользовательские литералы**](#пользовательские-литералы)
-	- [C++14](#c14-2)
-		- [**Строковый литерал**](#строковый-литерал)
-		- [**Бинарные литералы**](#бинарные-литералы)
-		- [**Разделители числовых литералов**](#разделители-числовых-литералов)
-		- [**STL литералы**](#stl-литералы)
 - [Initialization](#initialization)
-	- [C++11](#c11-3)
+	- [C++11](#c11-2)
 		- [**Универсальная инициализация**](#универсальная-инициализация)
 		- [**std::initializer_list**](#stdinitializer_list)
-	- [C++14](#c14-3)
+	- [C++14](#c14-2)
 		- [**Aggregate initialization with deafult member initializer**](#aggregate-initialization-with-deafult-member-initializer)
 	- [C++17](#c17-1)
 		- [**auto + std::initializer_list**](#auto--stdinitializer_list)
 		- [**Агрегатная инциализация базового класса**](#агрегатная-инциализация-базового-класса)
-- [Небольшие нововведения](#небольшие-нововведения)
-	- [C++11](#c11-4)
-		- [Спецификаторы](#спецификаторы)
-			- [***'default' + 'deleted' specifiers***](#default--deleted-specifiers)
-			- [***'overrdie' + 'final' sepcifiers***](#overrdie--final-sepcifiers)
-		- [**Move semantics**](#move-semantics)
-		- [**noexcept**](#noexcept)
-		- [**Range based for cycle**](#range-based-for-cycle)
-		- [**Delegate constructors**](#delegate-constructors)
-		- [**Default values for non-static class members**](#default-values-for-non-static-class-members)
-		- [**nullptr**](#nullptr)
-		- [**enum class**](#enum-class)
-		- [**enum underlying type**](#enum-underlying-type)
-		- [**Explicit cast operators**](#explicit-cast-operators)
+- [C++11](#c11-3)
+	- [POD-type](#pod-type)
+	- [Спецификаторы](#спецификаторы)
+		- [***'default' + 'deleted' specifiers***](#default--deleted-specifiers)
+		- [***'overrdie' + 'final' sepcifiers***](#overrdie--final-sepcifiers)
+	- [**Move semantics**](#move-semantics)
+	- [**noexcept**](#noexcept)
+	- [**Range based for cycle**](#range-based-for-cycle)
+	- [**Delegate constructors**](#delegate-constructors)
+	- [**Default values for non-static class members**](#default-values-for-non-static-class-members)
+	- [**nullptr**](#nullptr)
+	- [**enum class**](#enum-class)
+	- [**enum underlying type**](#enum-underlying-type)
+	- [**Explicit cast operators**](#explicit-cast-operators)
 		- [**Relaxed rules for unions**](#relaxed-rules-for-unions)
-		- [**static_assert**](#static_assert)
-		- [**allignof, alligingas**](#allignof-alligingas)
-		- [**'using' for types**](#using-for-types)
+	- [**static_assert**](#static_assert)
+	- [**allignof, alligingas**](#allignof-alligingas)
+	- [**'using' for types**](#using-for-types)
+- [C++14](#c14-3)
+	- [**Memory allocation ellision/combining**](#memory-allocation-ellisioncombining)
+- [C++17](#c17-2)
+	- [**noexcept**](#noexcept-1)
+	- [**Copy elision**](#copy-elision)
+	- [**Structure bindings**](#structure-bindings)
+	- [**Последовательность операций вызова**](#последовательность-операций-вызова)
+	- [**'if' / 'switch' with initialization**](#if--switch-with-initialization)
+	- [**inline variables**](#inline-variables)
+	- [**__has_include(<io>)**](#__has_includeio)
+	- [**allignas (32)**](#allignas-32)
+	- [**static_assert(true)**](#static_asserttrue)
+	- [**Nasted namespaces**](#nasted-namespaces)
+- [Атрибуты](#атрибуты)
+	- [C++11](#c11-4)
 	- [C++14](#c14-4)
-		- [**Memory allocation ellision/combining**](#memory-allocation-ellisioncombining)
-	- [C++17](#c17-2)
-		- [**noexcept**](#noexcept-1)
-		- [**Copy elision**](#copy-elision)
-		- [**Structure bindings**](#structure-bindings)
-		- [**Последовательность операций вызова**](#последовательность-операций-вызова)
-		- [**'if' / 'switch' with initialization**](#if--switch-with-initialization)
-		- [**inline variables**](#inline-variables)
-		- [**__has_include(<io>)**](#__has_includeio)
-		- [**allignas (32)**](#allignas-32)
-		- [**static_assert(true)**](#static_asserttrue)
-		- [**Nasted namespaces**](#nasted-namespaces)
-	- [Атрибуты](#атрибуты)
-		- [C++11](#c11-5)
-		- [C++14](#c14-5)
-		- [C++17](#c17-3)
+	- [C++17](#c17-3)
+- [Literals](#literals)
+	- [C++11](#c11-5)
+		- [**Строковые литералы**](#строковые-литералы)
+		- [**Пользовательские литералы**](#пользовательские-литералы)
+	- [C++14](#c14-5)
+		- [**Строковый литерал**](#строковый-литерал)
+		- [**Бинарные литералы**](#бинарные-литералы)
+		- [**Разделители числовых литералов**](#разделители-числовых-литералов)
+		- [**STL литералы**](#stl-литералы)
 - [constexpr](#constexpr)
 	- [C++11](#c11-6)
 	- [C++14](#c14-6)
@@ -191,7 +190,6 @@
 		- [**Список захвата с инициализацией**](#список-захвата-с-инициализацией)
 	- [Правила вывода для decltype](#правила-вывода-для-decltype)
 	- [Правила вывода для возвращаемого типа](#правила-вывода-для-возвращаемого-типа)
-			- [**Пример: Cоздание обобщенного оператора суммации**](#пример-cоздание-обобщенного-оператора-суммации)
 			- [**Опасности decltyp**](#опасности-decltyp)
 	- [Как найти\отладить выводимый тип](#как-найтиотладить-выводимый-тип)
 	- [Вывод типов на runtime: RTTI](#вывод-типов-на-runtime-rtti)
@@ -286,35 +284,6 @@ int b = generator(); // == 1
 Необходим спецификатор mutable, для того чтобы иметь возможность вызывать неконстантные версии функций класса.
 
 
-# POD-type
-
-Plain old data - структура размещающаяся в памяти таким образом, как её описал программист, исключая оптимизации. Это может быть необходимо для передачи данных в другие языки программирования.
-
-POD = Тривиальный класс + Класс со стандартным размещением
-
-
-Тривиальный класс:
- 
-+ T() = default;
-+ T(const T&) = default;
-+ T& operator=(const T&) = default;
-+ T(T&&) = default;
-+ T& operator=(T&&) = default;
-+ ~T() = default;
-+ Нет виртуальных методов и виртуального наследования
-+ Все нестатические поля тривиальны
-+ Все базовые классы тривиальны(при наличии)
-
-
-Класс со стандартным размещением:
-
-+ Все нестатические поля имеют одинаковый доступ private\public\protected
-+ Нет вирутальных методов и вирт. наследования
-+ Нет нестатических полей-ссылок
-+ Все нестатические поля и базовые классы со стандартным размещением
-+ Все нестатические поля объявленны в одном классе в иерархии наследования
-+ Нет базовых классов того же типа, что и первое нестатическое поле
-
 
 # auto/decltype
 
@@ -387,101 +356,6 @@ decltype(auto) v5 = v2;  //const double&
 
 decltype(auto) v6 = foo(); //double
 decltype(auto) v7 = bar(); //double && 
-```
-
-
-# Literals
-
-## C++11
-
-***
-
-### **Строковые литералы**
-
-```cpp
-//Было до С++11
-
-"Text" //char 
-L"Text" //wchar_t
-
-//Появилось в C++11 - utf
-
-u8"Text" //char - utf8
-u"Text" //char16_t
-U"Text"//char32_t
-
-//Сырые строки обрамляются в () в "" и могут иметь произвольны delemiter
-R"delimiter( raw string )delimeter" 
-LR"delimiter( raw string )delimeter"
-u8R"delimiter( raw string )delimeter"
-uR"delimiter( raw string )delimeter"
-UR"delimiter( raw string )delimeter"
-```
-
-
-### **Пользовательские литералы**
-
-Пример пользовательского литерала преобразования радиан в градусы.
-
-```cpp
-long double operator""_degrees(long double value)
-{
-	return value * M_PI / 180.0;
-}
-
-double degrees = 0.38__degrees
-```
-
-Список возможных аргументов, при определении пользовательского литерала:
-
-```cpp
-( const char * )
-( unsigned long long int )	
-( long double )	
-( char )
-( wchar_t )	
-( char16_t )	
-( char32_t )
-( const char * , std::size_t )	
-( const wchar_t * , std::size_t )	
-( const char16_t * , std::size_t )	
-( const char32_t * , std::size_t )
-```
-
-
-## C++14
-
-***
-
-### **Строковый литерал**
-
-```cpp
-
-std::string from_literal = "some string"s;
-
-```
-
-### **Бинарные литералы**
-
-```cpp
-int a = 0b111; // == 7
-int b = 0B11; // == 3
-```
-
-### **Разделители числовых литералов**
-
-```cpp
-int a = 1'000'000;
-int b = 3.14'15'92'65;
-```
-
-### **STL литералы**
-
-```cpp
-	auto half_minute = 30s; // std::chrono::duration
-	auto day = 24h; // std::chrono::duration
-
-	auto complex = 1 + 1i; //std::complex
 ```
 
 
@@ -605,16 +479,44 @@ Child ch4 {"name", "sur", 99};
 
 
 
-# Небольшие нововведения
-
-
-## C++11
+# C++11
 
 ***
 
-### Спецификаторы
+## POD-type
 
-#### ***'default' + 'deleted' specifiers***
+Plain old data - структура размещающаяся в памяти таким образом, как её описал программист, исключая оптимизации. Это может быть необходимо для передачи данных в другие языки программирования.
+
+POD = Тривиальный класс + Класс со стандартным размещением
+
+
+Тривиальный класс:
+ 
++ T() = default;
++ T(const T&) = default;
++ T& operator=(const T&) = default;
++ T(T&&) = default;
++ T& operator=(T&&) = default;
++ ~T() = default;
++ Нет виртуальных методов и виртуального наследования
++ Все нестатические поля тривиальны
++ Все базовые классы тривиальны(при наличии)
+
+
+Класс со стандартным размещением:
+
++ Все нестатические поля имеют одинаковый доступ private\public\protected
++ Нет вирутальных методов и вирт. наследования
++ Нет нестатических полей-ссылок
++ Все нестатические поля и базовые классы со стандартным размещением
++ Все нестатические поля объявленны в одном классе в иерархии наследования
++ Нет базовых классов того же типа, что и первое нестатическое поле
+
+
+
+## Спецификаторы
+
+### ***'default' + 'deleted' specifiers***
 
 ***
 
@@ -630,7 +532,7 @@ Child ch4 {"name", "sur", 99};
 Если компилятор может - он постарается вывести noexcept версии функций
 
 
-####  ***'overrdie' + 'final' sepcifiers***
+###  ***'overrdie' + 'final' sepcifiers***
 
 ***
 
@@ -647,7 +549,7 @@ virtual void foo(int) const final {}
 Так же final может запретить дальнейшее наследование, если мы хотим создать класс\структуру, от которой нельзя наследоваться дальше.
 
 
-### **Move semantics**
+## **Move semantics**
 
 Добавлен новый тип r-value ссылка T&&, который представляет собой временное значение, например результат вычисления выражений или результат вызова функций.
 
@@ -655,13 +557,13 @@ virtual void foo(int) const final {}
 
 Move семантика полезна когда объект тяжелый для копирования, но легкий для перемещения. Или же когда объект запрещено копировать, например unique_ptr.
 
-### **noexcept**
+## **noexcept**
 
 Метод пометить функцию, что она не должна вызывать исключения.
 
 Необходимо для создания move-конструктора и оператора присвоения, если они не помечены как noexcept будут вызываны конструктор копирования и оператор копирования (например при содания векторов нашего произвольного класса).
 
-### **Range based for cycle**
+## **Range based for cycle**
 
 Вызов цикла в конструкции вида:
 
@@ -675,25 +577,25 @@ for (const auto& element: containter)
 Где container это класс с функциями begin\end, возвращающих итератороподобный объект, который должен уметь инкрементироваться и разыменовываться как указатель.
 
 
-### **Delegate constructors**
+## **Delegate constructors**
 
 Возможность вызова одного из конструкторв из тела другого.
 
-### **Default values for non-static class members**
+## **Default values for non-static class members**
 
 Возможность проинициализировать переменную класса в месте её определения
 
 
-### **nullptr**
+## **nullptr**
 
 Общий тип для обозначения пустых указателей.
 Можно перегружать функции, используя std::nullptr_t как аргумент.
 
-### **enum class**
+## **enum class**
 
 Не позволяет сравнивать поля разных enum'ов.
 
-### **enum underlying type**
+## **enum underlying type**
 
 Позволяет задать тип, в котором хранится перечисление, например:
 
@@ -707,7 +609,7 @@ enum X : int
 
 Тем самым можно задать размер переменной типа X.
 
-### **Explicit cast operators**
+## **Explicit cast operators**
 
 Операторы явного каста:
 
@@ -729,7 +631,7 @@ int flag = ptr; // Преобразования не будет,
 Теперь почти любой, но важно для юнона так же объявить конструктор, если он есть у вложенной структуры. Но в 17 стандарте это стало не обязательным для реализации.
 
 
-### **static_assert**
+## **static_assert**
 
 Возможность использования ассертов на этапе компиляции, условие + строка сообщения, например:
 
@@ -739,11 +641,11 @@ static_assert(std::is_pod(variable), "ERROR: !!");
 
 В 17 стандарте строка стала не обязательной.
 
-### **allignof, alligingas**
+## **allignof, alligingas**
 
 Позволяет использовать нужное выравнивание или узнать его
 
-### **'using' for types**
+## **'using' for types**
 
 Более современная замена typedef, способная принимать шаблонные аргументы:
 
@@ -764,19 +666,19 @@ vec_t_iter<int> it; //ok!
 ```
 
 
-## C++14
+# C++14
 
 ***
 
-### **Memory allocation ellision/combining**
+## **Memory allocation ellision/combining**
 
 Вызовы new\delete могут оптимизироваться.
 
-## C++17
+# C++17
 
 ***
 
-### **noexcept**
+## **noexcept**
 
 Cпецификатор того, что функция не выбрасывает исключения - теперь часть системы типов функции.
 
@@ -793,11 +695,11 @@ ef = bar;  // +
 nef = bar; //Compile error
 ```
 
-### **Copy elision**
+## **Copy elision**
 
 Создание объекта не при выходе из фукнкции, а в месте его последующего применения, там где эта функция вызывалась.
 
-### **Structure bindings**
+## **Structure bindings**
 
 Возможность раскрутить группу значений в серию переменных. Можно раскрытить:
 
@@ -849,7 +751,7 @@ namespace std
 }
 ```
 
-### **Последовательность операций вызова**
+## **Последовательность операций вызова**
 
 ```cpp
 a.b
@@ -865,7 +767,7 @@ a >> b >> c
 ```
 
 
-### **'if' / 'switch' with initialization**
+## **'if' / 'switch' with initialization**
 
 Возможность задать значение в теле условия:
 
@@ -880,26 +782,26 @@ if (int a = f(5); a > 2)
 Можно использовать structure bindings на этапе if initialization. Тем самым подготовить сразу несколько переменных для условий и вычислений.
 
 
-### **inline variables**
+## **inline variables**
 
 Необходимы чтобы быть разделяемыми между файлами, будучи определенными в хэдере.
 Или для функций - чтобы писать определение прямо в хэдере.
 
 
-### **__has_include(<io>)**
+## **__has_include(<io>)**
 
 Директива препроцессора, проверяет наличие хэдеров
 
 
-### **allignas (32)**
+## **allignas (32)**
 
 Теперь выравнивани структуры по границе заданной, при динамическом размещении
 
-### **static_assert(true)**
+## **static_assert(true)**
 Теперь можно использовать без строки, просто 1 условие
 
 
-### **Nasted namespaces**
+## **Nasted namespaces**
 
 ```cpp
 namespace A::B::C {
@@ -918,9 +820,9 @@ n1::n2::n;
 ```
 
 
-## Атрибуты
+# Атрибуты
 
-### C++11
+## C++11
 
 ***
 
@@ -932,7 +834,7 @@ n1::n2::n;
 
 Атрибут связан с моделями памяти.
 
-### C++14 
+## C++14 
 
 ***
 
@@ -953,7 +855,7 @@ enum E { a [[depracated]], b [[depracated]] = 1 };
 template < > struct [[depracated]] X<int> {};
 ```
 
-### C++17
+## C++17
 
 ***
 
@@ -1003,6 +905,101 @@ enum [[maybe_unused]]  E {};
 enum { A [[maybe_unused]], B [[maybe_unused]] }; 
 ```
 
+
+
+# Literals
+
+## C++11
+
+***
+
+### **Строковые литералы**
+
+```cpp
+//Было до С++11
+
+"Text" //char 
+L"Text" //wchar_t
+
+//Появилось в C++11 - utf
+
+u8"Text" //char - utf8
+u"Text" //char16_t
+U"Text"//char32_t
+
+//Сырые строки обрамляются в () в "" и могут иметь произвольны delemiter
+R"delimiter( raw string )delimeter" 
+LR"delimiter( raw string )delimeter"
+u8R"delimiter( raw string )delimeter"
+uR"delimiter( raw string )delimeter"
+UR"delimiter( raw string )delimeter"
+```
+
+
+### **Пользовательские литералы**
+
+Пример пользовательского литерала преобразования радиан в градусы.
+
+```cpp
+long double operator""_degrees(long double value)
+{
+	return value * M_PI / 180.0;
+}
+
+double degrees = 0.38__degrees
+```
+
+Список возможных аргументов, при определении пользовательского литерала:
+
+```cpp
+( const char * )
+( unsigned long long int )	
+( long double )	
+( char )
+( wchar_t )	
+( char16_t )	
+( char32_t )
+( const char * , std::size_t )	
+( const wchar_t * , std::size_t )	
+( const char16_t * , std::size_t )	
+( const char32_t * , std::size_t )
+```
+
+
+## C++14
+
+***
+
+### **Строковый литерал**
+
+```cpp
+
+std::string from_literal = "some string"s;
+
+```
+
+### **Бинарные литералы**
+
+```cpp
+int a = 0b111; // == 7
+int b = 0B11; // == 3
+```
+
+### **Разделители числовых литералов**
+
+```cpp
+int a = 1'000'000;
+int b = 3.14'15'92'65;
+```
+
+### **STL литералы**
+
+```cpp
+	auto half_minute = 30s; // std::chrono::duration
+	auto day = 24h; // std::chrono::duration
+
+	auto complex = 1 + 1i; //std::complex
+```
 
 
 # constexpr
@@ -3629,8 +3626,6 @@ decltype(auto) bar()
 }
 ```
 
-#### **Пример: Cоздание обобщенного оператора суммации**
-
 Применение механизмов выше, создание обобщенного оператора суммации:
 
 ```cpp
@@ -3664,7 +3659,7 @@ decltype(auto) operator+(Callable&& op, Args&& args) // Perfect returning
 ```
 
 #### **Опасности decltyp**
- 
+
 Но с decltype нужно быть аккуратным:
 
 ```cpp
