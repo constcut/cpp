@@ -1761,7 +1761,8 @@ TODO дополнить + (std::gcd, std::lcm).
 
 Возможность использовать параллельные вычисления в стандартных алгоритмах.
 
-TODO дополнить с примерами.
+Для этого в первый аргумент алгоритма требуется передать значение std::execution::seq \ std::execution::par \ std::execution::par_unseq.
+
 
 ***
 
@@ -3280,6 +3281,7 @@ int foo(const unsigined char* s)
 
 ## **Инвалидация**
 
+
 ### **Ссылок**
 
 При реаллокации в std::vector - старые ссылки, ссылающиеся на его элементы инвалидируются.
@@ -3303,6 +3305,10 @@ std::cout << ref; // UB
 
 
 ### **Итераторов**
+
+
+![image info](images/iter_invalidation.png)
+
 
 #### **std::vector**
 
@@ -5508,4 +5514,6 @@ std::unique_ptr<int[]> unique_array(new int[10]);
 ++ TODO при описании контейнеров выводить только разницу между ними (не дублировать море лишнего кода и названий полей)
 А может лучше всего даже сделать сводную таблицу, чтобы видеть сразу разницу между всеми контейнерами
 
-++ parallel http://www.modernescpp.com/index.php/performance-of-the-parallel-stl-algorithmn
+https://alyssaq.github.io/stl-complexities/
+
+
