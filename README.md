@@ -141,6 +141,7 @@
 				- [**BidirectionalIterator**](#bidirectionaliterator)
 				- [**RandomAccessIterator**](#randomaccessiterator)
 				- [**OutputIterator**](#outputiterator)
+				- [**std::make_move_iterator**](#stdmake_move_iterator)
 			- [**std::iterator_trait**](#stditerator_trait)
 		- [Алгоритмы и функциональные объекты](#алгоритмы-и-функциональные-объекты)
 			- [Адаптеры итераторов](#адаптеры-итераторов)
@@ -237,6 +238,7 @@
 		- [**new default initialization**](#new-default-initialization)
 		- [**placement new**](#placement-new)
 		- [**std::shared_ptr \ std::unique_ptr массивы**](#stdshared_ptr--stdunique_ptr-массивы)
+	- [**Диапазоны значений стандартных типов**](#диапазоны-значений-стандартных-типов)
 	- [**Исключения**](#исключения)
 	- [**Преобразование типов**](#преобразование-типов)
 - [Идеомы](#идеомы)
@@ -319,6 +321,14 @@ auto create_lambda(int y) {
 
 auto lamda = CreateLambda(1);
 std::cout << lamda(2); // Выведет 3
+```
+
+Появилась возможность использовать обобщенные лямбды с переменным числом аргументов:
+
+```cpp
+auto variadic_lambda = [](auto... args) { function(args...); }
+// Perfect forwarding:
+auto variadic_lambda_ = [](auto&&... args) { std::forward<decltype(args)>(args)...; }
 ```
 
 ## C++17
@@ -2457,6 +2467,15 @@ std::ostream& os;
 std::copy(buf.begin(), buf.end(), os); //Копирует строку в поток
 ```
 
+##### **std::make_move_iterator**
+
+```cpp
+std::vector<std::string> v1(vec.begin(), vec.end()); // copy
+
+std::vector<std::string> v2(std::make_move_iterator(vec.begin()),
+							std::make_move_iterator(vec.end())); // move
+```
+
 #### **std::iterator_trait**
 
 Структуры для метапрограммирования, позволяющие узнать тип итератора.
@@ -2627,6 +2646,25 @@ namespace std
 
 Person p { "A", "B", 7};
 const auto hash_value = std::hash<decltype(obj)>{}(obj);
+```
+
+Для комбинации нескольких хешей, часто используют их как коэффициенты при вычислении некоторого многочлена.
+
+```cpp
+struct MyHasher {
+	size_t operator() (const MyType& p) const
+	{
+		size_t r1 = double_hash(p.double_value);
+		size_t r2 = str_hash(p.str_value);
+		size_t r3 = int_hash(p.int_value)
+		size_t x = 37; 
+		return (r1*x*x + r2*x + r3); //// ax^2 + bx + c
+	}
+
+	std::hash<double> double_hash;
+	std::hash<std::string> str_hash;
+	std::hash<int> int_hash;
+}
 ```
 
 ##### Частичное применение функций
@@ -5418,6 +5456,27 @@ std::shared_ptr<int> sp(new int[10], [](int *p) { delete[] p; });
 std::unique_ptr<int[]> unique_array(new int[10]);
 ```
 
+## **Диапазоны значений стандартных типов**
+
+Для получения информации о диапазонах стандартных типов существует std::numeric_limits<type>, который содержит следующие функции:
+
++ min
++ max
++ digits
++ lowest
+
+В случае с вещественными типами так же добавляются функции:
+
++ denom_min
++ infinity
++ quiet_NaN
++ signalig_NaN
++ epsilon
++ min_exponent
++ max_exponent
++ is_iec559
+
+
 ## **Исключения**
 
 ## **Преобразование типов**
@@ -5449,11 +5508,4 @@ std::unique_ptr<int[]> unique_array(new int[10]);
 ++ TODO при описании контейнеров выводить только разницу между ними (не дублировать море лишнего кода и названий полей)
 А может лучше всего даже сделать сводную таблицу, чтобы видеть сразу разницу между всеми контейнерами
 
-++ STL 
-
-https://hackingcpp.com/cpp/cheat_sheets.html
-https://hackingcpp.com/cpp/std/algorithms.png
-++ make_move_iterator - перепроверить
-++ Рекомендации по Hash функции
-++ https://cppcheatsheet.com/
 ++ parallel http://www.modernescpp.com/index.php/performance-of-the-parallel-stl-algorithmn
