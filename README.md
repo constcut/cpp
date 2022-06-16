@@ -165,16 +165,34 @@
 	- [Неуточненное поведение](#неуточненное-поведение)
 	- [Примеры undefined behavior](#примеры-undefined-behavior)
 	- [Более серьёзные, и менее очевидные случаи:](#более-серьёзные-и-менее-очевидные-случаи)
-- [Выведение типов лекция](#выведение-типов-лекция)
-	- [Обзор](#обзор)
+- [Выведение типов](#выведение-типов)
 	- [Правила вывода для шаблонов](#правила-вывода-для-шаблонов)
 		- [**Правила вывода типов по значению**](#правила-вывода-типов-по-значению)
+			- [**(T param)**](#t-param)
+			- [**(const T param)**](#const-t-param)
 		- [**Правила вывода типов для указателей и ссылок**](#правила-вывода-типов-для-указателей-и-ссылок)
+			- [**(T& param)**](#t-param-1)
+			- [**(const T& param)**](#const-t-param-1)
+			- [**(T* param)**](#t-param-2)
+			- [**(const T* param)**](#const-t-param-2)
+			- [**Массивы и функции**](#массивы-и-функции)
 		- [**Правила вывода типов для forwarding reference**](#правила-вывода-типов-для-forwarding-reference)
+			- [**(const T&& param)**](#const-t-param-3)
 	- [Правила вывода для auto](#правила-вывода-для-auto)
+		- [**auto& T**](#auto-t)
+		- [**const\volatile auto& T**](#constvolatile-auto-t)
+		- [**auto&& T**](#auto-t-1)
+		- [**Пример с массивом и функцией**](#пример-с-массивом-и-функцией)
 	- [Правила вывода для lambda capture-list](#правила-вывода-для-lambda-capture-list)
+		- [**Типы списков захвата**](#типы-списков-захвата)
+		- [**Захват по копии**](#захват-по-копии)
+			- [**Влияние mutable спецификатора**](#влияние-mutable-спецификатора)
+		- [**Захват по ссылке**](#захват-по-ссылке)
+		- [**Список захвата с инициализацией**](#список-захвата-с-инициализацией)
 	- [Правила вывода для decltype](#правила-вывода-для-decltype)
 	- [Правила вывода для возвращаемого типа](#правила-вывода-для-возвращаемого-типа)
+			- [**Пример: Cоздание обобщенного оператора суммации**](#пример-cоздание-обобщенного-оператора-суммации)
+			- [**Опасности decltyp**](#опасности-decltyp)
 	- [Как найти\отладить выводимый тип](#как-найтиотладить-выводимый-тип)
 	- [Вывод типов на runtime: RTTI](#вывод-типов-на-runtime-rtti)
 - [Метапрограммирование](#метапрограммирование)
@@ -3081,7 +3099,7 @@ int foo(const unsigined char* s)
 }
 ```
 
-# Выведение типов лекция
+# Выведение типов
 
 До С++11 вывод типов применялся только в шаблонах.
 
@@ -3091,9 +3109,6 @@ int foo(const unsigined char* s)
 
 C++14: function return type deduction, lambda caption with initialization.
 
-## Обзор
-
-***
 
 ![image info](images/type_deduction.png)
 
@@ -3117,6 +3132,8 @@ C++14: function return type deduction, lambda caption with initialization.
 
 ### **Правила вывода типов по значению**
 
+#### **(T param)**
+
 Отбрасываются ссылки, const, volatile:
 
 ```cpp
@@ -3134,6 +3151,8 @@ foo(rci);  //T = int, param тип = int
 foo(rvi);  //T = int, param тип = int
 foo(rcvi); //T = int, param тип = int
 ```
+
+#### **(const T param)**
 
 ```cpp
 //Если заменить на const T:
@@ -3190,6 +3209,7 @@ foo({1, 2, 3}); //ERROR: fails to deduce type
 
 ### **Правила вывода типов для указателей и ссылок**
 
+#### **(T& param)**
 
 Если передаётся значение, у которого есть референс - он отбрасывается, остальные модификаторы сохраняются:
 
@@ -3211,6 +3231,8 @@ foo(i); // T = cv int, param тип = cv int&
 //То результат не изменится
 ```
 
+#### **(const T& param)**
+
 Если наш параметр должен быть ссылкой на константный объект:
 
 ```cpp
@@ -3229,6 +3251,8 @@ foo(rvi);  //T = volatile int, param тип = cv int&
 foo(rcvi); //T = volatile int, param тип = int cv int&
 ```
 
+#### **(T* param)**
+
 Для указателей действуют схожие правила:
 
 ```cpp
@@ -3246,6 +3270,8 @@ foo(pci); // T = const int, param тип = const int*
 foo(pvi); // T = volatile int, param тип = volatile int*
 foo(pcvi); // T = const volatile, param тип = const volatile int*
 ```
+
+#### **(const T* param)**
 
 При добавлении константности для указателей:
 
@@ -3266,6 +3292,8 @@ foo(pvi); // T = volatile int, param тип = volatile int*
 foo(pcvi); // T = volatile int, param тип = const volatile int*
 ```
 
+#### **Массивы и функции**
+
 ```cpp
 template <typename T>
 void foo(T& param);
@@ -3281,9 +3309,12 @@ foo({1, 2, 3}); //ERROR: fails to deduce type
 
 ### **Правила вывода типов для forwarding reference**
 
+#### **(const T&& param)**
+
 Если передается ссылка на объект l-value, т.е. объект у которого есть имя и адрес, тогда аргумент ссылка на l-value.
 
 Если передаётся временный объект, то расскручивается аргумент на r-value ссылка.
+
 
 ```cpp
 template <typename T>
@@ -3352,6 +3383,8 @@ const volatile auto cva_i = rcvi;
 //Полынй тип переменной = specificators + int
 ```
 
+### **auto& T**
+
 При указании ссылки, работают правила вывода ссылки в шаблонах:
 
 ```cpp
@@ -3361,6 +3394,8 @@ auto& a_rci = rci;   //auto == const int, var type = const int&
 auto& a_rvi = rvi;   //auto == volatile int, var type = volatile int&
 auto& a_rcvi = rcvi; //auto == cv int, var type = cv int&
 ```
+
+### **const\volatile auto& T**
 
 При добавлении спецификаторов немного меняется поведение:
 
@@ -3376,6 +3411,8 @@ const auto& ca_rci = rci; //auto = int, var type = const int&
 volatile auto& va_rvi = rvi; //auto = int, var type = volatilee int&
 const volatile auto& cva_rcvi = rcvi; //auto = int, var type = cv int&
 ```
+
+### **auto&& T**
 
 При применении двойного амперсанда:
 
@@ -3394,7 +3431,7 @@ auto&& a_foo = foo(); //auto = int, var type = int&&
 auto&& a_bar = bar(); //auto = int, var type = int&&
 ```
 
-Пример с массивом и функцией:
+### **Пример с массивом и функцией**
 
 ```cpp
 void bar();
@@ -3415,7 +3452,8 @@ auto err_list = {1, 0.2}; // не удастся вывести тип
 ## Правила вывода для lambda capture-list
 ***
 
-Список типов захвата:
+### **Типы списков захвата**
+
 
 ```cpp
 [=]
@@ -3427,6 +3465,8 @@ auto err_list = {1, 0.2}; // не удастся вывести тип
 [identifier initializer] // C++14
 [&identifier initializer] // C++14
 ```
+
+### **Захват по копии**
 
 Захват по копии:
 
@@ -3443,6 +3483,8 @@ public:
 	auto operator()() const { ... }
 }
 ```
+
+#### **Влияние mutable спецификатора**
 
 Влияние mutable спецификатора:
 
@@ -3475,7 +3517,7 @@ public:
 }
 ```
 
-Захват по ссылке:
+### **Захват по ссылке**
 
 ```cpp
 int x = 42;
@@ -3501,7 +3543,8 @@ public:
 }
 ```
 
-Список захвата с инициализацией:
+### **Список захвата с инициализацией**
+
 
 ```cpp
 auto p = std::make_unique<SomeClass>();
@@ -3586,6 +3629,8 @@ decltype(auto) bar()
 }
 ```
 
+#### **Пример: Cоздание обобщенного оператора суммации**
+
 Применение механизмов выше, создание обобщенного оператора суммации:
 
 ```cpp
@@ -3618,6 +3663,8 @@ decltype(auto) operator+(Callable&& op, Args&& args) // Perfect returning
 }
 ```
 
+#### **Опасности decltyp**
+ 
 Но с decltype нужно быть аккуратным:
 
 ```cpp
