@@ -1,55 +1,50 @@
-- [С++11, C++14, C++17](#с11-c14-c17)
-- [Атрибуты](#атрибуты)
+- [Lambda](#lambda)
 	- [C++11](#c11)
 	- [C++14](#c14)
 	- [C++17](#c17)
-- [Lambda](#lambda)
-	- [C++11](#c11-1)
-	- [C++14](#c14-1)
-	- [C++17](#c17-1)
 - [POD-type](#pod-type)
 - [auto/decltype](#autodecltype)
-	- [C++11](#c11-2)
+	- [C++11](#c11-1)
 		- [**Альтернативный синтаксис шаблонных функций**](#альтернативный-синтаксис-шаблонных-функций)
-	- [C++14](#c14-2)
+	- [C++14](#c14-1)
 - [Literals](#literals)
-	- [C++11](#c11-3)
+	- [C++11](#c11-2)
 		- [**Строковые литералы**](#строковые-литералы)
 		- [**Пользовательские литералы**](#пользовательские-литералы)
-	- [C++14](#c14-3)
+	- [C++14](#c14-2)
 		- [**Строковый литерал**](#строковый-литерал)
 		- [**Бинарные литералы**](#бинарные-литералы)
 		- [**Разделители числовых литералов**](#разделители-числовых-литералов)
 		- [**STL литералы**](#stl-литералы)
 - [Initialization](#initialization)
-	- [C++11](#c11-4)
+	- [C++11](#c11-3)
 		- [**Универсальная инициализация**](#универсальная-инициализация)
 		- [**std::initializer_list**](#stdinitializer_list)
-	- [C++14](#c14-4)
+	- [C++14](#c14-3)
 		- [**Aggregate initialization with deafult member initializer**](#aggregate-initialization-with-deafult-member-initializer)
-	- [C++17](#c17-2)
+	- [C++17](#c17-1)
 		- [**auto + std::initializer_list**](#auto--stdinitializer_list)
 		- [**Агрегатная инциализация базового класса**](#агрегатная-инциализация-базового-класса)
 - [constexpr](#constexpr)
-	- [C++11](#c11-5)
-	- [C++14](#c14-5)
-	- [C++17](#c17-3)
+	- [C++11](#c11-4)
+	- [C++14](#c14-4)
+	- [C++17](#c17-2)
 - [Шаблоны](#шаблоны)
-	- [C++11](#c11-6)
+	- [C++11](#c11-5)
 		- [**Вариативные шаблоны (Variadic template)**](#вариативные-шаблоны-variadic-template)
 		- [**Extern templates**](#extern-templates)
-	- [C++14](#c14-6)
+	- [C++14](#c14-5)
 		- [**Шаблон переменной (Variable template)**](#шаблон-переменной-variable-template)
-	- [C++17](#c17-4)
+	- [C++17](#c17-3)
 		- [**Выведение типов шаблонных аргументов**](#выведение-типов-шаблонных-аргументов)
 		- [**template auto**](#template-auto)
 		- [**Fold expressions (свертка функций)**](#fold-expressions-свертка-функций)
 		- [**constexpr if**](#constexpr-if)
-- [Спецификаторы](#спецификаторы)
-	- [***'default' + 'deleted' specifiers***](#default--deleted-specifiers)
-	- [***'overrdie' + 'final' sepcifiers***](#overrdie--final-sepcifiers)
 - [Небольшие нововведения](#небольшие-нововведения)
-	- [C++11](#c11-7)
+	- [C++11](#c11-6)
+		- [Спецификаторы](#спецификаторы)
+			- [***'default' + 'deleted' specifiers***](#default--deleted-specifiers)
+			- [***'overrdie' + 'final' sepcifiers***](#overrdie--final-sepcifiers)
 		- [**Move semantics**](#move-semantics)
 		- [**noexcept**](#noexcept)
 		- [**Range based for cycle**](#range-based-for-cycle)
@@ -63,9 +58,9 @@
 		- [**static_assert**](#static_assert)
 		- [**allignof, alligingas**](#allignof-alligingas)
 		- [**'using' for types**](#using-for-types)
-	- [C++14](#c14-7)
+	- [C++14](#c14-6)
 		- [**Memory allocation ellision/combining**](#memory-allocation-ellisioncombining)
-	- [C++17](#c17-5)
+	- [C++17](#c17-4)
 		- [**noexcept**](#noexcept-1)
 		- [**Copy elision**](#copy-elision)
 		- [**Structure bindings**](#structure-bindings)
@@ -76,6 +71,10 @@
 		- [**allignas (32)**](#allignas-32)
 		- [**static_assert(true)**](#static_asserttrue)
 		- [**Nasted namespaces**](#nasted-namespaces)
+	- [Атрибуты](#атрибуты)
+		- [C++11](#c11-7)
+		- [C++14](#c14-7)
+		- [C++17](#c17-5)
 - [STL](#stl)
 	- [С++11](#с11)
 		- [**Chrono**](#chrono)
@@ -202,95 +201,6 @@
 			- [Numeric algorithms](#numeric-algorithms)
 			- [Алгоритмы с неинциализованной памятью](#алгоритмы-с-неинциализованной-памятью)
 - [TODO](#todo)
-
-# С++11, C++14, C++17
-
-Ниже рассмотрены нововведения 3х стандартов языка C++.
-
-# Атрибуты
-
-## C++11
-
-***
-
-[[noreturn]]
-
-Функция помеченная так не должна возвращать поток управленения.
-
-[[carries_dependencies]]
-
-Атрибут связан с моделями памяти.
-
-## C++14 
-
-***
-
-[[depracated]]
-
-Атрибудт позволяет разметить устаревший код, вызывая warning'и при его использовании.
-
-```cpp
-struct [[depracated]] Name;
-[[depracated]] typedef S* pS;
-using PS [[depracated]] = S*;
-[[depracated]] int x;
-uninon U { [[depracated]] int n; }
-[[depracated]] void f();
-namespace [[depracated]] {NS { int x; }
-enum [[depracated]] E {};
-enum E { a [[depracated]], b [[depracated]] = 1 };
-template < > struct [[depracated]] X<int> {};
-```
-
-## C++17
-
-***
-
-[[fallthrough]] 
-
-Используется для switch блоков, сообщая что оператор break не был пропущен по ошибке.
-
-```cpp
-switch (x)
-{
-	case 1:
-	    [[fallthrough]] //No warning
-	case 2:
-	    break;
-    case 3: //Warning
-    case 4:
-        break; 
-}
-```
-
-
-[[nodiscard]] 
-
-Атрибут требует чтобы результат функции не был проигнорирован.
-
-```cpp
-[[nodiscard]] bool isEmpty() { ... }
-
-bool status = isEmpty(); //No warning
-
-isEmpty(); //Warning - результат возвращаемый функцией проигнорирован
-```
-
-[[maybe_unused]] 
-
-
-Атрибут убирает warning от неиспользуемых аргументов\переменных\функций итд.
-
-```cpp
-struct [[maybe_unused]]  S;
-[[maybe_unused]]  typedef S* PS;
-using PS [[maybe_unused]]  = S*;
-[[maybe_unused]]  int x;
-union U { [[maybe_unused]]  int n; };
-[[maybe_unused]]  void f();
-enum [[maybe_unused]]  E {};
-enum { A [[maybe_unused]], B [[maybe_unused]] }; 
-```
 
 
 # Lambda
@@ -900,9 +810,18 @@ decltype(auto) get(const Person& )
 }
 ```
 
-# Спецификаторы
 
-## ***'default' + 'deleted' specifiers***
+
+# Небольшие нововведения
+
+
+## C++11
+
+***
+
+### Спецификаторы
+
+#### ***'default' + 'deleted' specifiers***
 
 ***
 
@@ -918,7 +837,7 @@ decltype(auto) get(const Person& )
 Если компилятор может - он постарается вывести noexcept версии функций
 
 
-##  ***'overrdie' + 'final' sepcifiers***
+####  ***'overrdie' + 'final' sepcifiers***
 
 ***
 
@@ -934,13 +853,6 @@ virtual void foo(int) const final {}
 
 Так же final может запретить дальнейшее наследование, если мы хотим создать класс\структуру, от которой нельзя наследоваться дальше.
 
-
-
-# Небольшие нововведения
-
-## C++11
-
-***
 
 ### **Move semantics**
 
@@ -1211,6 +1123,95 @@ namespace n1 {
 //Вызов
 n1::n2::n;
 ```
+
+
+## Атрибуты
+
+### C++11
+
+***
+
+[[noreturn]]
+
+Функция помеченная так не должна возвращать поток управленения.
+
+[[carries_dependencies]]
+
+Атрибут связан с моделями памяти.
+
+### C++14 
+
+***
+
+[[depracated]]
+
+Атрибудт позволяет разметить устаревший код, вызывая warning'и при его использовании.
+
+```cpp
+struct [[depracated]] Name;
+[[depracated]] typedef S* pS;
+using PS [[depracated]] = S*;
+[[depracated]] int x;
+uninon U { [[depracated]] int n; }
+[[depracated]] void f();
+namespace [[depracated]] {NS { int x; }
+enum [[depracated]] E {};
+enum E { a [[depracated]], b [[depracated]] = 1 };
+template < > struct [[depracated]] X<int> {};
+```
+
+### C++17
+
+***
+
+[[fallthrough]] 
+
+Используется для switch блоков, сообщая что оператор break не был пропущен по ошибке.
+
+```cpp
+switch (x)
+{
+	case 1:
+	    [[fallthrough]] //No warning
+	case 2:
+	    break;
+    case 3: //Warning
+    case 4:
+        break; 
+}
+```
+
+
+[[nodiscard]] 
+
+Атрибут требует чтобы результат функции не был проигнорирован.
+
+```cpp
+[[nodiscard]] bool isEmpty() { ... }
+
+bool status = isEmpty(); //No warning
+
+isEmpty(); //Warning - результат возвращаемый функцией проигнорирован
+```
+
+[[maybe_unused]] 
+
+
+Атрибут убирает warning от неиспользуемых аргументов\переменных\функций итд.
+
+```cpp
+struct [[maybe_unused]]  S;
+[[maybe_unused]]  typedef S* PS;
+using PS [[maybe_unused]]  = S*;
+[[maybe_unused]]  int x;
+union U { [[maybe_unused]]  int n; };
+[[maybe_unused]]  void f();
+enum [[maybe_unused]]  E {};
+enum { A [[maybe_unused]], B [[maybe_unused]] }; 
+```
+
+
+
 
 ----------------------------------------
 
