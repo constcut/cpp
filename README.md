@@ -16,8 +16,8 @@
 		- [**auto + std::initializer_list**](#auto--stdinitializer_list)
 		- [**Агрегатная инциализация базового класса**](#агрегатная-инциализация-базового-класса)
 - [C++11](#c11-3)
-	- [POD-type](#pod-type)
-	- [Спецификаторы](#спецификаторы)
+	- [**POD-type**](#pod-type)
+	- [**Спецификаторы**](#спецификаторы)
 		- [***'default' + 'deleted' specifiers***](#default--deleted-specifiers)
 		- [***'overrdie' + 'final' sepcifiers***](#overrdie--final-sepcifiers)
 	- [**Move semantics**](#move-semantics)
@@ -33,6 +33,7 @@
 	- [**static_assert**](#static_assert)
 	- [**allignof, alligingas**](#allignof-alligingas)
 	- [**'using' for types**](#using-for-types)
+	- [**inline namespaces**](#inline-namespaces)
 - [C++14](#c14-3)
 	- [**Memory allocation ellision/combining**](#memory-allocation-ellisioncombining)
 - [C++17](#c17-2)
@@ -50,7 +51,7 @@
 	- [C++11](#c11-4)
 	- [C++14](#c14-4)
 	- [C++17](#c17-3)
-- [Literals](#literals)
+- [Литералы](#литералы)
 	- [C++11](#c11-5)
 		- [**Строковые литералы**](#строковые-литералы)
 		- [**Пользовательские литералы**](#пользовательские-литералы)
@@ -216,6 +217,13 @@
 	- [Special metafunctions](#special-metafunctions)
 	- [void_t](#void_t)
 	- [Detectors](#detectors)
+- [Важные особенности языка](#важные-особенности-языка)
+	- [**const**](#const)
+	- [**volatile**](#volatile)
+	- [**placement new**](#placement-new)
+- [Идеомы](#идеомы)
+	- [RAII](#raii)
+	- [IILE](#iile)
 - [TODO](#todo)
 
 
@@ -483,7 +491,7 @@ Child ch4 {"name", "sur", 99};
 
 ***
 
-## POD-type
+## **POD-type**
 
 Plain old data - структура размещающаяся в памяти таким образом, как её описал программист, исключая оптимизации. Это может быть необходимо для передачи данных в другие языки программирования.
 
@@ -514,7 +522,7 @@ POD = Тривиальный класс + Класс со стандартным
 
 
 
-## Спецификаторы
+## **Спецификаторы**
 
 ### ***'default' + 'deleted' specifiers***
 
@@ -663,6 +671,34 @@ template <typename T>
 using vec_t_iter = std::vector<T>::iterator;
 
 vec_t_iter<int> it; //ok!
+```
+
+## **inline namespaces**
+
+Возможность включить данные из одного namespace в текущий:
+
+```cpp
+// file V1.h:
+namespace V1 {
+    void f(int);
+}
+
+// file V2.h:
+inline namespace V2 {
+    void f(int);    
+    void f(double);
+}
+
+//Code:
+namespace Default {
+	#include "V1.h"
+	#include "V2.h"
+}
+
+using namespace Default;
+V1::f(1); 
+V2::f(1);  
+f(1); // Тоже самое, что и V2::f(1);  
 ```
 
 
@@ -907,7 +943,7 @@ enum { A [[maybe_unused]], B [[maybe_unused]] };
 
 
 
-# Literals
+# Литералы
 
 ## C++11
 
@@ -5124,31 +5160,43 @@ inline constexpr bool has_foo = is_detected_v<v_foo_v, T>
 ***
 ***
 
+# Важные особенности языка
+
+## **const**
+
+## **volatile**
+
+## **placement new**
+
+
+
+
+# Идеомы
+
+## RAII
+
+## IILE
+
 
 # TODO
 
-Проработать оглавление, поставить в нужном порядке темы, добиться того чтобы до любой подтемы можно было добраться через оглавление( например как сейчас не очень с алгоритмами, т.к. уже 4 уровня вложенности)
 
 ++ Forwarding reference
 допольнить и изучить внимательней
 
 ++ inline namespaces тоже в 11 фитчи
 
-++std::invoke 
+++ std::invoke 
 
 ++ Searcher function objects
 
 ++ общие фитчи языка вроде const\volotile итд - из конспетов курсеры
-
-+++ Идеомы
 
 +++ шпоры filesystem +?
 
 ++ advanced constexpr?
 
 ++ TODO скользкие места C++ в UB
-
-// TODO placement new
 
 ++ std::true_type пометить о существовании этих функций, где есть пример их реализации
 
