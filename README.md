@@ -25,23 +25,8 @@
 	- [C++17](#c17-1)
 		- [**auto + std::initializer_list**](#auto--stdinitializer_list)
 		- [**Агрегатная инциализация базового класса**](#агрегатная-инциализация-базового-класса)
-- [constexpr](#constexpr)
-	- [C++11](#c11-4)
-	- [C++14](#c14-4)
-	- [C++17](#c17-2)
-- [Шаблоны](#шаблоны)
-	- [C++11](#c11-5)
-		- [**Вариативные шаблоны (Variadic template)**](#вариативные-шаблоны-variadic-template)
-		- [**Extern templates**](#extern-templates)
-	- [C++14](#c14-5)
-		- [**Шаблон переменной (Variable template)**](#шаблон-переменной-variable-template)
-	- [C++17](#c17-3)
-		- [**Выведение типов шаблонных аргументов**](#выведение-типов-шаблонных-аргументов)
-		- [**template auto**](#template-auto)
-		- [**Fold expressions (свертка функций)**](#fold-expressions-свертка-функций)
-		- [**constexpr if**](#constexpr-if)
 - [Небольшие нововведения](#небольшие-нововведения)
-	- [C++11](#c11-6)
+	- [C++11](#c11-4)
 		- [Спецификаторы](#спецификаторы)
 			- [***'default' + 'deleted' specifiers***](#default--deleted-specifiers)
 			- [***'overrdie' + 'final' sepcifiers***](#overrdie--final-sepcifiers)
@@ -58,9 +43,9 @@
 		- [**static_assert**](#static_assert)
 		- [**allignof, alligingas**](#allignof-alligingas)
 		- [**'using' for types**](#using-for-types)
-	- [C++14](#c14-6)
+	- [C++14](#c14-4)
 		- [**Memory allocation ellision/combining**](#memory-allocation-ellisioncombining)
-	- [C++17](#c17-4)
+	- [C++17](#c17-2)
 		- [**noexcept**](#noexcept-1)
 		- [**Copy elision**](#copy-elision)
 		- [**Structure bindings**](#structure-bindings)
@@ -72,87 +57,63 @@
 		- [**static_assert(true)**](#static_asserttrue)
 		- [**Nasted namespaces**](#nasted-namespaces)
 	- [Атрибуты](#атрибуты)
-		- [C++11](#c11-7)
-		- [C++14](#c14-7)
-		- [C++17](#c17-5)
+		- [C++11](#c11-5)
+		- [C++14](#c14-5)
+		- [C++17](#c17-3)
+- [constexpr](#constexpr)
+	- [C++11](#c11-6)
+	- [C++14](#c14-6)
+	- [C++17](#c17-4)
+- [Шаблоны](#шаблоны)
+	- [C++11](#c11-7)
+		- [**Вариативные шаблоны (Variadic template)**](#вариативные-шаблоны-variadic-template)
+		- [**Extern templates**](#extern-templates)
+	- [C++14](#c14-7)
+		- [**Шаблон переменной (Variable template)**](#шаблон-переменной-variable-template)
+	- [C++17](#c17-5)
+		- [**Выведение типов шаблонных аргументов**](#выведение-типов-шаблонных-аргументов)
+		- [**template auto**](#template-auto)
+		- [**Fold expressions (свертка функций)**](#fold-expressions-свертка-функций)
+		- [**constexpr if**](#constexpr-if)
 - [STL](#stl)
-	- [С++11](#с11)
-		- [**Chrono**](#chrono)
-		- [**Random**](#random)
-		- [**Regex**](#regex)
-		- [**Multithreading**](#multithreading)
-		- [**Обновления вызванные новым стандартом**](#обновления-вызванные-новым-стандартом)
+	- [Нововведения](#нововведения)
+		- [С++11](#с11)
+			- [**Chrono**](#chrono)
+			- [**Random**](#random)
+			- [**Regex**](#regex)
+			- [**Multithreading**](#multithreading)
+			- [**Обновления вызванные новым стандартом**](#обновления-вызванные-новым-стандартом)
 		- [**std::tuple**](#stdtuple)
-		- [**Accosicative unordered containers**](#accosicative-unordered-containers)
-		- [**Smart pointers**](#smart-pointers)
-		- [**std::function**](#stdfunction)
-		- [**std::reference_wrapper**](#stdreference_wrapper)
-	- [C++14](#c14-8)
-		- [**Гетрогенный поиск по ассоциативным контейнерам**](#гетрогенный-поиск-по-ассоциативным-контейнерам)
-		- [**Адресация элементов кортежа через тип**](#адресация-элементов-кортежа-через-тип)
-		- [**std::make_unique**](#stdmake_unique)
-		- [**std::exchange**](#stdexchange)
-		- [**rbegin, rend, cbegin, cend, rcbegin, rcend**](#rbegin-rend-cbegin-cend-rcbegin-rcend)
-	- [C++17](#c17-6)
-		- [**string_view**](#string_view)
-		- [**std::to_chars/std::from_chars**](#stdto_charsstdfrom_chars)
-		- [**std::optional**](#stdoptional)
-		- [**std::variant**](#stdvariant)
-		- [**std::any**](#stdany)
-		- [**std::filesystem**](#stdfilesystem)
-		- [**std::byte**](#stdbyte)
-		- [**std::apply**](#stdapply)
-		- [**std::as_const**](#stdas_const)
-		- [**std::clamp**](#stdclamp)
-		- [**Ассоциативыне контейнеры**](#ассоциативыне-контейнеры)
-		- [**std::size, std::data, std::empty**](#stdsize-stddata-stdempty)
-		- [**non const std::string::data**](#non-const-stdstringdata)
-		- [**std::not_fn**](#stdnot_fn)
-		- [**emplace_back**](#emplace_back)
-		- [**std::scoped_lock**](#stdscoped_lock)
-		- [**shared_poiter для массивов**](#shared_poiter-для-массивов)
-		- [**Математические функции**](#математические-функции)
-		- [**Paralel algorithms**](#paralel-algorithms)
-- [Undefined behavior](#undefined-behavior)
-	- [Неуточненное поведение](#неуточненное-поведение)
-	- [Примеры undefined behavior](#примеры-undefined-behavior)
-	- [Более серьёзные, и менее очевидные случаи:](#более-серьёзные-и-менее-очевидные-случаи)
-- [Выведение типов лекция](#выведение-типов-лекция)
-	- [Обзор](#обзор)
-	- [Правила вывода для шаблонов](#правила-вывода-для-шаблонов)
-		- [**Правила вывода типов по значению**](#правила-вывода-типов-по-значению)
-		- [**Правила вывода типов для указателей и ссылок**](#правила-вывода-типов-для-указателей-и-ссылок)
-		- [**Правила вывода типов для forwarding reference**](#правила-вывода-типов-для-forwarding-reference)
-	- [Правила вывода для auto](#правила-вывода-для-auto)
-	- [Правила вывода для lambda capture-list](#правила-вывода-для-lambda-capture-list)
-	- [Правила вывода для decltype](#правила-вывода-для-decltype)
-	- [Правила вывода для возвращаемого типа](#правила-вывода-для-возвращаемого-типа)
-	- [Как найти\отладить выводимый тип](#как-найтиотладить-выводимый-тип)
-	- [Вывод типов на runtime: RTTI](#вывод-типов-на-runtime-rtti)
-- [Метапрограммирование](#метапрограммирование)
-	- [Не типовые шаблонные параметры](#не-типовые-шаблонные-параметры)
-	- [Типовые шаблонные параметры](#типовые-шаблонные-параметры)
-	- [Ключевое слово typename](#ключевое-слово-typename)
-	- [Explicit (full) specialization (явная\полная специализация)](#explicit-full-specialization-явнаяполная-специализация)
-	- [Partial specialization (частичная специализация)](#partial-specialization-частичная-специализация)
-	- [Variadic template (вариативные шаблоны)](#variadic-template-вариативные-шаблоны)
-	- [Вычисления на этапе компиляции](#вычисления-на-этапе-компиляции)
-	- [Compile-time type manipulation (Преобразование с типами)](#compile-time-type-manipulation-преобразование-с-типами)
-		- [Primary type categories](#primary-type-categories)
-		- [Composite type categories](#composite-type-categories)
-		- [Type properties](#type-properties)
-		- [Supported operations properties](#supported-operations-properties)
-		- [Type relationships](#type-relationships)
-		- [Property queries](#property-queries)
-		- [Type transformations](#type-transformations)
-	- [Curiously recurring template pattern : CRTP](#curiously-recurring-template-pattern--crtp)
-	- [SFINAE (Subsituation Failure Is Not An Error)](#sfinae-subsituation-failure-is-not-an-error)
-		- [Tag dispatch](#tag-dispatch)
-		- [Практический пример основанный на SFINAE](#практический-пример-основанный-на-sfinae)
-	- [Special metafunctions](#special-metafunctions)
-	- [void_t](#void_t)
-	- [Detectors](#detectors)
-- [STL](#stl-1)
+			- [**Accosicative unordered containers**](#accosicative-unordered-containers)
+			- [**Smart pointers**](#smart-pointers)
+			- [**std::function**](#stdfunction)
+			- [**std::reference_wrapper**](#stdreference_wrapper)
+		- [C++14](#c14-8)
+			- [**Гетрогенный поиск по ассоциативным контейнерам**](#гетрогенный-поиск-по-ассоциативным-контейнерам)
+			- [**Адресация элементов кортежа через тип**](#адресация-элементов-кортежа-через-тип)
+			- [**std::make_unique**](#stdmake_unique)
+			- [**std::exchange**](#stdexchange)
+			- [**rbegin, rend, cbegin, cend, rcbegin, rcend**](#rbegin-rend-cbegin-cend-rcbegin-rcend)
+		- [C++17](#c17-6)
+			- [**string_view**](#string_view)
+			- [**std::to_chars/std::from_chars**](#stdto_charsstdfrom_chars)
+			- [**std::optional**](#stdoptional)
+			- [**std::variant**](#stdvariant)
+			- [**std::any**](#stdany)
+			- [**std::filesystem**](#stdfilesystem)
+			- [**std::byte**](#stdbyte)
+			- [**std::apply**](#stdapply)
+			- [**std::as_const**](#stdas_const)
+			- [**std::clamp**](#stdclamp)
+			- [**Ассоциативыне контейнеры**](#ассоциативыне-контейнеры)
+			- [**std::size, std::data, std::empty**](#stdsize-stddata-stdempty)
+			- [**non const std::string::data**](#non-const-stdstringdata)
+			- [**std::not_fn**](#stdnot_fn)
+			- [**emplace_back**](#emplace_back)
+			- [**std::scoped_lock**](#stdscoped_lock)
+			- [**shared_poiter для массивов**](#shared_poiter-для-массивов)
+			- [**Математические функции**](#математические-функции)
+			- [**Paralel algorithms**](#paralel-algorithms)
 	- [Базовая структура STL](#базовая-структура-stl)
 	- [Контейнеры](#контейнеры)
 		- [**std::allocator**](#stdallocator)
@@ -200,6 +161,45 @@
 			- [Алгоритмы перестановок](#алгоритмы-перестановок)
 			- [Numeric algorithms](#numeric-algorithms)
 			- [Алгоритмы с неинциализованной памятью](#алгоритмы-с-неинциализованной-памятью)
+- [Undefined behavior](#undefined-behavior)
+	- [Неуточненное поведение](#неуточненное-поведение)
+	- [Примеры undefined behavior](#примеры-undefined-behavior)
+	- [Более серьёзные, и менее очевидные случаи:](#более-серьёзные-и-менее-очевидные-случаи)
+- [Выведение типов лекция](#выведение-типов-лекция)
+	- [Обзор](#обзор)
+	- [Правила вывода для шаблонов](#правила-вывода-для-шаблонов)
+		- [**Правила вывода типов по значению**](#правила-вывода-типов-по-значению)
+		- [**Правила вывода типов для указателей и ссылок**](#правила-вывода-типов-для-указателей-и-ссылок)
+		- [**Правила вывода типов для forwarding reference**](#правила-вывода-типов-для-forwarding-reference)
+	- [Правила вывода для auto](#правила-вывода-для-auto)
+	- [Правила вывода для lambda capture-list](#правила-вывода-для-lambda-capture-list)
+	- [Правила вывода для decltype](#правила-вывода-для-decltype)
+	- [Правила вывода для возвращаемого типа](#правила-вывода-для-возвращаемого-типа)
+	- [Как найти\отладить выводимый тип](#как-найтиотладить-выводимый-тип)
+	- [Вывод типов на runtime: RTTI](#вывод-типов-на-runtime-rtti)
+- [Метапрограммирование](#метапрограммирование)
+	- [Не типовые шаблонные параметры](#не-типовые-шаблонные-параметры)
+	- [Типовые шаблонные параметры](#типовые-шаблонные-параметры)
+	- [Ключевое слово typename](#ключевое-слово-typename)
+	- [Explicit (full) specialization (явная\полная специализация)](#explicit-full-specialization-явнаяполная-специализация)
+	- [Partial specialization (частичная специализация)](#partial-specialization-частичная-специализация)
+	- [Variadic template (вариативные шаблоны)](#variadic-template-вариативные-шаблоны)
+	- [Вычисления на этапе компиляции](#вычисления-на-этапе-компиляции)
+	- [Compile-time type manipulation (Преобразование с типами)](#compile-time-type-manipulation-преобразование-с-типами)
+		- [Primary type categories](#primary-type-categories)
+		- [Composite type categories](#composite-type-categories)
+		- [Type properties](#type-properties)
+		- [Supported operations properties](#supported-operations-properties)
+		- [Type relationships](#type-relationships)
+		- [Property queries](#property-queries)
+		- [Type transformations](#type-transformations)
+	- [Curiously recurring template pattern : CRTP](#curiously-recurring-template-pattern--crtp)
+	- [SFINAE (Subsituation Failure Is Not An Error)](#sfinae-subsituation-failure-is-not-an-error)
+		- [Tag dispatch](#tag-dispatch)
+		- [Практический пример основанный на SFINAE](#практический-пример-основанный-на-sfinae)
+	- [Special metafunctions](#special-metafunctions)
+	- [void_t](#void_t)
+	- [Detectors](#detectors)
 - [TODO](#todo)
 
 
@@ -583,231 +583,6 @@ Child ch2{}; //all fields empty
 
 Child ch3 {{"name", "sur"}, 99};
 Child ch4 {"name", "sur", 99};
-```
-
-
-# constexpr
-
-## C++11
-
-***
-
-Функции помеченные constexpr могут вычислять на этапе компиляции.
-Изначально такие функции имели большое количество ограничений, например должны были состоять из только 1 блока return.
-
-## C++14
-
-***
-
-Ограничения были существенно ослабленны. Запрещенным остались:
-
-```cpp
-__asm__
-goto
-метки, корме case\default в switch,
-блок try,
-переменные нелитерального типа, 
-static \ thread_local переменные,
-переменные без инициализации
-```
-
-Так же они удобны для применения в шаблонной магии, например в вариативных шаблонах, о них ниже.
-
-## C++17
-
-***
-
-Лямбда может быть помечена как constexpr:
-
-```cpp
-constexpr auto add = [](int a, int b) { return a + b; }
-```
-
-Если она может быть вызванна на этапе компиляции - это будет осуществленно, иначе она будет работать в run-time.
-
-
-# Шаблоны 
-
-## C++11
-
-***
-
-### **Вариативные шаблоны (Variadic template)**
-
-Используются для создания функций с переменным числом аргументов:
-
-```cpp
-template <typename... Args>
-void printf(const char* const format, const Args&... args);
-
-//При вызове
-printf("test", 1, 0.1);
-
-// Произойдёт инстанцирование
-printf<int, double>("test", 1, 0.1);
-```
-
-Помимо этого, используются в кортежах (tuple).
-
-### **Extern templates**
-
-Используются с целью осуществить единичное истанцирование при компиляции, для её ускорения.
-
-```cpp
-extern template void foo<int>(int);
-extern template class SomeClass<int>;
-```
-
-## C++14
-
-***
-
-### **Шаблон переменной (Variable template)**
-
-```cpp
-template <class T>
-structure is_reference
-{
-	static constexpr bool value = false;
-};
-
-template <class T>
-structure is_reference<T&>
-{
-	static constexpr bool value = true;
-};
-
-template <class T>
-structure is_reference<T&&>
-{
-	static constexpr bool value = true;
-};
-
-
-template <typename T>
-constexpr bool is_reference_v = is_reference<T>::value;
-
-static_assert(!is_reference_v<SomeType>, " SomeType is reference");
-```
-
-## C++17
-
-***
-
-### **Выведение типов шаблонных аргументов**
-
-Возможность не использовать указание типа шаблонного параметра в <>:
-
-```cpp
-std::piar m {0, 0}; //Вместо std::pair<int, int> { 0, 0};
-std::vector v { 0.0 }; // Вместо std::vector<double> { 0.0; }
-std::lock_guard lock(mutex); // Вместо std::lock_guard<std::mutex>
-```
-
-Так же deduction guide может быть определен вручную. Пример для std::array:
-
-```cpp
-namespace std
-{
-template <class T, size_t N>
-struct array
-{
-	T arr[N];
-};
-
-template <class T, class... U>
-array(T, U...) -> array<T, sizeof...(U) + 1>
-
-};
-
-//Тогда возможно использование 
-std::array arr {0, 1, 2, 3}; //Вместо std::array<int, 4>;
-```
-
-### **template auto**
-
-Полезно для template not-type параметров.
-
-```cpp
-template <auto Val> // Эквивалент template <decltype(auto) Val> 
-struct integral_const 
-{
-	using value_type = decltype(Val);
-	static constexpr value_type value = Val;
-};
-using true_type = integral_const<true>; //Не требуется задавать тип вручную
-using false_type = integral_const<false>; //integral_const<bool, false>
-
-//Схожий пример:
-template <auto.. seq>
-struct my_sequence 
-{
-	...
-};
-
-auto seq = std::integer_sequence<int, 0, 1, 2>(); //int задан явно
-auto seq2 = my_sequence<1, 2, 3>(); //int будет выведен из значений
-```
-
-### **Fold expressions (свертка функций)**
-
-Позволяет записывать операции для вариативного числа шаблонных аргументов:
-
-```cpp
-template <typename T, typename ..Types>
-constexpr auto sum(T t1, Types ..tN)
-{
-	return (t1 + ... + tN);
-}
-
-constexpr size_t res = sum(0, 1, 2, 3);
-```
-
-Четыре вида свёрток функций:
-
-```cpp
-(pack op ...) = (E_1 op (... op (E_N-1 op E_N)))
-(... op pack) = (((E_1 op E_2) op ...) op E_N)
-(pack op ... op init) = (E_1 op (... op (E_N-1 op (E_N op I))))
-(init op ... op pack) = ((((I op E1) op E2) op ...) op E_N)
-```
-
-Операции:
-```cpp
-op:
-+,  -,  *,  /,  %,  ^,  &,  |,  =,  <,  >,  <<,  >>,  
-+=,  -=,  *=,  /=,  %=,  ^=, &= |=, 
-<<=, >>=, ==, !=, <=, >=, &&, ||, .*, ->*
-и оператор ,
-```
-
-Начиная с C++17 возможна запись:
-
-```cpp
-template <typename ...Types>
-void print(const Types& ...tN) 
-{
-	std::cout << ... << tN;
-}
-```
-
-### **constexpr if**
-
-Метод разметить ветки для шаблонов:
-
-```cpp
-template <size_t N>
-decltype(auto) get(const Person& )
-{
-	if constexpr (N == 0)
-	{
-		return p.Name();
-	}
-	else if constexpr (N == 1)
-	{
-		return p.GetSurname();
-	}
-}
 ```
 
 
@@ -1212,16 +987,244 @@ enum { A [[maybe_unused]], B [[maybe_unused]] };
 
 
 
+# constexpr
+
+## C++11
+
+***
+
+Функции помеченные constexpr могут вычислять на этапе компиляции.
+Изначально такие функции имели большое количество ограничений, например должны были состоять из только 1 блока return.
+
+## C++14
+
+***
+
+Ограничения были существенно ослабленны. Запрещенным остались:
+
+```cpp
+__asm__
+goto
+метки, корме case\default в switch,
+блок try,
+переменные нелитерального типа, 
+static \ thread_local переменные,
+переменные без инициализации
+```
+
+Так же они удобны для применения в шаблонной магии, например в вариативных шаблонах, о них ниже.
+
+## C++17
+
+***
+
+Лямбда может быть помечена как constexpr:
+
+```cpp
+constexpr auto add = [](int a, int b) { return a + b; }
+```
+
+Если она может быть вызванна на этапе компиляции - это будет осуществленно, иначе она будет работать в run-time.
+
+
+# Шаблоны 
+
+## C++11
+
+***
+
+### **Вариативные шаблоны (Variadic template)**
+
+Используются для создания функций с переменным числом аргументов:
+
+```cpp
+template <typename... Args>
+void printf(const char* const format, const Args&... args);
+
+//При вызове
+printf("test", 1, 0.1);
+
+// Произойдёт инстанцирование
+printf<int, double>("test", 1, 0.1);
+```
+
+Помимо этого, используются в кортежах (tuple).
+
+### **Extern templates**
+
+Используются с целью осуществить единичное истанцирование при компиляции, для её ускорения.
+
+```cpp
+extern template void foo<int>(int);
+extern template class SomeClass<int>;
+```
+
+## C++14
+
+***
+
+### **Шаблон переменной (Variable template)**
+
+```cpp
+template <class T>
+structure is_reference
+{
+	static constexpr bool value = false;
+};
+
+template <class T>
+structure is_reference<T&>
+{
+	static constexpr bool value = true;
+};
+
+template <class T>
+structure is_reference<T&&>
+{
+	static constexpr bool value = true;
+};
+
+
+template <typename T>
+constexpr bool is_reference_v = is_reference<T>::value;
+
+static_assert(!is_reference_v<SomeType>, " SomeType is reference");
+```
+
+## C++17
+
+***
+
+### **Выведение типов шаблонных аргументов**
+
+Возможность не использовать указание типа шаблонного параметра в <>:
+
+```cpp
+std::piar m {0, 0}; //Вместо std::pair<int, int> { 0, 0};
+std::vector v { 0.0 }; // Вместо std::vector<double> { 0.0; }
+std::lock_guard lock(mutex); // Вместо std::lock_guard<std::mutex>
+```
+
+Так же deduction guide может быть определен вручную. Пример для std::array:
+
+```cpp
+namespace std
+{
+template <class T, size_t N>
+struct array
+{
+	T arr[N];
+};
+
+template <class T, class... U>
+array(T, U...) -> array<T, sizeof...(U) + 1>
+
+};
+
+//Тогда возможно использование 
+std::array arr {0, 1, 2, 3}; //Вместо std::array<int, 4>;
+```
+
+### **template auto**
+
+Полезно для template not-type параметров.
+
+```cpp
+template <auto Val> // Эквивалент template <decltype(auto) Val> 
+struct integral_const 
+{
+	using value_type = decltype(Val);
+	static constexpr value_type value = Val;
+};
+using true_type = integral_const<true>; //Не требуется задавать тип вручную
+using false_type = integral_const<false>; //integral_const<bool, false>
+
+//Схожий пример:
+template <auto.. seq>
+struct my_sequence 
+{
+	...
+};
+
+auto seq = std::integer_sequence<int, 0, 1, 2>(); //int задан явно
+auto seq2 = my_sequence<1, 2, 3>(); //int будет выведен из значений
+```
+
+### **Fold expressions (свертка функций)**
+
+Позволяет записывать операции для вариативного числа шаблонных аргументов:
+
+```cpp
+template <typename T, typename ..Types>
+constexpr auto sum(T t1, Types ..tN)
+{
+	return (t1 + ... + tN);
+}
+
+constexpr size_t res = sum(0, 1, 2, 3);
+```
+
+Четыре вида свёрток функций:
+
+```cpp
+(pack op ...) = (E_1 op (... op (E_N-1 op E_N)))
+(... op pack) = (((E_1 op E_2) op ...) op E_N)
+(pack op ... op init) = (E_1 op (... op (E_N-1 op (E_N op I))))
+(init op ... op pack) = ((((I op E1) op E2) op ...) op E_N)
+```
+
+Операции:
+```cpp
+op:
++,  -,  *,  /,  %,  ^,  &,  |,  =,  <,  >,  <<,  >>,  
++=,  -=,  *=,  /=,  %=,  ^=, &= |=, 
+<<=, >>=, ==, !=, <=, >=, &&, ||, .*, ->*
+и оператор ,
+```
+
+Начиная с C++17 возможна запись:
+
+```cpp
+template <typename ...Types>
+void print(const Types& ...tN) 
+{
+	std::cout << ... << tN;
+}
+```
+
+### **constexpr if**
+
+Метод разметить ветки для шаблонов:
+
+```cpp
+template <size_t N>
+decltype(auto) get(const Person& )
+{
+	if constexpr (N == 0)
+	{
+		return p.Name();
+	}
+	else if constexpr (N == 1)
+	{
+		return p.GetSurname();
+	}
+}
+```
+
+
+
 
 ----------------------------------------
 
 # STL 
 
-## С++11
+## Нововведения
+
+### С++11
 
 ***
 
-### **Chrono**
+#### **Chrono**
 
 Используется для измерения времени:
 
@@ -1250,7 +1253,7 @@ std::chrono::minutes;
 std::chrono::hours;
 ```
 
-### **Random**
+#### **Random**
 
 Используется для генерации случайных чисел.
 
@@ -1307,7 +1310,7 @@ auto generator = std::bind(distr, engine);
 std::cout << generator();
 ```
 
-### **Regex**
+#### **Regex**
 
 Регулярные выражения:
 
@@ -1332,7 +1335,7 @@ for (auto it = std::sregex_iterator {str.begin(), str.end(), pattern},
 auto replaced = std::regex_replace(str, pattern, "xx.xx.xxxx");
 ```
 
-### **Multithreading**
+#### **Multithreading**
 
 Используется для реализации многопоточных или асинхронных приложений.
 
@@ -1361,7 +1364,7 @@ auto replaced = std::regex_replace(str, pattern, "xx.xx.xxxx");
 ```
 
 
-### **Обновления вызванные новым стандартом**
+#### **Обновления вызванные новым стандартом**
 
 
 ```cpp
@@ -1391,7 +1394,7 @@ std::tie(name, surname) =  get_person(1);
 
 std::tie(year, month, day) > std::tie(year2, month2, day2);
 
-### **Accosicative unordered containers**
+#### **Accosicative unordered containers**
 
 unordered_
 _set, _multiset,
@@ -1399,7 +1402,7 @@ _map, _multimap,
 
 Поиск за O(1), как и вставка\удаление. Но зависит от количества элементов на bucket'е.
 
-### **Smart pointers**
+#### **Smart pointers**
 
 ```cpp
 //Можно настроить делитер - который закроет файл
@@ -1410,13 +1413,13 @@ std::shared_ptr<T>
 std::week_ptr<T> //решение для перекрестных ссылок
 ```
 
-### **std::function**
+#### **std::function**
 
 Обертка для callable объекта, которым может выступать лямбда.
 
 Или результат std::bind.
 
-### **std::reference_wrapper**
+#### **std::reference_wrapper**
 
 Модулирование поведения ссылки.
 Нужны для thread'ов - чтобы протолкнуть объект по ссылке
@@ -1424,11 +1427,11 @@ std::week_ptr<T> //решение для перекрестных ссылок
 std::ref + std::cref - функции помогающие сгенерировать объект типа reference_wrapper.
 
 
-## C++14
+### C++14
 
 ***
 
-### **Гетрогенный поиск по ассоциативным контейнерам**
+#### **Гетрогенный поиск по ассоциативным контейнерам**
 
 ```cpp
 //Гетрогенный компоратор less
@@ -1437,18 +1440,18 @@ std::set<std::string, std::less<>> elements { ... };
 elements.find("const char*"); 
 ```
 
-### **Адресация элементов кортежа через тип**
+#### **Адресация элементов кортежа через тип**
 
 Стала доступна адресация по типу ::get<double>().
 
 Если будет указан несуществующий тип - ошибка будет на этапе компиляции.
 Но элементов с одинаковым типом не должно быть, для корректной работы функции.
 
-### **std::make_unique**
+#### **std::make_unique**
 
 Подобие make_shared, make_pair, make_tuple.
 
-### **std::exchange**
+#### **std::exchange**
 
 std::excange( объект, следующее его значение ).
 Результат вызова это изначальный объект.
@@ -1463,26 +1466,26 @@ for (const auto x: std::exchange(vec, {})
 
 Другая область использоваия это реализация своего move конструктора, или move оператора присваивания.
 
-### **rbegin, rend, cbegin, cend, rcbegin, rcend**
+#### **rbegin, rend, cbegin, cend, rcbegin, rcend**
 
 Константные и реверсивные интераторы для контейнеров.
 
-## C++17
+### C++17
 
 ***
 
-### **string_view**
+#### **string_view**
 
 Обобщенный и легковесный вариант для хранения строчек std::string\c_string
 std::string_view // std::wstring_view
 
-### **std::to_chars/std::from_chars**
+#### **std::to_chars/std::from_chars**
 
 Функции приобразования цифр.
 Может содержать ошибку парсинга.
 
 
-### **std::optional**
+#### **std::optional**
 
 Хранит либо значение, либо nullopt
 
@@ -1501,7 +1504,7 @@ opt.value_or({});
 if (optional > 2) {}
 ```
 
-### **std::variant**
+#### **std::variant**
 
 Метод хранения множества разнотипных значений вместе:
 
@@ -1523,7 +1526,7 @@ std::visit( [](auto arg) { std::cout << arg << ' '; }, v);
 
 ```
 
-### **std::any**
+#### **std::any**
 
 Принимает произволный тип, но почти всегда происходит динамическая локация.
 Если возможно, лучше использовать variant.
@@ -1536,7 +1539,7 @@ x.has_value(); // == true
 std::any_castt<int>(x); // == 5
 ```
 
-### **std::filesystem**
+#### **std::filesystem**
 
 Позвояет использовать функции доступа к файловой системе:
 
@@ -1553,7 +1556,7 @@ if (std::filesystem::exists(my_path))
 }
 ```
 
-### **std::byte**
+#### **std::byte**
 
 ```cpp
 //Новый тип для хранения "сырых" байтов, перегружен
@@ -1561,7 +1564,7 @@ std::byte a { 0 };
 int x = std::to_integer<int>(a);
 ```
 
-### **std::apply**
+#### **std::apply**
 
 Применение функции к tuple\pair:
 
@@ -1574,15 +1577,15 @@ std::apply(add, std::make_tuple(2, 3)); // == 5
 std::apply(add, std::make_pair(1, 2)); // == 3
 ```
 
-### **std::as_const**
+#### **std::as_const**
 
 Обертка для получение const-ref.
 
-### **std::clamp**
+#### **std::clamp**
 
 Клипует значение по 2м границам - верхней и нижней.
 
-### **Ассоциативыне контейнеры**
+#### **Ассоциативыне контейнеры**
 
 Добавлены функции: try_emplace, insert_or_assign.
 
@@ -1604,40 +1607,1359 @@ e.key() = 4;
 m.insert(std::move(e));
 ```
 
-### **std::size, std::data, std::empty** 
+#### **std::size, std::data, std::empty** 
 
 Свободные обобщенные функции для всех контейнеров.
 
-### **non const std::string::data** 
+#### **non const std::string::data** 
 
 Доступ к сырой памяти строки.
 
-### **std::not_fn** 
+#### **std::not_fn** 
 
 Wrapper возвращающий отрицательное\обратное значение функции.
 
-### **emplace_back** 
+#### **emplace_back** 
 
 Функции теперь возвращают ссылку на объект.
 
-### **std::scoped_lock** 
+#### **std::scoped_lock** 
 
 Возможность использовать несколько мьютексов в одном локе.
 
-### **shared_poiter для массивов**
+#### **shared_poiter для массивов**
 
 TODO дополнить.
 
-### **Математические функции** 
+#### **Математические функции** 
 
 TODO дополнить + (std::gcd, std::lcm).
 
-### **Paralel algorithms**
+#### **Paralel algorithms**
 
 Возможность использовать параллельные вычисления в стандартных алгоритмах.
 
 TODO дополнить с примерами.
 
+***
+
+
+
+
+
+
+## Базовая структура STL
+
+***
+
++ Контейнеры
++ Итераторы
++ Алгоритмы
++ Адаптеры
++ Функциональные объекты
+
+***
+
+## Контейнеры
+
++ Последовательные
++ Упорядоченные ассоциативные
++ Неупорядоченные ассоциативные
++ Адаптеры
+
+
+### **std::allocator**
+
+Изначально алокаторы появились для того чтобы проще было работать со старой моделью памяти, в которой существовали ближние и дальние указатели.
+Но на текущий момент у них другие задачи. Рассмотрим пример реализации:
+
+```cpp
+template <class T>
+struct allocator { ... };
+
+template <class Alloc>
+struct allocator_traits
+{
+	using allocator_type = Alloc;
+	using value_type = Alloc::value_type;
+	using pointer = Alloc::pointer;
+	using const_pointer = Alloc::const_pointer;
+	using difference_type = Alloc::difference_type;
+	using size_type = Alloc::size_type;
+
+	[[nodiscard]] static pointer allocate(Alloc& a, size_type n);
+
+	static void deallocate(Alloc& a, pointer p, size_type n);
+
+	template <class T, class... Args>
+	static void construct(Alloc& a, T* p, Args&&... args);
+
+	template<class T>
+	static void destroy(Alloc& a, T* p);
+}
+```
+
+Allocator умеет:
+
++ Аллоцировать кусок памяти через функцию allocate
++ Очищаять аллоцированную память через deallocate
++ Через функцию construct формируется объект (placement new)
++ Разрушать объект, через функцию destroy
+
+Начиная с C++11 эти функции были перенесены в allocator_traits, а так же были добавленны using'и для шаблонной магии.
+
+Пример использования:
+
+```cpp
+#include <memory>
+
+std::allocator<int> a1; //Стандартный алокатор для int
+int* p = a1.allocate(1); //алокация памяти для 1 элемента
+a1.construct(p, 7); //Конструирование и инициализация
+
+std::cout << *p; // 7
+
+using prev_alloc = decltype(a1);
+std::allocator<std::allocator_traits<prev_alloc>::value_type> a2;
+
+a2.deallocate(p, 1); //Этот код корректен, алокаторы не хранят состояния
+```
+
+Контейнеры используют алокаторы как второй шаблонный параметер.
+
+### **Последовательные контейнеры**
+
+#### **std::vector**
+
+Вектор хранит объекты типа T в динамически выделенной памяти.
+ 
+```cpp
+template <class T, class Alloc = std::allocator<T>>
+class vector
+{
+	using value_type = T;
+	using allocator_type = Alloc;
+	using size_type = std::size_t;
+	using difference_type = std::ptrdiff_t;
+	using reference = value_type&;
+	using const_reference = const value_type&;
+	using pointer = std::allocator_traits<Alloc>::pointer;
+	using const_pointer = std::allocator_traits<Alloc>::const_pointer;
+
+	//+ итераторы (о них позже)
+};
+```
+
+Функции класса вектор можно разбить на 4 типа.
+
+Доступ к элементам:
+
++ at, operator[] - асимптотическая сложность O(1)
++ data - асимптотическая сложность O(1)
++ front, back - асимптотическая сложность O(1)
+
+Функция at может бросить исключение, если вышли за границы, operator[] - нет.
+
+Размеры (capacity):
+
++ empty - асимптотическая сложность O(1)
++ size, max_size, capacity - асимптотическая сложность O(1)
++ resize, reserve, shrink_to_fit - асимптотическая сложность O(n)
+
+При инициализации вектора при помощи std::initializer_list или {} - capacity равно его размеру.
+
+При resize происходит изменение размера вектора, новые элементы (выше прошлого size()) заполняются дефолтным значением.
+
+При reserve происходит увеличение capacity, но не size.
+
+Функция shrink_to_fit делает capasity = size, т.е. обрезает лишнюю память.
+
+Модицикаторы (modifiers):
+
++ clear, erase - асимптотическая сложность O(n)
++ insert, emplace, push_back - асимптотическая сложность O(1) или O(n)
++ emplace_back, pop_back - асимптотическая сложность O(1)
++ swap - асимптотическая сложность O(1)
+
+Разница в асимптотической сложности push_back итд связанна с тем нужна ли реалокация, или нет.
+Если требуется сделать вставку не в конец, insert\emplace тоже работают за O(n), иначе O(1).
+
+Emplace и emplace_back формируют объект при помощи preferct forwarding.
+
+Аллокатор:
+
++ get_allocator - асимптотическая сложность O(1)
+
+
+#### **std::array**
+
+Отличается от вектора там, что хранит элементы на стеке, а не в динамически выделенной памяти.
+
+```cpp
+template <class T, size_t N>
+struct array
+{
+	using value_type = T;
+	using size_type = std::size_t;
+	using difference_type = std::ptrdiff_t;
+	using reference = value_type&;
+	using const_reference = const value_type&;
+	using pointer = T*;
+	using const_pointer = const T*;
+
+	//+ итераторы (о них позже)
+};
+```
+
+В отличии от сырых массивов его можно передавать как по значению, так и по ссылки, и в первом случае он будет копироваться.
+
+std::array содержит 3 группы функций.
+
+Доступ к элементам:
+
++ at, operator[] - асимптотическая сложность O(1)
++ data - асимптотическая сложность O(1)
++ front, back - асимптотическая сложность O(1)
+
+Размер (capacity):
+
++ empty - асимптотическая сложность O(1)
++ size, max_size - асимптотическая сложность O(1)
+
+Модификаторы:
+
++ swap - асимптотическая сложность O(n)
+
+
+#### **std::forward_list**
+
+Представляет однонаправленный список. Так же использует аллокатор как вектор и содержит все те же using'и, для метапрограммирования.
+
+У него есть 5 групп функций.
+
+Доступ к элементам:
+
++ front - асимптотическая сложность O(1)
+
+Размер:
+
++ empty - асимптотическая сложность O(1)
++ max_size - асимптотическая сложность O(1)
++ resize - асимптотическая сложность O(n)
+
+Модификаторы:
+
++ clear - асимптотическая сложность O(n)
++ erase_after - асимптотическая сложность O(1)-O(n)
++ insert_after - асимптотическая сложность O(1)-O(n)
++ push_front, emplace_after, emplace_front - асимптотическая сложность O(1)
++ pop_front - асимптотическая сложность O(1)
++ swap - асимптотическая сложность O(1)
++ merge - асимптотическая сложность O(n)
+
+Merge перености все элементы из листа переданного в качестве аргумента функции, второй лист становится пустым.
+
+Встроенные алгоритмы:
+
++ splice_after - асимптотическая сложность O(1)-O(n)
++ remove, remove_if - асимптотическая сложность O(n)
++ reverse - асимптотическая сложность O(n)
++ sort -  - асимптотическая сложность O(n log n)
++ unique - асимптотическая сложность O(n)
+
+Функция splice_after работает схоже с merge, но можно задать позицию для вставки.
+
+Функции remove\remove_if - удаление диапазона.
+
+Функция unique - оставляет только уникальные значения, однако перед тем как её вызвать нужно обязательно отсортировать элементы, функцией sort.
+
+Аллокатор:
+
++ get_allocator - асимптотическая сложность O(1)
+
+
+#### **std::list**
+
+Похож на std::forward_list - но умеет двигаться в обоих направлениях. Это приводит к тому что он занимает больше места в памяти, но у него появляются новые функции.
+
+У него тоже есть 5 групп функций.
+
+Доступ к элементам:
+
++ front, back - асимптотическая сложность O(1)
+
+Размер:
+
++ empty - асимптотическая сложность O(1)
++ max_size - асимптотическая сложность O(1)
++ resize - асимптотическая сложность O(n)
+
+Модификаторы:
+
++ clear - асимптотическая сложность O(n)
++ erase - асимптотическая сложность O(n)
++ insert - асимптотическая сложность O(1)-O(n)
++ push_front, push_back, emplace, emplace_front, emplace_back - асимптотическая сложность O(1)
++ pop_front, pop_back - асимптотическая сложность O(1)
++ swap - асимптотическая сложность O(1)
++ merge - асимптотическая сложность O(n)
+
+Встроенные алгоритмы:
+
++ splice_after - асимптотическая сложность O(1)-O(n)
++ remove, remove_if - асимптотическая сложность O(n)
++ reverse - асимптотическая сложность O(n)
++ sort -  - асимптотическая сложность O(n log n)
++ unique - асимптотическая сложность O(n)
+
+Аллокатор:
+
++ get_allocator - асимптотическая сложность O(1)
+
+
+#### **std::deque**
+
+Дек - двусторонняя очередь (стек + очередь). Саму структуру возможно реализовать через std::list, однако последний не дружелюбен к кэшированию, т.к. элементы не хранятся блоком памяти.
+
+Другой возможный способ - это реализация через массив указателей на chunk'и.
+
+Содержит 4 группы функций:
+
+Доступ:
+
++ at, operator[] - асимптотическая сложность O(1)
++ front, back - асимптотическая сложность O(1)
+
+Размер:
+
++ empty - асимптотическая сложность O(1)
++ size, max_size - асимптотическая сложность O(1)
++ resize, shrink_to_fit - асимптотическая сложность O(n)
+
+Модификаторы:
+
++ clear, erase - асимптотическая сложность O(n)
++ insert, emplace, push_front, push_back, O(1), O(n)
++ emplace_front, emplace_back, pop_front, pop_back - асимптотическая сложность O(n)
++ swap - асимптотическая сложность O(1)
+
+Аллокатор:
+
++ get_allocator
+
+
+### **Упорядоченные ассоциативные контейнеры**
+
+Поиск в последовательных контейнерах достаточно тяжелая операция, более эффективная структура для поиска элементов - дерево.
+
+
+#### **std::set / std::multiset**
+
+```cpp
+template <class Key, class Compare = std::less<Key>,
+		  class Alloc = std::allocator<T>>
+
+class set 
+{
+	using key_type = Key;
+	using value_type = Key;
+	using key_compare = Compare;
+	using value_compare = Compare;
+	//И все остальыне using'и, которые были в std::vector
+}
+```
+
+Реализация сета это красно-черное дерево даёт сбалансированное бинарное дерево поиска, благодаря этом средняя скорость поиска имеет логарифмическую сложность. 
+
+Содержит 5 групп функций:
+
+Размер:
+
++ empty - асимптотическая сложность O(1)
++ size, max_size - асимптотическая сложность O(1)
+
+Модификаторы:
+
++ clear - асимптотическая сложность O(n)
++ erase - асимптотическая сложность O(1), O(log n), O(n)
++ insert, emplace - асимптотическая сложность O(log n)
++ emplace_hint - асимптотическая сложность O(1), O(log n)
++ swap - асимптотическая сложность O(1)
++ merge - асимптотическая сложность O(n log n)
++ extract - асимптотическая сложность O(1), O(log n)
+
+Удаление при помощи erase по итератору работает за константное время, если удаление по ключу - то логарифмическое, и если последний случай с multiset тогда за линейное время.
+
+Так же определяется асимптотическая сложность extract.
+
+Функция emplace_hint может быть использована, чтобы "подсказать" куда вставить элемент - если позиция будет верная - тогда вставка будет за константное время, иначе - логарифмическое.
+
+Важное замечание: extract\insert можно использовать только между контейнерами с одинаковыми алокаторами, иначе это undefined behavior.
+
+Поиск \ нахождение элементов по условиям (Lookup):
+
++ count, find, contains, equal_range - асимптотическая сложность O(log n)
++ lower_bound, upper_bound - асимптотическая сложность O(log n)
+
+Contains появилась в C++20 и возвращает bool, в остальном работая как count.
+
+Функция lower_bound для ключа возвращает итератор на элемент, который не меньше по компаратору с переданным.
+
+Функция upper_bound для ключа возвращает итератор на элемент, который больше чем заданный.
+
+
+Наблюдатели (Observers):
+
++ key_comp, value_comp - асимптотическая сложность O(1)
+
+Аллокатор:
+
++ get_allocator - асимптотическая сложность O(1)
+
+
+#### **std::map / std::multimap**
+
+```cpp
+template <class Key, class T, class Compare = std::less<Key>,
+		  class Alloc = std::allocator<std::pait<const Key, T>>>
+
+class map 
+{
+	using key_type = Key;
+	using mapped_type = T;
+	using value_type = std::pair<const Key, T>;
+	using key_compare = Compare;
+	using value_compare = Compare;
+	//И все остальыне using'и, которые были в std::vector
+}
+```
+
+Есть 6 групп функций std::map.
+
+Доступ к элементам:
+
++ at, operator[] - асимптотическая сложность O(log n)
+
+operator[] может использоваться для добавления нового элемента, не только для получения существующего.
+
+Размер\длина:
+
++ empty - асимптотическая сложность O(1)
++ size, max_size - асимптотическая сложность O(1)
+
+Модификаторы:
+
++ clear - асимптотическая сложность O(n)
++ erase  - асимптотическая сложность O(1), O(log n), O(n)
++ insert, insert_or_assign, emplace, try_emplace - O(log n)
++ emplace_hint  - асимптотическая сложность O(1), O(log n)
++ swap - асимптотическая сложность O(1)
++ merge - асимптотическая сложность O(n log n)
++ extract  - асимптотическая сложность O(1), O(log n)
+
+Почти всё действует как в std::set.
+
+Функция insert_or_assing работает как оператор [], отличие в том что возвращается пару - итератор на вставленный элемент и bool определяющий был ли вставлен элемент.
+
+Функция try_emplace - пытается создать объект на месте, но если он уже создан - не будет делать ничего
+
+
+Поиск:
+
++ count, find, contains, equal_range - асимптотическая сложность O(log n)
++ lower_bound, upper_bound - асимптотическая сложность O(log n)
+
+Наблюдатели (observers):
+
++ key_comp, value_comp - асимптотическая сложность O(1)
+
+Аллокатор:
+
++ get_allocator - асимптотическая сложность O(1)
+
+
+### **Неупорядоченные ассоциативные контейнеры**
+
+
+Особенность неупорядоченных ассоциативных контейнеров заключается в том, что они используют хэш-функцию, для хранения ключей. Это позволяет добиться более быстрого доступа к элементам, в средем за константное время.
+
+#### **std::unordered_set **
+
+```cpp
+template <class Key, class Hash = std::hash<Key>, 
+		  class KeyEqual = std::equal_to<Key>,
+		  class Allocator = std::allocator<Key>>
+class unordered_set
+{
+	//Те же самые using что и в std::set  
+}
+```
+
+
+Содержит те же 5 групп функций, что и std::set:
+
+Размер:
+
++ empty - асимптотическая сложность O(1)
++ size, max_size - асимптотическая сложность O(1)
+
+Модификаторы:
+
++ clear - асимптотическая сложность O(1)
++ erase - асимптотическая сложность O(1), O(log n), O(n)
++ insert, emplace - асимптотическая сложность O(1)
++ emplace_hint - асимптотическая сложность O(1), O(log n)
++ swap - асимптотическая сложность O(1)
++ merge - асимптотическая сложность O(n)
++ extract - асимптотическая сложность O(1), O(n)
+
+Поиск \ нахождение элементов по условиям (Lookup):
+
++ count, find, contains, equal_range - асимптотическая сложность O(log n)
++ lower_bound, upper_bound - асимптотическая сложность O(log n)
+
+Наблюдатели (Observers):
+
++ key_eq, hash_function - асимптотическая сложность O(1)
+
+Аллокатор:
+
++ get_allocator - асимптотическая сложность O(1)
+
+
+#### **std::unordered_map **
+
+```cpp
+template <class Key, class Hash = std::hash<Key>, 
+		  class KeyEqual = std::equal_to<Key>,
+		  class Allocator = std::allocator<Key>>
+class unordered_map
+{
+	//Те же самые using что и в std::map
+
+	using hasher = Hash;
+	using key_equal = KeyEqual;  
+}
+```
+
+
+
+Присутствуют те же 6 групп функций как и в std::map.
+
+Доступ к элементам:
+
++ at, operator[] - асимптотическая сложность O(1), O(n)
+
+Размер\длина:
+
++ empty - асимптотическая сложность O(1)
++ size, max_size - асимптотическая сложность O(1)
++ reserve - асимптотическая сложность O(n), O(n^2)
+
+Модификаторы:
+
++ clear - асимптотическая сложность O(n)
++ erase  - асимптотическая сложность O(1), O(n)
++ insert, insert_or_assign, emplace, try_emplace - O(log n)
++ emplace_hint  - асимптотическая сложность O(1), O(log n)
++ swap - асимптотическая сложность O(1)
++ merge - асимптотическая сложность O(n)
++ extract  - асимптотическая сложность O(1), O(log n)
+
+Поиск:
+
++ count, find, contains, equal_range - асимптотическая сложность O(log n)
++ lower_bound, upper_bound - асимптотическая сложность O(log n)
+
+Наблюдатели (observers):
+
++ key_eq, hash_function - асимптотическая сложность O(1)
+
+Аллокатор:
+
++ get_allocator - асимптотическая сложность O(1)
+
+
+Функции load factor, max load factor позволяют регулировать количество элементов на bucket'е. 
+По умолчанию это 1.0. Значение больше - создаст больше колизий, но потребует меньше памяти, значение меньше - наоборот.
+
+
+### Адаптеры
+
+Это разновидность контейнеров, которые могут использовать для своей реализации другой класс контейнера.
+
+#### **std::stack**
+
+```cpp
+template <class T,
+		  class Container = std::deque<T>>
+
+class stack
+{
+	using container type = Containter;
+	//value_type, size_type, reference, const_reference
+
+	Container c;
+}
+```
+
+Функции:
+
++ top - O(1)
+
+Элемент на вершине стека.
+
++ empty - O(1)
++ size - O(1)
++ swap - как в контейнере ниже
++ push, emplace - как в контейнере ниже push_back, emplace_back
++ pop - как в контейнере pop_back
+
+Условиям функций соответствуют помимо std::deque, std::vector и std::list.
+
+#### **std::queue**
+
+Функции:
+
++ front, back - O(1)
++ empty - O(1)
++ size - O(1)
++ swap - как в контейнере ниже
++ push, emplace - сложность как в контейнере ниже у функций push_back, emplace_back  
++ pop - сложность как в контейнере ниже у pop_front
+
+Типы доступных контейнеров: deque, list.
+std::vector нельзя, у него нет pop_front.
+
+#### **std::priority_queue**
+
+Очередь с приоритетом. По умолчанию нижележайший контейнер это std::vector.
+
+```cpp
+templace <....
+		  class Compare = std::less<typename Container::value_type>>
+class priority_queue
+{ 
+}; // Остальные using схожие
+```
+
+Функции:
+
++ top - O(1)
++ empty - O(1)
++ size - O(1)
++ swap - как в контейнере ниже
++ push, emplace - как в контейнере ниже push_back, emplace_back
++ pop - как в контейнере pop_back
+
+Помимо std::vector могут быть использованы std::list, std::deque.
+Очередь с приоритетом реализуется через кучу, она похожа на дерево.
+На вершине находится максимальный элемент, слева максимальный наследник, справа минимальный наследник.
+
+### Итераторы
+
+Итераторы это обобщенные указатели, которые используются для унифицированного доступа к контейнерам (и не только).
+
+InputIterator:
+
++ std::istream
+
+ForwardIterator:
+
++ std::forward_list
++ std::unordered_set
++ std::unordered_map
++ std::unordered_multiset
++ std::unordered_multimap
+
+BidirectionalIterator:
+
++ std::list
++ std::set
++ std::multiset
++ std::map
++ std::multimap
+
+RandomAccess \ ContinuesIterator (C++17):
+
++ std::array
++ std::vector
++ std::string
++ std::string_view
++ std::valarray
+
+OutputIterator:
+
++ std::ostream
+
+Последовательность первых 5 итераторов иерархична, и каждая следующая группа имеет больше возможностей, чем предшествующая.
+
+#### **InputIterator**
+
+```cpp
+//std::istream& is;
+
+std::istreambuf_iterator it {is};
+std::istreambuf_iterator<char> end;
+
+//size_t count = std::distance(it, end); //O(n)
+//Если строчку выше раскоментить, то buf окажется пустой, т.к. it смещён!
+
+std::string buf {it, end};
+```
+
+```cpp
+std::vector<int> v { std::istreambuf_iterator<int> { is }, 
+					 std::istreambuf_iterator<int> {}};
+```
+
+#### **ForwardIterator**
+
+У него есть перегруженная функция ++, но отсутствует --.
+
+Оператор += не перегружен, но его эффекта можно достичь при помощи std::next \ std::advance.
+
+Любой контейнер можно сконструировать используя итераторы, таким образом можно из std::forward_list или std::unordered_map создать вектор, с соответствующей нижележащей структурой.
+
+
+#### **BidirectionalIterator**
+
+В дополнение имеет перегрузку --. Для смещения на несколько элементов можно использовать std::prev // std::advance.
+
+Контейнеры имеют реверсированыне итераторы rbegin \ rend.
+
+
+#### **RandomAccessIterator**
+
+В дополнение перегружены операторы +=, -=. Но prev\next\advance - работают так же.
+
+#### **OutputIterator**
+
+```cpp
+std::string buf { "text" };
+
+std::ostream& os;
+
+std::copy(buf.begin(), buf.end(), os); //Копирует строку в поток
+```
+
+#### **std::iterator_trait**
+
+Структуры для метапрограммирования, позволяющие узнать тип итератора.
+
+```cpp
+template <class Iter>
+struct iterator_traits
+{
+	using difference_type = typename Iter::difference_type;
+	using value_type = typename Iter::value_type;
+	using pointer = typename Iter::pointer;
+	using reference = typename Iter::reference;
+	using iterator_category = typename Iter::iterator_category;
+};
+
+template <class T>
+struct iterator_traits<T*>
+{
+	using difference_type = ptrdiff_t;
+	using value_type = T;
+	using pointer = T*;
+	using reference = T&;
+	using iterator_category = random_access_iterator_tag;
+}
+```
+
+Существует 6 типов итератор тэгов:
+
++ input_interator_tag
++ forward_iterator_tag - наследуюет предшествующий
++ bidirectional_iterator_tag - наследуюет предшествующий
++ random_access_iterator_tag - наследуюет предшествующий
++ continues_iterator_tag - наследуюет предшествующий
+
++ output_iterator_tag
+
+```cpp
+template <typename It>
+using it_cat = typename std::iterator_trait<It>::iterator_category;
+
+template <typename It>
+using it_diff = typename std::iterator_trait<It>::difference_type;
+
+template <class It>
+auto distance(It first, It last, std::input_iterator_tag)
+{
+	it_diff<It> dist = 0;
+	for (; frist != last; ++first, ++dist);
+
+	return dist;
+}
+
+template <class It>
+auto distance(It first, It last, std::random_access_iterator_tag)
+{
+	return first < last ? (last - first) : -(first - last);
+}
+
+template <class It>
+auto distance(It first, It last)
+{
+	return distance(first, last, it_cat<It>{});
+}
+```
+
+
+## Алгоритмы и функциональные объекты
+
+### Адаптеры итераторов
+
+#### **std::reverse_iterator**
+
+```cpp
+std::string str {"text"};
+
+std::reverse_iterator<std::string::iterator> rit {str.end()}; // C++11
+auto rit = std::make_reverse_iterator(str.end()); // C++14
+std::reverse_iterator rit{str.end()}; // C++17
+auto rit = str.rbegin();
+
+std::reverse_iterator<std::string::iterator> rend {str.begin()}; // C++11
+auto rend = std::make_reverse_iterator(str.begin()); // C++14
+std::reverse_iterator rend{str.begin()}; // C++17
+auto rend = str.rend();
+
+std::string reversed {rit, rend}; // == "txet"
+``` 
+
+#### **std::back_insert_iterator**
+
+Данный адаптер при резименовании приводит к вставке элемента в конец, в данном случае вызовется std::vector::push_back:
+
+```cpp
+std::vector<uint64_t> generate_vector(size_t n, std::functional<uint64_t()> g)
+{
+	std::vector<uint64_t> res;
+	res.reserve(n);
+	//Функция заполнен n элементов, функтором g
+	std::generate_n(std::back_insert_iterator<std::vector<uint64_t>> {res}, n, g); //C++11
+	std::generate_n(std::back_inserter(res), n, g); //альтернатива
+	std::generate_n(std::back_insert_iterator{res}, n, g); //C++17
+}
+```
+
+#### **std::move_iterator**
+
+При разименовывании адаптера std::move_iterator нижележащий тип кастится к r-value&, т.е. будут извлекаться ресурсы.
+
+```cpp
+std::vector<std::string> v1 { "Hello", "my", "beautiful", "world" };
+std::vector<std::string> v2;
+v2.reserve(v1.size());
+
+using iter_t = decltype(v1)::iterator;
+std::copy(std::move_iterator<iter_t> {v.begin() }, //<iter_t> не нужно для C++17
+		  std::move_iterator<iter_t> {v1.end()}, //<iter_t> не нужно для C++17
+		  std::back_inserter(v2));
+
+//v1 {"", "", "", ""}
+//v2  { "Hello", "my", "beautiful", "world" }
+```
+
+### Функциональные объекты (Function objects)
+
++ Функции
++ Функторы - структуры с перегруженным operator()
++ Lambda
+
+![image info](images/functors.png)
+
+#### **std::hash**
+
+Функтор вычисляющий значения хэш функции для встроенных типов, включая std::string и многие другие. 
+Используется в неупорядоченных ассоциативных контейнерах, а так же может быть удобна при создании хэш функции из структур, содержащих несколько типов, которые умеет обрабатывать std::hash.
+
+![image info](images/hash.png)
+
+```cpp
+struct Person
+{
+	std::string name, surname;
+	uint8_t age;
+}
+
+template <typename T, typename... Rest>
+size_t hash_combine(const T& obj1, const Rest&... objN) 
+{
+	size_t res = 0; //Шаблонный сатанизм из boost:
+	res ^= std::hash<T>{}(obj1) + 0x9e3779b9 + (res << 6) + (res >> 2);
+	(..., (res ^= std::hash<Rest>{}(objN) + 0x9e3779b9 + (res << 6) + (res >> 2)) );
+
+	return res;
+}
+
+namespace std 
+{
+	template <>
+	struct hash<Person>
+	{
+		size_t operator()(const SomeClass& obj) const noexcept
+		{
+			return hash_combine(obj.name, obj.surname, obj.age);
+		}
+	};
+}
+
+Person p { "A", "B", 7};
+const auto hash_value = std::hash<decltype(obj)>{}(obj);
+```
+
+#### Частичное применение функций
+
+Если у нас есть функция с большим количеством аргументов, и мы хотим сделать вторую, которая будет вызывать изначальную, но принимать только част её аргументов, а остальные проталкивать в соответствии с требуемыми условими.
+
+Для этого используется std::bind.
+
+Она принимает функциональный объект и список аргументов.
+
+```cpp
+void f(int a1, int a2, int a3, int a4, double a5)
+{...}
+
+using namespace std::placeholders;
+
+int n = 7;
+auto f2 = std::bind(f, _1, 42, _2, std::cref(n), 24); 
+//без cref мы передадим 7 и она всегда будет такой (копия)
+
+f(1, 2, 3); //1 связано _1, 2 связано _2, 3 не используется
+//вызовется f1(1, 42, 2, n, 24);
+```
+
+Это может быть полезно, например, для функции возвращающей вектор случайных чисел.
+
+```cpp
+std::vector<int64_t> foo(int64_t a, int64_t b, size_t n)
+{
+	std::mt19937_64 engine { std::random_device{}() };
+	std::uniform_int_distribution<int64_t> {a, b};
+
+	std::vector<int64_t> res;
+	res.reserve(n);
+
+	std::generate_n(std::back_inserter(res), n, 
+					[dirst, engine]() mutable { return distr(engine); })
+	//Если сделать захват по ссылкам &disrt, &engine и тогда не mutable
+
+	//Вариант с bind:
+	std::generate_n(std::back_inserter(res), n, 
+					std::bind(std::ref(distr), std::ref(engine)));
+
+	return res;
+}
+```
+
+### Алгоритмы
+
+Причины использования алгоритмов:
+
++ Делает код чище и читабельней
++ Нет ошибок связанных с границами
++ Высокий уровень оптимизации
++ Исчерпывающая документация
+
+#### Не модифицирующие последовательные алгоритмы
+
++ std::all_of
++ std::any_of
++ std::none_of
+
+Принимают 2 итератора и применяют к каждому элементу предикат.
+
+std::all_of вернёт true, если все элементы удовлетворяют предикату. std::any_of - если хотя бы один удовлетворяет предикату. std::none_of - если нет ни одного элемента, удовлетворяющего предикату.
+
+
++ std::for_each
++ std::for_each_n
+
+Проходит по каждому элементу и выполняет функтор, если он модифицирует элемент - он будет изменен.
+
+
++ std::count
++ std::count_if
+
+Подсчёт количества значений на диапазоне итераторов. std::count_if вместо значения принимает функциональный объект возвращающий true, если подсчёт необходим.
+
+
++ std::find
++ std::find_if
++ std::find_if_not
+
+Поиск элемента по значению, или по фунциональному объекту возвращающему bool.
+
++ std::find_first_of
+
+Ищет группу элементов, заданных диапазоном итераторов, и возвращает итератор на первое вхождение одного из этих элементов.
+
++ std::find_end
+
+Ищет целую цепочку элементов, возвращается итератор на последнее вхождение этой цепочки.
+
++ std::mismatch
+
+Ищет точку в двух последовательностях, когда элементы не совпадают. Возвращает пару итераторов.
+
++ std::adjacent_find
+
+??? Ищет пару элементов смежных ??? Возвращает итератор на первый из этих двух элементов.
+
++ std::search
+
+Находит первое вхождение группы элементов. Т.е. почти как std::find_end.
+
+В C++17 подвезли версию алгоритма с searcher. Например для строки появились searcher'ы, которые работают с алгоритмами Бойера-Мура-Хорспула и Бойера-Мура.
+
++ std::search_n
+
+Алгоритм ищет n вхождений одного элемента, т.е. когда подряд идет n одинаковых элементов.
+
+#### Модифицирующие последовательные алгоритмы
+
++ std::copy
++ std::copy_if
++ std::copy_n
+
+Копируют элементы из диапазона. Есть вариации когда используется предикат для проверки требуется ли копирование, и функция когда элемент копируется n раз.
+
++ std::copy_backward
+
+Копирует элементы начиная с последнего копируемого. Может оказаться полезной, при копировании внутри одного контейнера.
+
++ std::move
+
+Принимает диапазон итераторов, и переносит их по указанному итератору.
+
++ std::move_backward
+
+Как и прошлый алгоритм, но перемещение начинается с конца диапазона.
+
++ std::fill
++ std::fill_n
+
+Заполнения нашей последовательности определенным значением. fill_n вставит только n элементов в последовательность.
+
++ std::generate
++ std::generate_n
+
+Выполняет функциональный объект (без аргументов) для диапазона или n элементов.
+
++ std::transform
+
+Преобразует каждый элемент из последовательности при помощи унарного функционального объекта, и вставляет их по указанному адресу.
+Вторая версия алгоритма принимает 2 контейнера и осуществляет преоразование с использованием бинарного функционального объекта.
+
++ std::remove
++ std::remove_if
+
+Принимает последовательность со значением для удаление, либо же функтор вместо значения.
+
+Важно!Функция не удаляет сами элементы, а только смещает их так, словно произошло удаление, после этого необходимо вызвать функцию erase, в которую передать итератор возвращенный функцией std::remove.
+
++ std::remove_copy
++ std::remove_copy_if
+ 
+Тоже осуществляет удаление, но записывает новую последовательность в другой контейнер. Т.е. изначальная последовательность остаётся без изменений.
+
++ std::replace
++ std::replace_if
+
+Ищет элемент и меняет его на выбранное значение. Либо же выполняется предикат и меняется на выбранное значение.
+
++ std::replace_copy
++ std::replace_copy_if
+
+Как и выше, но записывает в другую последовательность (контейнер).
+
++ std::unique
+
+Удаляет повторы элементов. Действует схоже как и std::remove - после требуется вызов erase.
+
+Важно! Последовательность должна быть отсортирована.
+
++ std::unique_copy 
+
+Как и функция выше, однако копирует в новую последовательность, т.е. не нужен вызов erase - старая последовательность неизменна.
+
++ std::swap_ranges
+
+Меняет местами объекты в двух последовательностях.
+
++ std::reverse
++ std::reverse_copy
+
+Разворачивает последовательность задом наперёд, _copy версия копирует развернутую последовательность внутрь другой последовательности.
+
++ std::rotate
++ std::rotate_copy
+
+Задается последовательность и точка в ней, точка становится первым элементов, остальное вращается по кругу 1,2,3,4 -> 3,4,1,2.
+
++ std::sample
+
+Принимает на вход совокупность элементов, и случайным образом генерируется n элементов.
+
+#### Разделяющие функции (Partitioning algorithms)
+
+Данная группа алгоритмов осуществляет разделения на части.
+
++ std::partition
++ std::stable_partition
++ std::is_partitioned
++ std::partition_point
+
+По предикату, позволяет разграничить последовательности на левую и правую. Например {x1, y1, x2, y2, x3} -> {x1, x2, x3, y1, y2}.
+
+std::partition не гарантирует исходную последовательность перемещённых объектов, stable_partition гарантирует изначальный порядок исходной последовательности.
+
+std::partition_point находит точку где последовательности разделяются на две под группы.
+std::is_partitioned проверяет что элементы разеделены на 2 последовательности.
+
++ std::partition_copy
+
+Работает схожим образом, но не изменяет исходную последовательность, а создаёт две новых.
+
+
+#### Алгоритмы с кучей (Heap algorithms)
+
+Куча это сортирующее дерево, у которого корневой элемент максимальный (если куча отсортирована по максимуму), правый дочерний элемент больше левого дочернего элемента.
+
++ std::make_heap
+
+{2, 3, 4, 5, 6, 7, 8, 9} -> {9, 4, 8, 2, 3, 6, 5, 2}
+
+Возможно передать компоратор, так чтобы сделать минимальную кучу, вместо максимальной.
+
+Чтобы для ноды n найти наследников нужно n * 2 + 1 или + 2.
+
++ std::is_heap
++ std::is_heap_untill
+
+Проверяют ялвяется ли последовательность кучей, или есть ли подмножество кучи в последовательности.
+std::is_heap_untill возвращают указатель на первый элемент нарушающий структуру кучи.
+
+Так же есть версии с компораторами.
+
++ std::push_heap
+
+Алгоритм вставки в кучу, есть версия с компаратором.
+
++ std::pop_heap
+
+Сортирует кучу, так словно из неё удалён первый элемент.
+
+Если каждый раз применять к последовательности на 1 элемент короче (убирая элемент с начала) - это будет алгоритм пирамидальной сортировки.
+
++ std::heap_sort
+
+Как и в других случаях с кучей, есть версия принимающая компаратор.
+
+
+#### Сортирующие алгоритмы
+
++ std::sort
++ std::stable_sort
+
+Сортирует последовательность, есть возможность передать компаратор.
+
+Если требуется чтобы элементы, которые одинаковые по значению - не переставлялись, есть вариант std::stable_sort, но он медленней.
+
++ std::is_sorted
++ std::is_sorted_untill
+
+Проверят упорядоченна ли последовательность. std::is_sorted_untill возвращает итератор на первый элемент, который выбивается из отсортированной последовательности. 
+Есть версии с компораторами.
+
++ std::partial_sort
+
+Сортирует только часть последовательности, но другая хранит элементы строго больше или меньше (в зависимости от компоратора) чем отсортированная последовательность.
+
+Алгоритм нужен например когда надо найти 10 лучших значений, но дальше сортировать 1000 элементов массива не нужно.
+
++ std::partial_sort_copy
+
+Как и алгоритм выше, но копирует всё в отдельную последовательность.
+
++ std::nth_element
+
+Сортирует только 1 элемент, при этом правая и левые части последовательности от него соблюдают условия что каждый их элемент меньше или больше (или равны) отсортированному элементу.
+
+Может быть полезно чтобы найти кто находится на 11 месте, без того чтобы сортировать ни весь массив, ни 11 элементов.
+
++ std::merge
++ std::inplace_merge
+
+Соединение отсортированных последовательностей - слияние двух массивов. Результат записывается в отдельную последовательность.
+
+std::inplace_merge - отличается тем, что части находятся в одной последовательности, и результат остаётся в ней же.
+
+#### Бинарные алгоритмы поиска
+
+Когда у нас отсортированна последовательность - появляется возможность осуществлять ускоренные методы поиска.
+
++ std::lower_bound
+
+Возвращает первый элемент, который не меньше, чем переданный нами как аргумент.
+
+Т.е. {0, 1, 2, 3, 4, 5, 6}; и элемент 3, дадут указатель на 3, т.к. 3 >= 3.
+
++ std::upper_bound
+
+Возвращает первый элемент, который больше, в примере выше это будет 4.
+
++ std::binary_search
+
+Алгоритм поиска работающий с использованием upper\lower_bound. Работает за логарифмическое время.
+
++ std::equal_range
+
+Работает как комбинация std::lower_bound и std::upper_bound, возвращая пару итереторов.
+
+#### Алгоритмы для множеств
+
++ std::includes
+  
+Проверка является ли одно множество подмножеством другого.
+
++ std::sef_difference
+
+Разница множеств, из А вычитается B.
+
++ std::set_intersection
+
+Пересечение множеств.
+
++ std::set_symmetric_difference
+
+Подсчёт симметричной разницы (всё кроме пересечения).
+
++ std::set_union
+
+Совокупность двух множеств.
+
+#### min\max алгоритмы
+
++ std::min_element
+
+Поиск минимального в последовательности.
+
++ std::max_element
+
+Поиск максимального в последовательности.
+
++ std::minmax_element
+
+Сочитание двух предшествующих функций.
+
+
+#### Алгоритмы сравнения
+
++ std::equal
+
+Проверяет равны ли две наших последовательности.
+Но чаще используют std::vector::operator==.
+
++ std::lexicographical_compare
+
+Лексикографическое сравнение двух последовательностей.
+Используется в следующем алгоритме.
+
+#### Алгоритмы перестановок
+
+Функции комбинаторики:
+
++ std::next_permutation
+
+Ищет следующую комбинацию, например {1, 1, 2} -> { 1, 2, 1 }.
+
+Возвращает true если ещё возможны перестановки, или false - если они все уже осуществленны.
+
++ std::prev_permutation
+
+Обратный алгоритм.
+
++ std::is_permutation
+
+Проверка являются ли 2 последовательности перестановками.
+
+#### Numeric algorithms
+
++ std::iota
+
+Заполняет последовательность значениями, начиная с переданного значения, и инкрементируя его каждый шаг.
+
++ std::accumulate
+
+Считает сумму по последовательности, которая может начинаться с инициализированного значения.
+
++ std::reduce 
+
+Работает схоже, но последок не определен. Необходимо для возможности использовать параллельный алгоритм.
+
++ std::inner_product
+
+Скалярное произведение двух векторов.
+
++ std::partial_sum
+
+Суммирует элементы и в каждую ячекую записывает текущую сумму. Например {1, 2, 3, 4} -> {1, 3, 6, 10};
+
++ std::inclusive_scan
+
+Схоже как выше, учитывает i элемент в i-ой сумме. Может быть паралеллен.
+
++ std::exclusive_scan
+
+Схоже как выше, но не учитывает i элемент в i-ой сумме. Может быть паралеллен.
+
++ std::transform_reduce
++ std::transform_inclusive_scan
++ std::transform_exclusive_scan
+
+Как выше, но до суммирования ещё применяется функциональный объект.
+
+
+#### Алгоритмы с неинциализованной памятью
+
++ std::unitialized_copy
++ std::unitialized_copy_n
+
+Вызывается конструктор от элемента на последовательности. (???)
+
++ std::unitialized_fill
++ std::unitialized_fill_n
+
+Действует схоже, но конструирует объекты по передаваемому значению в функцию.
+
++ std::unitialized_move
++ std::unitialized_move_n
+
+Как и выше, но перемещение.
+
++ std::unitialized_default_construct
++ std::unitialized_default_construct_n
+
+Вызывает дефолтные конструкторы на последовательности.
+
++ std::unitialized_value_construct
++ std::unitialized_value_construct_n
+
+Делает value initialization (???).
+
++ std::destroy
++ std::destroy_n
+
+Разрушает объекты (вызывает деструктор) на последовательности.
+
+***
 ***
 
 # Undefined behavior
@@ -3764,1321 +5086,6 @@ inline constexpr bool has_foo = is_detected_v<v_foo_v, T>
 ***
 ***
 
-# STL
-
-## Базовая структура STL
-
-***
-
-+ Контейнеры
-+ Итераторы
-+ Алгоритмы
-+ Адаптеры
-+ Функциональные объекты
-
-***
-
-## Контейнеры
-
-+ Последовательные
-+ Упорядоченные ассоциативные
-+ Неупорядоченные ассоциативные
-+ Адаптеры
-
-
-### **std::allocator**
-
-Изначально алокаторы появились для того чтобы проще было работать со старой моделью памяти, в которой существовали ближние и дальние указатели.
-Но на текущий момент у них другие задачи. Рассмотрим пример реализации:
-
-```cpp
-template <class T>
-struct allocator { ... };
-
-template <class Alloc>
-struct allocator_traits
-{
-	using allocator_type = Alloc;
-	using value_type = Alloc::value_type;
-	using pointer = Alloc::pointer;
-	using const_pointer = Alloc::const_pointer;
-	using difference_type = Alloc::difference_type;
-	using size_type = Alloc::size_type;
-
-	[[nodiscard]] static pointer allocate(Alloc& a, size_type n);
-
-	static void deallocate(Alloc& a, pointer p, size_type n);
-
-	template <class T, class... Args>
-	static void construct(Alloc& a, T* p, Args&&... args);
-
-	template<class T>
-	static void destroy(Alloc& a, T* p);
-}
-```
-
-Allocator умеет:
-
-+ Аллоцировать кусок памяти через функцию allocate
-+ Очищаять аллоцированную память через deallocate
-+ Через функцию construct формируется объект (placement new)
-+ Разрушать объект, через функцию destroy
-
-Начиная с C++11 эти функции были перенесены в allocator_traits, а так же были добавленны using'и для шаблонной магии.
-
-Пример использования:
-
-```cpp
-#include <memory>
-
-std::allocator<int> a1; //Стандартный алокатор для int
-int* p = a1.allocate(1); //алокация памяти для 1 элемента
-a1.construct(p, 7); //Конструирование и инициализация
-
-std::cout << *p; // 7
-
-using prev_alloc = decltype(a1);
-std::allocator<std::allocator_traits<prev_alloc>::value_type> a2;
-
-a2.deallocate(p, 1); //Этот код корректен, алокаторы не хранят состояния
-```
-
-Контейнеры используют алокаторы как второй шаблонный параметер.
-
-### **Последовательные контейнеры**
-
-#### **std::vector**
-
-Вектор хранит объекты типа T в динамически выделенной памяти.
- 
-```cpp
-template <class T, class Alloc = std::allocator<T>>
-class vector
-{
-	using value_type = T;
-	using allocator_type = Alloc;
-	using size_type = std::size_t;
-	using difference_type = std::ptrdiff_t;
-	using reference = value_type&;
-	using const_reference = const value_type&;
-	using pointer = std::allocator_traits<Alloc>::pointer;
-	using const_pointer = std::allocator_traits<Alloc>::const_pointer;
-
-	//+ итераторы (о них позже)
-};
-```
-
-Функции класса вектор можно разбить на 4 типа.
-
-Доступ к элементам:
-
-+ at, operator[] - асимптотическая сложность O(1)
-+ data - асимптотическая сложность O(1)
-+ front, back - асимптотическая сложность O(1)
-
-Функция at может бросить исключение, если вышли за границы, operator[] - нет.
-
-Размеры (capacity):
-
-+ empty - асимптотическая сложность O(1)
-+ size, max_size, capacity - асимптотическая сложность O(1)
-+ resize, reserve, shrink_to_fit - асимптотическая сложность O(n)
-
-При инициализации вектора при помощи std::initializer_list или {} - capacity равно его размеру.
-
-При resize происходит изменение размера вектора, новые элементы (выше прошлого size()) заполняются дефолтным значением.
-
-При reserve происходит увеличение capacity, но не size.
-
-Функция shrink_to_fit делает capasity = size, т.е. обрезает лишнюю память.
-
-Модицикаторы (modifiers):
-
-+ clear, erase - асимптотическая сложность O(n)
-+ insert, emplace, push_back - асимптотическая сложность O(1) или O(n)
-+ emplace_back, pop_back - асимптотическая сложность O(1)
-+ swap - асимптотическая сложность O(1)
-
-Разница в асимптотической сложности push_back итд связанна с тем нужна ли реалокация, или нет.
-Если требуется сделать вставку не в конец, insert\emplace тоже работают за O(n), иначе O(1).
-
-Emplace и emplace_back формируют объект при помощи preferct forwarding.
-
-Аллокатор:
-
-+ get_allocator - асимптотическая сложность O(1)
-
-
-#### **std::array**
-
-Отличается от вектора там, что хранит элементы на стеке, а не в динамически выделенной памяти.
-
-```cpp
-template <class T, size_t N>
-struct array
-{
-	using value_type = T;
-	using size_type = std::size_t;
-	using difference_type = std::ptrdiff_t;
-	using reference = value_type&;
-	using const_reference = const value_type&;
-	using pointer = T*;
-	using const_pointer = const T*;
-
-	//+ итераторы (о них позже)
-};
-```
-
-В отличии от сырых массивов его можно передавать как по значению, так и по ссылки, и в первом случае он будет копироваться.
-
-std::array содержит 3 группы функций.
-
-Доступ к элементам:
-
-+ at, operator[] - асимптотическая сложность O(1)
-+ data - асимптотическая сложность O(1)
-+ front, back - асимптотическая сложность O(1)
-
-Размер (capacity):
-
-+ empty - асимптотическая сложность O(1)
-+ size, max_size - асимптотическая сложность O(1)
-
-Модификаторы:
-
-+ swap - асимптотическая сложность O(n)
-
-
-#### **std::forward_list**
-
-Представляет однонаправленный список. Так же использует аллокатор как вектор и содержит все те же using'и, для метапрограммирования.
-
-У него есть 5 групп функций.
-
-Доступ к элементам:
-
-+ front - асимптотическая сложность O(1)
-
-Размер:
-
-+ empty - асимптотическая сложность O(1)
-+ max_size - асимптотическая сложность O(1)
-+ resize - асимптотическая сложность O(n)
-
-Модификаторы:
-
-+ clear - асимптотическая сложность O(n)
-+ erase_after - асимптотическая сложность O(1)-O(n)
-+ insert_after - асимптотическая сложность O(1)-O(n)
-+ push_front, emplace_after, emplace_front - асимптотическая сложность O(1)
-+ pop_front - асимптотическая сложность O(1)
-+ swap - асимптотическая сложность O(1)
-+ merge - асимптотическая сложность O(n)
-
-Merge перености все элементы из листа переданного в качестве аргумента функции, второй лист становится пустым.
-
-Встроенные алгоритмы:
-
-+ splice_after - асимптотическая сложность O(1)-O(n)
-+ remove, remove_if - асимптотическая сложность O(n)
-+ reverse - асимптотическая сложность O(n)
-+ sort -  - асимптотическая сложность O(n log n)
-+ unique - асимптотическая сложность O(n)
-
-Функция splice_after работает схоже с merge, но можно задать позицию для вставки.
-
-Функции remove\remove_if - удаление диапазона.
-
-Функция unique - оставляет только уникальные значения, однако перед тем как её вызвать нужно обязательно отсортировать элементы, функцией sort.
-
-Аллокатор:
-
-+ get_allocator - асимптотическая сложность O(1)
-
-
-#### **std::list**
-
-Похож на std::forward_list - но умеет двигаться в обоих направлениях. Это приводит к тому что он занимает больше места в памяти, но у него появляются новые функции.
-
-У него тоже есть 5 групп функций.
-
-Доступ к элементам:
-
-+ front, back - асимптотическая сложность O(1)
-
-Размер:
-
-+ empty - асимптотическая сложность O(1)
-+ max_size - асимптотическая сложность O(1)
-+ resize - асимптотическая сложность O(n)
-
-Модификаторы:
-
-+ clear - асимптотическая сложность O(n)
-+ erase - асимптотическая сложность O(n)
-+ insert - асимптотическая сложность O(1)-O(n)
-+ push_front, push_back, emplace, emplace_front, emplace_back - асимптотическая сложность O(1)
-+ pop_front, pop_back - асимптотическая сложность O(1)
-+ swap - асимптотическая сложность O(1)
-+ merge - асимптотическая сложность O(n)
-
-Встроенные алгоритмы:
-
-+ splice_after - асимптотическая сложность O(1)-O(n)
-+ remove, remove_if - асимптотическая сложность O(n)
-+ reverse - асимптотическая сложность O(n)
-+ sort -  - асимптотическая сложность O(n log n)
-+ unique - асимптотическая сложность O(n)
-
-Аллокатор:
-
-+ get_allocator - асимптотическая сложность O(1)
-
-
-#### **std::deque**
-
-Дек - двусторонняя очередь (стек + очередь). Саму структуру возможно реализовать через std::list, однако последний не дружелюбен к кэшированию, т.к. элементы не хранятся блоком памяти.
-
-Другой возможный способ - это реализация через массив указателей на chunk'и.
-
-Содержит 4 группы функций:
-
-Доступ:
-
-+ at, operator[] - асимптотическая сложность O(1)
-+ front, back - асимптотическая сложность O(1)
-
-Размер:
-
-+ empty - асимптотическая сложность O(1)
-+ size, max_size - асимптотическая сложность O(1)
-+ resize, shrink_to_fit - асимптотическая сложность O(n)
-
-Модификаторы:
-
-+ clear, erase - асимптотическая сложность O(n)
-+ insert, emplace, push_front, push_back, O(1), O(n)
-+ emplace_front, emplace_back, pop_front, pop_back - асимптотическая сложность O(n)
-+ swap - асимптотическая сложность O(1)
-
-Аллокатор:
-
-+ get_allocator
-
-
-### **Упорядоченные ассоциативные контейнеры**
-
-Поиск в последовательных контейнерах достаточно тяжелая операция, более эффективная структура для поиска элементов - дерево.
-
-
-#### **std::set / std::multiset**
-
-```cpp
-template <class Key, class Compare = std::less<Key>,
-		  class Alloc = std::allocator<T>>
-
-class set 
-{
-	using key_type = Key;
-	using value_type = Key;
-	using key_compare = Compare;
-	using value_compare = Compare;
-	//И все остальыне using'и, которые были в std::vector
-}
-```
-
-Реализация сета это красно-черное дерево даёт сбалансированное бинарное дерево поиска, благодаря этом средняя скорость поиска имеет логарифмическую сложность. 
-
-Содержит 5 групп функций:
-
-Размер:
-
-+ empty - асимптотическая сложность O(1)
-+ size, max_size - асимптотическая сложность O(1)
-
-Модификаторы:
-
-+ clear - асимптотическая сложность O(n)
-+ erase - асимптотическая сложность O(1), O(log n), O(n)
-+ insert, emplace - асимптотическая сложность O(log n)
-+ emplace_hint - асимптотическая сложность O(1), O(log n)
-+ swap - асимптотическая сложность O(1)
-+ merge - асимптотическая сложность O(n log n)
-+ extract - асимптотическая сложность O(1), O(log n)
-
-Удаление при помощи erase по итератору работает за константное время, если удаление по ключу - то логарифмическое, и если последний случай с multiset тогда за линейное время.
-
-Так же определяется асимптотическая сложность extract.
-
-Функция emplace_hint может быть использована, чтобы "подсказать" куда вставить элемент - если позиция будет верная - тогда вставка будет за константное время, иначе - логарифмическое.
-
-Важное замечание: extract\insert можно использовать только между контейнерами с одинаковыми алокаторами, иначе это undefined behavior.
-
-Поиск \ нахождение элементов по условиям (Lookup):
-
-+ count, find, contains, equal_range - асимптотическая сложность O(log n)
-+ lower_bound, upper_bound - асимптотическая сложность O(log n)
-
-Contains появилась в C++20 и возвращает bool, в остальном работая как count.
-
-Функция lower_bound для ключа возвращает итератор на элемент, который не меньше по компаратору с переданным.
-
-Функция upper_bound для ключа возвращает итератор на элемент, который больше чем заданный.
-
-
-Наблюдатели (Observers):
-
-+ key_comp, value_comp - асимптотическая сложность O(1)
-
-Аллокатор:
-
-+ get_allocator - асимптотическая сложность O(1)
-
-
-#### **std::map / std::multimap**
-
-```cpp
-template <class Key, class T, class Compare = std::less<Key>,
-		  class Alloc = std::allocator<std::pait<const Key, T>>>
-
-class map 
-{
-	using key_type = Key;
-	using mapped_type = T;
-	using value_type = std::pair<const Key, T>;
-	using key_compare = Compare;
-	using value_compare = Compare;
-	//И все остальыне using'и, которые были в std::vector
-}
-```
-
-Есть 6 групп функций std::map.
-
-Доступ к элементам:
-
-+ at, operator[] - асимптотическая сложность O(log n)
-
-operator[] может использоваться для добавления нового элемента, не только для получения существующего.
-
-Размер\длина:
-
-+ empty - асимптотическая сложность O(1)
-+ size, max_size - асимптотическая сложность O(1)
-
-Модификаторы:
-
-+ clear - асимптотическая сложность O(n)
-+ erase  - асимптотическая сложность O(1), O(log n), O(n)
-+ insert, insert_or_assign, emplace, try_emplace - O(log n)
-+ emplace_hint  - асимптотическая сложность O(1), O(log n)
-+ swap - асимптотическая сложность O(1)
-+ merge - асимптотическая сложность O(n log n)
-+ extract  - асимптотическая сложность O(1), O(log n)
-
-Почти всё действует как в std::set.
-
-Функция insert_or_assing работает как оператор [], отличие в том что возвращается пару - итератор на вставленный элемент и bool определяющий был ли вставлен элемент.
-
-Функция try_emplace - пытается создать объект на месте, но если он уже создан - не будет делать ничего
-
-
-Поиск:
-
-+ count, find, contains, equal_range - асимптотическая сложность O(log n)
-+ lower_bound, upper_bound - асимптотическая сложность O(log n)
-
-Наблюдатели (observers):
-
-+ key_comp, value_comp - асимптотическая сложность O(1)
-
-Аллокатор:
-
-+ get_allocator - асимптотическая сложность O(1)
-
-
-### **Неупорядоченные ассоциативные контейнеры**
-
-
-Особенность неупорядоченных ассоциативных контейнеров заключается в том, что они используют хэш-функцию, для хранения ключей. Это позволяет добиться более быстрого доступа к элементам, в средем за константное время.
-
-#### **std::unordered_set **
-
-```cpp
-template <class Key, class Hash = std::hash<Key>, 
-		  class KeyEqual = std::equal_to<Key>,
-		  class Allocator = std::allocator<Key>>
-class unordered_set
-{
-	//Те же самые using что и в std::set  
-}
-```
-
-
-Содержит те же 5 групп функций, что и std::set:
-
-Размер:
-
-+ empty - асимптотическая сложность O(1)
-+ size, max_size - асимптотическая сложность O(1)
-
-Модификаторы:
-
-+ clear - асимптотическая сложность O(1)
-+ erase - асимптотическая сложность O(1), O(log n), O(n)
-+ insert, emplace - асимптотическая сложность O(1)
-+ emplace_hint - асимптотическая сложность O(1), O(log n)
-+ swap - асимптотическая сложность O(1)
-+ merge - асимптотическая сложность O(n)
-+ extract - асимптотическая сложность O(1), O(n)
-
-Поиск \ нахождение элементов по условиям (Lookup):
-
-+ count, find, contains, equal_range - асимптотическая сложность O(log n)
-+ lower_bound, upper_bound - асимптотическая сложность O(log n)
-
-Наблюдатели (Observers):
-
-+ key_eq, hash_function - асимптотическая сложность O(1)
-
-Аллокатор:
-
-+ get_allocator - асимптотическая сложность O(1)
-
-
-#### **std::unordered_map **
-
-```cpp
-template <class Key, class Hash = std::hash<Key>, 
-		  class KeyEqual = std::equal_to<Key>,
-		  class Allocator = std::allocator<Key>>
-class unordered_map
-{
-	//Те же самые using что и в std::map
-
-	using hasher = Hash;
-	using key_equal = KeyEqual;  
-}
-```
-
-
-
-Присутствуют те же 6 групп функций как и в std::map.
-
-Доступ к элементам:
-
-+ at, operator[] - асимптотическая сложность O(1), O(n)
-
-Размер\длина:
-
-+ empty - асимптотическая сложность O(1)
-+ size, max_size - асимптотическая сложность O(1)
-+ reserve - асимптотическая сложность O(n), O(n^2)
-
-Модификаторы:
-
-+ clear - асимптотическая сложность O(n)
-+ erase  - асимптотическая сложность O(1), O(n)
-+ insert, insert_or_assign, emplace, try_emplace - O(log n)
-+ emplace_hint  - асимптотическая сложность O(1), O(log n)
-+ swap - асимптотическая сложность O(1)
-+ merge - асимптотическая сложность O(n)
-+ extract  - асимптотическая сложность O(1), O(log n)
-
-Поиск:
-
-+ count, find, contains, equal_range - асимптотическая сложность O(log n)
-+ lower_bound, upper_bound - асимптотическая сложность O(log n)
-
-Наблюдатели (observers):
-
-+ key_eq, hash_function - асимптотическая сложность O(1)
-
-Аллокатор:
-
-+ get_allocator - асимптотическая сложность O(1)
-
-
-Функции load factor, max load factor позволяют регулировать количество элементов на bucket'е. 
-По умолчанию это 1.0. Значение больше - создаст больше колизий, но потребует меньше памяти, значение меньше - наоборот.
-
-
-### Адаптеры
-
-Это разновидность контейнеров, которые могут использовать для своей реализации другой класс контейнера.
-
-#### **std::stack**
-
-```cpp
-template <class T,
-		  class Container = std::deque<T>>
-
-class stack
-{
-	using container type = Containter;
-	//value_type, size_type, reference, const_reference
-
-	Container c;
-}
-```
-
-Функции:
-
-+ top - O(1)
-
-Элемент на вершине стека.
-
-+ empty - O(1)
-+ size - O(1)
-+ swap - как в контейнере ниже
-+ push, emplace - как в контейнере ниже push_back, emplace_back
-+ pop - как в контейнере pop_back
-
-Условиям функций соответствуют помимо std::deque, std::vector и std::list.
-
-#### **std::queue**
-
-Функции:
-
-+ front, back - O(1)
-+ empty - O(1)
-+ size - O(1)
-+ swap - как в контейнере ниже
-+ push, emplace - сложность как в контейнере ниже у функций push_back, emplace_back  
-+ pop - сложность как в контейнере ниже у pop_front
-
-Типы доступных контейнеров: deque, list.
-std::vector нельзя, у него нет pop_front.
-
-#### **std::priority_queue**
-
-Очередь с приоритетом. По умолчанию нижележайший контейнер это std::vector.
-
-```cpp
-templace <....
-		  class Compare = std::less<typename Container::value_type>>
-class priority_queue
-{ 
-}; // Остальные using схожие
-```
-
-Функции:
-
-+ top - O(1)
-+ empty - O(1)
-+ size - O(1)
-+ swap - как в контейнере ниже
-+ push, emplace - как в контейнере ниже push_back, emplace_back
-+ pop - как в контейнере pop_back
-
-Помимо std::vector могут быть использованы std::list, std::deque.
-Очередь с приоритетом реализуется через кучу, она похожа на дерево.
-На вершине находится максимальный элемент, слева максимальный наследник, справа минимальный наследник.
-
-### Итераторы
-
-Итераторы это обобщенные указатели, которые используются для унифицированного доступа к контейнерам (и не только).
-
-InputIterator:
-
-+ std::istream
-
-ForwardIterator:
-
-+ std::forward_list
-+ std::unordered_set
-+ std::unordered_map
-+ std::unordered_multiset
-+ std::unordered_multimap
-
-BidirectionalIterator:
-
-+ std::list
-+ std::set
-+ std::multiset
-+ std::map
-+ std::multimap
-
-RandomAccess \ ContinuesIterator (C++17):
-
-+ std::array
-+ std::vector
-+ std::string
-+ std::string_view
-+ std::valarray
-
-OutputIterator:
-
-+ std::ostream
-
-Последовательность первых 5 итераторов иерархична, и каждая следующая группа имеет больше возможностей, чем предшествующая.
-
-#### **InputIterator**
-
-```cpp
-//std::istream& is;
-
-std::istreambuf_iterator it {is};
-std::istreambuf_iterator<char> end;
-
-//size_t count = std::distance(it, end); //O(n)
-//Если строчку выше раскоментить, то buf окажется пустой, т.к. it смещён!
-
-std::string buf {it, end};
-```
-
-```cpp
-std::vector<int> v { std::istreambuf_iterator<int> { is }, 
-					 std::istreambuf_iterator<int> {}};
-```
-
-#### **ForwardIterator**
-
-У него есть перегруженная функция ++, но отсутствует --.
-
-Оператор += не перегружен, но его эффекта можно достичь при помощи std::next \ std::advance.
-
-Любой контейнер можно сконструировать используя итераторы, таким образом можно из std::forward_list или std::unordered_map создать вектор, с соответствующей нижележащей структурой.
-
-
-#### **BidirectionalIterator**
-
-В дополнение имеет перегрузку --. Для смещения на несколько элементов можно использовать std::prev // std::advance.
-
-Контейнеры имеют реверсированыне итераторы rbegin \ rend.
-
-
-#### **RandomAccessIterator**
-
-В дополнение перегружены операторы +=, -=. Но prev\next\advance - работают так же.
-
-#### **OutputIterator**
-
-```cpp
-std::string buf { "text" };
-
-std::ostream& os;
-
-std::copy(buf.begin(), buf.end(), os); //Копирует строку в поток
-```
-
-#### **std::iterator_trait**
-
-Структуры для метапрограммирования, позволяющие узнать тип итератора.
-
-```cpp
-template <class Iter>
-struct iterator_traits
-{
-	using difference_type = typename Iter::difference_type;
-	using value_type = typename Iter::value_type;
-	using pointer = typename Iter::pointer;
-	using reference = typename Iter::reference;
-	using iterator_category = typename Iter::iterator_category;
-};
-
-template <class T>
-struct iterator_traits<T*>
-{
-	using difference_type = ptrdiff_t;
-	using value_type = T;
-	using pointer = T*;
-	using reference = T&;
-	using iterator_category = random_access_iterator_tag;
-}
-```
-
-Существует 6 типов итератор тэгов:
-
-+ input_interator_tag
-+ forward_iterator_tag - наследуюет предшествующий
-+ bidirectional_iterator_tag - наследуюет предшествующий
-+ random_access_iterator_tag - наследуюет предшествующий
-+ continues_iterator_tag - наследуюет предшествующий
-
-+ output_iterator_tag
-
-```cpp
-template <typename It>
-using it_cat = typename std::iterator_trait<It>::iterator_category;
-
-template <typename It>
-using it_diff = typename std::iterator_trait<It>::difference_type;
-
-template <class It>
-auto distance(It first, It last, std::input_iterator_tag)
-{
-	it_diff<It> dist = 0;
-	for (; frist != last; ++first, ++dist);
-
-	return dist;
-}
-
-template <class It>
-auto distance(It first, It last, std::random_access_iterator_tag)
-{
-	return first < last ? (last - first) : -(first - last);
-}
-
-template <class It>
-auto distance(It first, It last)
-{
-	return distance(first, last, it_cat<It>{});
-}
-```
-
-
-## Алгоритмы и функциональные объекты
-
-### Адаптеры итераторов
-
-#### **std::reverse_iterator**
-
-```cpp
-std::string str {"text"};
-
-std::reverse_iterator<std::string::iterator> rit {str.end()}; // C++11
-auto rit = std::make_reverse_iterator(str.end()); // C++14
-std::reverse_iterator rit{str.end()}; // C++17
-auto rit = str.rbegin();
-
-std::reverse_iterator<std::string::iterator> rend {str.begin()}; // C++11
-auto rend = std::make_reverse_iterator(str.begin()); // C++14
-std::reverse_iterator rend{str.begin()}; // C++17
-auto rend = str.rend();
-
-std::string reversed {rit, rend}; // == "txet"
-``` 
-
-#### **std::back_insert_iterator**
-
-Данный адаптер при резименовании приводит к вставке элемента в конец, в данном случае вызовется std::vector::push_back:
-
-```cpp
-std::vector<uint64_t> generate_vector(size_t n, std::functional<uint64_t()> g)
-{
-	std::vector<uint64_t> res;
-	res.reserve(n);
-	//Функция заполнен n элементов, функтором g
-	std::generate_n(std::back_insert_iterator<std::vector<uint64_t>> {res}, n, g); //C++11
-	std::generate_n(std::back_inserter(res), n, g); //альтернатива
-	std::generate_n(std::back_insert_iterator{res}, n, g); //C++17
-}
-```
-
-#### **std::move_iterator**
-
-При разименовывании адаптера std::move_iterator нижележащий тип кастится к r-value&, т.е. будут извлекаться ресурсы.
-
-```cpp
-std::vector<std::string> v1 { "Hello", "my", "beautiful", "world" };
-std::vector<std::string> v2;
-v2.reserve(v1.size());
-
-using iter_t = decltype(v1)::iterator;
-std::copy(std::move_iterator<iter_t> {v.begin() }, //<iter_t> не нужно для C++17
-		  std::move_iterator<iter_t> {v1.end()}, //<iter_t> не нужно для C++17
-		  std::back_inserter(v2));
-
-//v1 {"", "", "", ""}
-//v2  { "Hello", "my", "beautiful", "world" }
-```
-
-### Функциональные объекты (Function objects)
-
-+ Функции
-+ Функторы - структуры с перегруженным operator()
-+ Lambda
-
-![image info](images/functors.png)
-
-#### **std::hash**
-
-Функтор вычисляющий значения хэш функции для встроенных типов, включая std::string и многие другие. 
-Используется в неупорядоченных ассоциативных контейнерах, а так же может быть удобна при создании хэш функции из структур, содержащих несколько типов, которые умеет обрабатывать std::hash.
-
-![image info](images/hash.png)
-
-```cpp
-struct Person
-{
-	std::string name, surname;
-	uint8_t age;
-}
-
-template <typename T, typename... Rest>
-size_t hash_combine(const T& obj1, const Rest&... objN) 
-{
-	size_t res = 0; //Шаблонный сатанизм из boost:
-	res ^= std::hash<T>{}(obj1) + 0x9e3779b9 + (res << 6) + (res >> 2);
-	(..., (res ^= std::hash<Rest>{}(objN) + 0x9e3779b9 + (res << 6) + (res >> 2)) );
-
-	return res;
-}
-
-namespace std 
-{
-	template <>
-	struct hash<Person>
-	{
-		size_t operator()(const SomeClass& obj) const noexcept
-		{
-			return hash_combine(obj.name, obj.surname, obj.age);
-		}
-	};
-}
-
-Person p { "A", "B", 7};
-const auto hash_value = std::hash<decltype(obj)>{}(obj);
-```
-
-#### Частичное применение функций
-
-Если у нас есть функция с большим количеством аргументов, и мы хотим сделать вторую, которая будет вызывать изначальную, но принимать только част её аргументов, а остальные проталкивать в соответствии с требуемыми условими.
-
-Для этого используется std::bind.
-
-Она принимает функциональный объект и список аргументов.
-
-```cpp
-void f(int a1, int a2, int a3, int a4, double a5)
-{...}
-
-using namespace std::placeholders;
-
-int n = 7;
-auto f2 = std::bind(f, _1, 42, _2, std::cref(n), 24); 
-//без cref мы передадим 7 и она всегда будет такой (копия)
-
-f(1, 2, 3); //1 связано _1, 2 связано _2, 3 не используется
-//вызовется f1(1, 42, 2, n, 24);
-```
-
-Это может быть полезно, например, для функции возвращающей вектор случайных чисел.
-
-```cpp
-std::vector<int64_t> foo(int64_t a, int64_t b, size_t n)
-{
-	std::mt19937_64 engine { std::random_device{}() };
-	std::uniform_int_distribution<int64_t> {a, b};
-
-	std::vector<int64_t> res;
-	res.reserve(n);
-
-	std::generate_n(std::back_inserter(res), n, 
-					[dirst, engine]() mutable { return distr(engine); })
-	//Если сделать захват по ссылкам &disrt, &engine и тогда не mutable
-
-	//Вариант с bind:
-	std::generate_n(std::back_inserter(res), n, 
-					std::bind(std::ref(distr), std::ref(engine)));
-
-	return res;
-}
-```
-
-### Алгоритмы
-
-Причины использования алгоритмов:
-
-+ Делает код чище и читабельней
-+ Нет ошибок связанных с границами
-+ Высокий уровень оптимизации
-+ Исчерпывающая документация
-
-#### Не модифицирующие последовательные алгоритмы
-
-+ std::all_of
-+ std::any_of
-+ std::none_of
-
-Принимают 2 итератора и применяют к каждому элементу предикат.
-
-std::all_of вернёт true, если все элементы удовлетворяют предикату. std::any_of - если хотя бы один удовлетворяет предикату. std::none_of - если нет ни одного элемента, удовлетворяющего предикату.
-
-
-+ std::for_each
-+ std::for_each_n
-
-Проходит по каждому элементу и выполняет функтор, если он модифицирует элемент - он будет изменен.
-
-
-+ std::count
-+ std::count_if
-
-Подсчёт количества значений на диапазоне итераторов. std::count_if вместо значения принимает функциональный объект возвращающий true, если подсчёт необходим.
-
-
-+ std::find
-+ std::find_if
-+ std::find_if_not
-
-Поиск элемента по значению, или по фунциональному объекту возвращающему bool.
-
-+ std::find_first_of
-
-Ищет группу элементов, заданных диапазоном итераторов, и возвращает итератор на первое вхождение одного из этих элементов.
-
-+ std::find_end
-
-Ищет целую цепочку элементов, возвращается итератор на последнее вхождение этой цепочки.
-
-+ std::mismatch
-
-Ищет точку в двух последовательностях, когда элементы не совпадают. Возвращает пару итераторов.
-
-+ std::adjacent_find
-
-??? Ищет пару элементов смежных ??? Возвращает итератор на первый из этих двух элементов.
-
-+ std::search
-
-Находит первое вхождение группы элементов. Т.е. почти как std::find_end.
-
-В C++17 подвезли версию алгоритма с searcher. Например для строки появились searcher'ы, которые работают с алгоритмами Бойера-Мура-Хорспула и Бойера-Мура.
-
-+ std::search_n
-
-Алгоритм ищет n вхождений одного элемента, т.е. когда подряд идет n одинаковых элементов.
-
-#### Модифицирующие последовательные алгоритмы
-
-+ std::copy
-+ std::copy_if
-+ std::copy_n
-
-Копируют элементы из диапазона. Есть вариации когда используется предикат для проверки требуется ли копирование, и функция когда элемент копируется n раз.
-
-+ std::copy_backward
-
-Копирует элементы начиная с последнего копируемого. Может оказаться полезной, при копировании внутри одного контейнера.
-
-+ std::move
-
-Принимает диапазон итераторов, и переносит их по указанному итератору.
-
-+ std::move_backward
-
-Как и прошлый алгоритм, но перемещение начинается с конца диапазона.
-
-+ std::fill
-+ std::fill_n
-
-Заполнения нашей последовательности определенным значением. fill_n вставит только n элементов в последовательность.
-
-+ std::generate
-+ std::generate_n
-
-Выполняет функциональный объект (без аргументов) для диапазона или n элементов.
-
-+ std::transform
-
-Преобразует каждый элемент из последовательности при помощи унарного функционального объекта, и вставляет их по указанному адресу.
-Вторая версия алгоритма принимает 2 контейнера и осуществляет преоразование с использованием бинарного функционального объекта.
-
-+ std::remove
-+ std::remove_if
-
-Принимает последовательность со значением для удаление, либо же функтор вместо значения.
-
-Важно!Функция не удаляет сами элементы, а только смещает их так, словно произошло удаление, после этого необходимо вызвать функцию erase, в которую передать итератор возвращенный функцией std::remove.
-
-+ std::remove_copy
-+ std::remove_copy_if
- 
-Тоже осуществляет удаление, но записывает новую последовательность в другой контейнер. Т.е. изначальная последовательность остаётся без изменений.
-
-+ std::replace
-+ std::replace_if
-
-Ищет элемент и меняет его на выбранное значение. Либо же выполняется предикат и меняется на выбранное значение.
-
-+ std::replace_copy
-+ std::replace_copy_if
-
-Как и выше, но записывает в другую последовательность (контейнер).
-
-+ std::unique
-
-Удаляет повторы элементов. Действует схоже как и std::remove - после требуется вызов erase.
-
-Важно! Последовательность должна быть отсортирована.
-
-+ std::unique_copy 
-
-Как и функция выше, однако копирует в новую последовательность, т.е. не нужен вызов erase - старая последовательность неизменна.
-
-+ std::swap_ranges
-
-Меняет местами объекты в двух последовательностях.
-
-+ std::reverse
-+ std::reverse_copy
-
-Разворачивает последовательность задом наперёд, _copy версия копирует развернутую последовательность внутрь другой последовательности.
-
-+ std::rotate
-+ std::rotate_copy
-
-Задается последовательность и точка в ней, точка становится первым элементов, остальное вращается по кругу 1,2,3,4 -> 3,4,1,2.
-
-+ std::sample
-
-Принимает на вход совокупность элементов, и случайным образом генерируется n элементов.
-
-#### Разделяющие функции (Partitioning algorithms)
-
-Данная группа алгоритмов осуществляет разделения на части.
-
-+ std::partition
-+ std::stable_partition
-+ std::is_partitioned
-+ std::partition_point
-
-По предикату, позволяет разграничить последовательности на левую и правую. Например {x1, y1, x2, y2, x3} -> {x1, x2, x3, y1, y2}.
-
-std::partition не гарантирует исходную последовательность перемещённых объектов, stable_partition гарантирует изначальный порядок исходной последовательности.
-
-std::partition_point находит точку где последовательности разделяются на две под группы.
-std::is_partitioned проверяет что элементы разеделены на 2 последовательности.
-
-+ std::partition_copy
-
-Работает схожим образом, но не изменяет исходную последовательность, а создаёт две новых.
-
-
-#### Алгоритмы с кучей (Heap algorithms)
-
-Куча это сортирующее дерево, у которого корневой элемент максимальный (если куча отсортирована по максимуму), правый дочерний элемент больше левого дочернего элемента.
-
-+ std::make_heap
-
-{2, 3, 4, 5, 6, 7, 8, 9} -> {9, 4, 8, 2, 3, 6, 5, 2}
-
-Возможно передать компоратор, так чтобы сделать минимальную кучу, вместо максимальной.
-
-Чтобы для ноды n найти наследников нужно n * 2 + 1 или + 2.
-
-+ std::is_heap
-+ std::is_heap_untill
-
-Проверяют ялвяется ли последовательность кучей, или есть ли подмножество кучи в последовательности.
-std::is_heap_untill возвращают указатель на первый элемент нарушающий структуру кучи.
-
-Так же есть версии с компораторами.
-
-+ std::push_heap
-
-Алгоритм вставки в кучу, есть версия с компаратором.
-
-+ std::pop_heap
-
-Сортирует кучу, так словно из неё удалён первый элемент.
-
-Если каждый раз применять к последовательности на 1 элемент короче (убирая элемент с начала) - это будет алгоритм пирамидальной сортировки.
-
-+ std::heap_sort
-
-Как и в других случаях с кучей, есть версия принимающая компаратор.
-
-
-#### Сортирующие алгоритмы
-
-+ std::sort
-+ std::stable_sort
-
-Сортирует последовательность, есть возможность передать компаратор.
-
-Если требуется чтобы элементы, которые одинаковые по значению - не переставлялись, есть вариант std::stable_sort, но он медленней.
-
-+ std::is_sorted
-+ std::is_sorted_untill
-
-Проверят упорядоченна ли последовательность. std::is_sorted_untill возвращает итератор на первый элемент, который выбивается из отсортированной последовательности. 
-Есть версии с компораторами.
-
-+ std::partial_sort
-
-Сортирует только часть последовательности, но другая хранит элементы строго больше или меньше (в зависимости от компоратора) чем отсортированная последовательность.
-
-Алгоритм нужен например когда надо найти 10 лучших значений, но дальше сортировать 1000 элементов массива не нужно.
-
-+ std::partial_sort_copy
-
-Как и алгоритм выше, но копирует всё в отдельную последовательность.
-
-+ std::nth_element
-
-Сортирует только 1 элемент, при этом правая и левые части последовательности от него соблюдают условия что каждый их элемент меньше или больше (или равны) отсортированному элементу.
-
-Может быть полезно чтобы найти кто находится на 11 месте, без того чтобы сортировать ни весь массив, ни 11 элементов.
-
-+ std::merge
-+ std::inplace_merge
-
-Соединение отсортированных последовательностей - слияние двух массивов. Результат записывается в отдельную последовательность.
-
-std::inplace_merge - отличается тем, что части находятся в одной последовательности, и результат остаётся в ней же.
-
-#### Бинарные алгоритмы поиска
-
-Когда у нас отсортированна последовательность - появляется возможность осуществлять ускоренные методы поиска.
-
-+ std::lower_bound
-
-Возвращает первый элемент, который не меньше, чем переданный нами как аргумент.
-
-Т.е. {0, 1, 2, 3, 4, 5, 6}; и элемент 3, дадут указатель на 3, т.к. 3 >= 3.
-
-+ std::upper_bound
-
-Возвращает первый элемент, который больше, в примере выше это будет 4.
-
-+ std::binary_search
-
-Алгоритм поиска работающий с использованием upper\lower_bound. Работает за логарифмическое время.
-
-+ std::equal_range
-
-Работает как комбинация std::lower_bound и std::upper_bound, возвращая пару итереторов.
-
-#### Алгоритмы для множеств
-
-+ std::includes
-  
-Проверка является ли одно множество подмножеством другого.
-
-+ std::sef_difference
-
-Разница множеств, из А вычитается B.
-
-+ std::set_intersection
-
-Пересечение множеств.
-
-+ std::set_symmetric_difference
-
-Подсчёт симметричной разницы (всё кроме пересечения).
-
-+ std::set_union
-
-Совокупность двух множеств.
-
-#### min\max алгоритмы
-
-+ std::min_element
-
-Поиск минимального в последовательности.
-
-+ std::max_element
-
-Поиск максимального в последовательности.
-
-+ std::minmax_element
-
-Сочитание двух предшествующих функций.
-
-
-#### Алгоритмы сравнения
-
-+ std::equal
-
-Проверяет равны ли две наших последовательности.
-Но чаще используют std::vector::operator==.
-
-+ std::lexicographical_compare
-
-Лексикографическое сравнение двух последовательностей.
-Используется в следующем алгоритме.
-
-#### Алгоритмы перестановок
-
-Функции комбинаторики:
-
-+ std::next_permutation
-
-Ищет следующую комбинацию, например {1, 1, 2} -> { 1, 2, 1 }.
-
-Возвращает true если ещё возможны перестановки, или false - если они все уже осуществленны.
-
-+ std::prev_permutation
-
-Обратный алгоритм.
-
-+ std::is_permutation
-
-Проверка являются ли 2 последовательности перестановками.
-
-#### Numeric algorithms
-
-+ std::iota
-
-Заполняет последовательность значениями, начиная с переданного значения, и инкрементируя его каждый шаг.
-
-+ std::accumulate
-
-Считает сумму по последовательности, которая может начинаться с инициализированного значения.
-
-+ std::reduce 
-
-Работает схоже, но последок не определен. Необходимо для возможности использовать параллельный алгоритм.
-
-+ std::inner_product
-
-Скалярное произведение двух векторов.
-
-+ std::partial_sum
-
-Суммирует элементы и в каждую ячекую записывает текущую сумму. Например {1, 2, 3, 4} -> {1, 3, 6, 10};
-
-+ std::inclusive_scan
-
-Схоже как выше, учитывает i элемент в i-ой сумме. Может быть паралеллен.
-
-+ std::exclusive_scan
-
-Схоже как выше, но не учитывает i элемент в i-ой сумме. Может быть паралеллен.
-
-+ std::transform_reduce
-+ std::transform_inclusive_scan
-+ std::transform_exclusive_scan
-
-Как выше, но до суммирования ещё применяется функциональный объект.
-
-
-#### Алгоритмы с неинциализованной памятью
-
-+ std::unitialized_copy
-+ std::unitialized_copy_n
-
-Вызывается конструктор от элемента на последовательности. (???)
-
-+ std::unitialized_fill
-+ std::unitialized_fill_n
-
-Действует схоже, но конструирует объекты по передаваемому значению в функцию.
-
-+ std::unitialized_move
-+ std::unitialized_move_n
-
-Как и выше, но перемещение.
-
-+ std::unitialized_default_construct
-+ std::unitialized_default_construct_n
-
-Вызывает дефолтные конструкторы на последовательности.
-
-+ std::unitialized_value_construct
-+ std::unitialized_value_construct_n
-
-Делает value initialization (???).
-
-+ std::destroy
-+ std::destroy_n
-
-Разрушает объекты (вызывает деструктор) на последовательности.
-
-***
-***
 
 # TODO
 
