@@ -5184,6 +5184,8 @@ static_assert(is_iterable<std::map<int, int>>);  // ok
 static_assert(is_iterable<std::stack<int>>); // compile time error
 ```
 
+Где std::true_type и std::false_type это std::integral_constant<bool, true> и std::integral_constant<bool, false>.
+
 Если трубется так же проверять есть ли возможность rbegin\rend:
 
 ```cpp
@@ -5427,10 +5429,6 @@ std::unique_ptr<int[]> unique_array(new int[10]);
 
 ***
 ***
-
-++ TODO скользкие места C++ в UB
-
-++ std::true_type пометить о существовании этих функций, где есть пример их реализации
 
 ++ TODO при описании контейнеров выводить только разницу между ними (не дублировать море лишнего кода и названий полей)
 А может лучше всего даже сделать сводную таблицу, чтобы видеть сразу разницу между всеми контейнерами
