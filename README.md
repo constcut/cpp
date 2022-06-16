@@ -229,6 +229,7 @@
 		- [**new default initialization**](#new-default-initialization)
 		- [**placement new**](#placement-new)
 		- [**std::shared_ptr \ std::unique_ptr массивы**](#stdshared_ptr--stdunique_ptr-массивы)
+	- [**Исплючения**](#исплючения)
 - [Идеомы](#идеомы)
 	- [RAII](#raii)
 	- [IILE](#iile)
@@ -268,6 +269,14 @@ lambda(arguments); //Вызов
 [a, &b] // захват отдельных перменных, по значению и ссылке
 ```
 
+Если необходимо хранить переменную или контейнер lambd:
+
+```cpp
+std::function<return_type(arguments_types)> lamda;
+
+std::vector<std::function<int(int)>> lambas_vector;
+```
+
 ## C++14
 
 ***
@@ -291,6 +300,17 @@ int b = generator(); // == 1
 
 Были введены генерализированные lambds, когда аргументы указаны типа auto.
 
+Стало возможным удобно возвращать lambda из функции:
+
+```cpp
+auto create_lambda(int y) {
+    return [&y](int x) { return x + y; };
+}
+
+auto lamda = CreateLambda(1);
+std::cout << lamda(2); // Выведет 3
+```
+
 ## C++17
 
 ***
@@ -302,6 +322,8 @@ int b = generator(); // == 1
 ```
 
 Необходим спецификатор mutable, для того чтобы иметь возможность вызывать неконстантные версии функций класса.
+
+Стало возможно помечать лямбды constexpr.
 
 
 
@@ -5279,6 +5301,7 @@ std::shared_ptr<int> sp(new int[10], [](int *p) { delete[] p; });
 std::unique_ptr<int[]> unique_array(new int[10]);
 ```
 
+## **Исплючения**
 
 
 # Идеомы
@@ -5316,7 +5339,7 @@ std::unique_ptr<int[]> unique_array(new int[10]);
 
 ++ узнать больше о multiset \ multimap
 
-++TODO при описании контейнеров выводить только разницу между ними (не дублировать море лишнего кода и названий полей)
+++ TODO при описании контейнеров выводить только разницу между ними (не дублировать море лишнего кода и названий полей)
 А может лучше всего даже сделать сводную таблицу, чтобы видеть сразу разницу между всеми контейнерами
 
 ++ STL 
