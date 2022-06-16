@@ -250,6 +250,7 @@
 - [Шоргалки](#шоргалки)
 	- [filesystem](#filesystem)
 	- [threads](#threads)
+		- [Потокобезопасность контейнеров STL](#потокобезопасность-контейнеров-stl)
 	- [regex](#regex-1)
 	- [streams](#streams)
 
@@ -5516,6 +5517,10 @@ std::unique_ptr<int[]> unique_array(new int[10]);
 
 ## threads
 
+### Потокобезопасность контейнеров STL
+
+https://en.cppreference.com/w/cpp/container
+
 ## regex
 
 ## streams
@@ -5523,7 +5528,5 @@ std::unique_ptr<int[]> unique_array(new int[10]);
 
 ***
 ***
-
-Потокобезопасность: https://en.cppreference.com/w/cpp/container
 
 
