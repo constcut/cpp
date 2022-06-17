@@ -243,9 +243,14 @@
 	- [**Исключения**](#исключения)
 	- [**Преобразование типов**](#преобразование-типов)
 - [Идеомы](#идеомы)
-	- [RAII](#raii)
-	- [IILE](#iile)
-	- [pImpl](#pimpl)
+	- [**RAII**](#raii)
+	- [**IILE**](#iile)
+	- [**pImpl**](#pimpl)
+	- [**Non-copyable**](#non-copyable)
+	- [**Copy and Swap**](#copy-and-swap)
+	- [**SBO, SOO, SSO**](#sbo-soo-sso)
+	- [**Curiously recurring template pattern**](#curiously-recurring-template-pattern)
+		- [**Barton–Nackman trick**](#bartonnackman-trick)
 - [Шоргалки](#шоргалки)
 	- [filesystem](#filesystem)
 	- [threads](#threads)
@@ -5504,11 +5509,151 @@ std::unique_ptr<int[]> unique_array(new int[10]);
 
 # Идеомы
 
-## RAII
+## **RAII**
 
-## IILE
+Resource Acquisition Is Initialization: получение некоторого ресурса связанно с созданием объекта, а высвобождение с разрушением.
 
-## pImpl
+Т.к. при выходе из области видимости происходит разрушение локальныйх объектов, RAII безопасно использовать с исключениями.
+
+Примеры в стандартной библиотеке: std::unique_ptr, std::ifstream, std::mutex.
+
+## **IILE**
+
+Immediately Invoked Lambda Expression: идеома используется для комплексной инициализации ресурсов.
+
+Её суть заключается в создании lambd'ы, которая немедленно вызывается.
+
+Код ниже создаёт константный вектор, который может быть заполнен произвольным образом.
+
+```cpp
+const std::vector<int> some_vector = [](){ return std::vector<int>(10);}();
+```
+
+
+## **pImpl**
+
+Private implementation: используется для того чтобы скрыть детали от других разработчиков, а так же помогают уменьшить нагрузку на компилятор при рекомпиляции скрытой реализации за счёт минимизация зависимостей компиляции и разделения интерфейса и реализации.
+
+```cpp
+// my_class.h
+class my_class {
+   //  ... all public and protected stuff goes here ...
+private:
+   class impl; 
+   std::unique_ptr<impl> pimpl; // opaque type here
+};
+
+// my_class.cpp
+class my_class::impl {  // defined privately here
+  // ... all private data and functions: all of these
+  //     can now change without recompiling callers ...
+};
+
+my_class::my_class(): pimpl( new impl )
+{
+  // ... set impl values ...
+}
+```
+
+## **Non-copyable**
+
+Запрет на копирование объекта.
+
+```cpp
+template <class T>
+class NonCopyable
+{
+  public: 
+    NonCopyable (const NonCopyable &) = delete;
+    T & operator = (const T &) = delete;
+
+  protected:
+    NonCopyable () = default;
+    ~NonCopyable () = default; 
+};
+
+class CantCopy : private NonCopyable <CantCopy>
+{};
+```
+
+Другой подход это создание explicit конструктор, который не позволит вызывать его неявным образом:
+
+```cpp
+struct NoImplicitCopy
+{
+  NoImplicitCopy () = default;
+  explicit NoImplicitCopy (const NoImplicitCopy &) = default;
+};
+
+// Ошибка компиляции из-за неявного вызова конструктора копирования при возвращении заначения
+NoImplicitCopy foo()  
+{
+  NoImplicitCopy n;
+  return n;
+}
+
+// Ошибка компиляции из-за неявного вызова конструктора копирования при возвращении заначения
+void bar(NoImplicitCopy n)   
+{
+}
+
+int main(void)
+{
+  NoImplicitCopy n;
+  NoImplicitCopy x(n); // Явный вызов разрешен
+  n = foo();
+  bar(n);
+}
+```
+
+## **Copy and Swap**
+
+Идиома позволяющая разрабатывать устойчивые к исключениям конструкторы копирования.
+
+```cpp
+class Copyable {
+public:
+   Copyable& operator=(const Copyable& value) {
+      if(this != &value)
+          Copyable(value).swap(*this);
+      return *this;
+   }
+
+   void swap(Copyable& value) noexcept;
+};
+```
+
+Устойчивость к исключениям заключается в том, что в операторе присваивания Copyable& operator=(const Copyable&) нет точки, где генерация исключения могла бы привести к утечке памяти.
+
+
+## **SBO, SOO, SSO**
+
+Empty Base Optimization. Оптимизация пустого базового класса. Так же может называться Empty Base Class Optimization (EBCO).
+
+Small Buffer/Object/String Optimization. Оптимизация малых буферов/объектов/строк. Иногда встречается SSO в значении Small Size Optimization, но очень редко, поэтому будем считать, что SSO – это про строки. SBO и SOO – просто синонимы, а SSO – наиболее известный частный случай.
+
+Все структуры данных, использующие динамическую память, безусловно занимают и какое-то место и на стеке. Хотя бы для того, чтобы хранить указатель на кучу. И суть этих оптимизаций в том, чтобы для достаточно малых объектов не запрашивать память у кучи (что относительно затратно), а размещать их в уже выделенном пространстве стека.
+
+## **Curiously recurring template pattern**
+
+Техника при которой класс наследуется от шаблона, в которой изначальный класс передаётся как шаблонный параметр.
+
+```cpp
+template <class T>
+class Base
+{
+    // Функции обращаются к T::functins()
+};
+
+class Derived : public Base<Derived>
+{
+    // ...
+};
+```
+
+### **Barton–Nackman trick**
+
+
 
 
 # Шоргалки
@@ -5529,4 +5674,7 @@ https://en.cppreference.com/w/cpp/container
 ***
 ***
 
+??
+EBO
 
+!!SFINAE подробней
