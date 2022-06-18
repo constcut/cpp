@@ -19,7 +19,7 @@
 	- [**POD-type**](#pod-type)
 	- [**Спецификаторы**](#спецификаторы)
 		- [***'default' + 'deleted' specifiers***](#default--deleted-specifiers)
-		- [***'overrdie' + 'final' sepcifiers***](#overrdie--final-sepcifiers)
+		- [***'override' + 'final' sepcifiers***](#override--final-sepcifiers)
 	- [**Move semantics**](#move-semantics)
 	- [**Perfect forwarding**](#perfect-forwarding)
 	- [**noexcept**](#noexcept)
@@ -47,7 +47,7 @@
 	- [**__has_include(<io>)**](#__has_includeio)
 	- [**allignas (32)**](#allignas-32)
 	- [**static_assert(true)**](#static_asserttrue)
-	- [**Nasted namespaces**](#nasted-namespaces)
+	- [**Nested namespaces**](#nested-namespaces)
 - [Атрибуты](#атрибуты)
 	- [C++11](#c11-4)
 	- [C++14](#c14-4)
@@ -85,7 +85,7 @@
 			- [**Multithreading**](#multithreading)
 			- [**Обновления вызванные новым стандартом**](#обновления-вызванные-новым-стандартом)
 		- [**std::tuple**](#stdtuple)
-			- [**Accosicative unordered containers**](#accosicative-unordered-containers)
+			- [**Associative unordered containers**](#associative-unordered-containers)
 			- [**Smart pointers**](#smart-pointers)
 			- [**std::function**](#stdfunction)
 			- [**std::reference_wrapper**](#stdreference_wrapper)
@@ -113,7 +113,6 @@
 			- [**std::not_fn**](#stdnot_fn)
 			- [**emplace_back**](#emplace_back)
 			- [**std::scoped_lock**](#stdscoped_lock)
-			- [**shared_poiter для массивов**](#shared_poiter-для-массивов)
 			- [**Математические функции**](#математические-функции)
 			- [**Paralel algorithms**](#paralel-algorithms)
 	- [Базовая структура STL](#базовая-структура-stl)
@@ -256,7 +255,8 @@
 	- [**SBO, SOO, SSO**](#sbo-soo-sso)
 	- [**Curiously recurring template pattern**](#curiously-recurring-template-pattern)
 		- [**Barton–Nackman trick**](#bartonnackman-trick)
-- [Шоргалки](#шоргалки)
+- [Стандартная библиотека](#стандартная-библиотека)
+	- [**General**](#general)
 	- [filesystem](#filesystem)
 	- [threads](#threads)
 		- [Потокобезопасность контейнеров STL](#потокобезопасность-контейнеров-stl)
@@ -606,7 +606,7 @@ POD = Тривиальный класс + Класс со стандартным
 Если компилятор может - он постарается вывести noexcept версии функций
 
 
-###  ***'overrdie' + 'final' sepcifiers***
+###  ***'override' + 'final' sepcifiers***
 
 ***
 
@@ -912,7 +912,7 @@ if (int a = f(5); a > 2)
 Теперь можно использовать без строки, просто 1 условие
 
 
-## **Nasted namespaces**
+## **Nested namespaces**
 
 ```cpp
 namespace A::B::C {
@@ -1520,7 +1520,7 @@ std::tie(name, surname) =  get_person(1);
 
 std::tie(year, month, day) > std::tie(year2, month2, day2);
 
-#### **Accosicative unordered containers**
+#### **Associative unordered containers**
 
 unordered_
 _set, _multiset,
@@ -1761,9 +1761,6 @@ Wrapper возвращающий отрицательное\обратное з�
 
 Возможность использовать несколько мьютексов в одном локе.
 
-#### **shared_poiter для массивов**
-
-TODO дополнить.
 
 #### **Математические функции** 
 
@@ -3609,11 +3606,10 @@ template <class... Args>
 void emplace_back(Args&... args) 
 {
 	T* ptr = ....; //Memory region from allocator
-	new (ptr) T { std::forward<Args>(args)...}; //TODO placement new в конспект
+	new (ptr) T { std::forward<Args>(args)...}; 
 }
 ```
 
-TODO более детально про std::forward.
 
 ## **Правила вывода для auto**
 
@@ -5704,7 +5700,14 @@ TODO: найти список наиболее значимых идиом.
 ***
 
 
-# Шоргалки
+# Стандартная библиотека
+
+## **General**
+
++ <any>
++ <atomic>
++ 
+
 
 ## filesystem
 
