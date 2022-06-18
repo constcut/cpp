@@ -257,11 +257,7 @@
 		- [**Barton–Nackman trick**](#bartonnackman-trick)
 - [Стандартная библиотека](#стандартная-библиотека)
 	- [**General**](#general)
-	- [filesystem](#filesystem)
-	- [threads](#threads)
-		- [Потокобезопасность контейнеров STL](#потокобезопасность-контейнеров-stl)
-	- [regex](#regex-1)
-	- [streams](#streams)
+	- [**Language support**](#language-support)
 
 
 # Lambda
@@ -5704,37 +5700,20 @@ TODO: найти список наиболее значимых идиом.
 
 ## **General**
 
-+ <any>
-+ <atomic>
-+ 
++ any
++ atomic
++ chrono
++ functional
++ memory
++ memory_resource
++ scoped_allocator
++ stdexcept
++ system_error
++ optional
++ tuple
++ type_traits
++ utility
++ variant
 
-
-## filesystem
-
-https://en.cppreference.com/w/cpp/filesystem
-
-## threads
-
-https://github.com/methylDragon/coding-notes/blob/master/C%2B%2B/07%20C%2B%2B%20-%20Threading%20and%20Concurrency.md
-
-### Потокобезопасность контейнеров STL
-
-https://en.cppreference.com/w/cpp/container
-
-## regex
-
-https://cpprocks.com/files/c++11-regex-cheatsheet.pdf
-
-## streams
-
-Базовые примеры + модификаторы.
-
-
-***
-TODO: С++20
-
-https://youtu.be/KPuYn_fUdxc
-
-https://github.com/constcut/modern-cpp-features
-
-***
+## **Language support**
+ 
