@@ -5644,18 +5644,18 @@ int main(void)
 
 ## **Copy and Swap**
 
-Идиома позволяющая разрабатывать устойчивые к исключениям конструкторы копирования.
+Идиома позволяющая реализовывать устойчивые к исключениям операции присвоения.
 
 ```cpp
-class Copyable {
+class Copyable 
+{
 public:
-   Copyable& operator=(const Copyable& value) {
-      if(this != &value)
-          Copyable(value).swap(*this);
-      return *this;
-   }
 
-   void swap(Copyable& value) noexcept;
+	Copyable& operator=(Copyable value)
+	{
+		std::swap(value, *this);
+		return *this;
+	}
 };
 ```
 
