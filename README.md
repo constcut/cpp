@@ -252,6 +252,7 @@
 	- [**pImpl**](#pimpl)
 	- [**Non-copyable**](#non-copyable)
 	- [**Copy and Swap**](#copy-and-swap)
+	- [**Remove-erase**](#remove-erase)
 	- [**SBO, SOO, SSO**](#sbo-soo-sso)
 	- [**Curiously recurring template pattern**](#curiously-recurring-template-pattern)
 		- [**Barton–Nackman trick**](#bartonnackman-trick)
@@ -5658,6 +5659,18 @@ public:
 	}
 };
 ```
+
+## **Remove-erase**
+
+Метод для быстрого прореживания вектора\строки:
+
+```cpp
+std::string remove_from = "Some    spaces    were    here"
+remove_from.erase(std::remove_if(remove_from.begin(), remove_from.end(),
+                              [](unsigned char x) { return std::isspace(x); }),
+```
+
+ 
 
 Устойчивость к исключениям заключается в том, что в операторе присваивания нет точки, где генерация исключения могла бы привести к утечке памяти.
 
