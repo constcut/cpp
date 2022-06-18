@@ -256,9 +256,18 @@
 	- [**SBO, SOO, SSO**](#sbo-soo-sso)
 	- [**Curiously recurring template pattern**](#curiously-recurring-template-pattern)
 		- [**Barton–Nackman trick**](#bartonnackman-trick)
-- [Стандартная библиотека](#стандартная-библиотека)
+- [Стандартная библиотека С++](#стандартная-библиотека-с)
 	- [**General**](#general)
+	- [**Memory**](#memory)
 	- [**Language support**](#language-support)
+	- [**Containers**](#containers)
+	- [**Iterators and algorithms**](#iterators-and-algorithms)
+	- [**Localization**](#localization)
+	- [**Strings**](#strings)
+	- [**Streams, files, i/o**](#streams-files-io)
+	- [**Multithreading**](#multithreading-1)
+	- [**Numeric**](#numeric)
+- [TODO](#todo)
 
 
 # Lambda
@@ -1686,6 +1695,8 @@ if (std::filesystem::exists(my_path))
 std::byte a { 0 };
 int x = std::to_integer<int>(a);
 ```
+
+Вычисления могут происходить на этапе компиляции.
 
 #### **std::apply**
 
@@ -5709,7 +5720,7 @@ TODO: найти список наиболее значимых идиом.
 ***
 
 
-# Стандартная библиотека
+# Стандартная библиотека С++
 
 ## **General**
 
@@ -5717,16 +5728,104 @@ TODO: найти список наиболее значимых идиом.
 + atomic
 + chrono
 + functional
-+ memory
-+ memory_resource
-+ scoped_allocator
 + stdexcept
 + system_error
 + optional
 + tuple
 + type_traits
++ typeindex
 + utility
 + variant
 
+
+## **Memory**
+
++ new
++ memory
++ memory_resource
++ scoped_allocator
+
 ## **Language support**
  
++ exception
++ initializer_list
++ limits
++ typeinfo
+  
+
+## **Containers**
+
++ array
++ bitset
++ deque
++ forward_list
++ list
++ map
++ queue
++ set
++ stack
++ unordered_map
++ unordered_set
++ vector
+
+## **Iterators and algorithms**
+
++ algorithm
++ execution
++ iterator
+  
+## **Localization**
+
++ locale
+
+## **Strings**
+
++ charconv
++ format
++ string
++ string_view
++ reg_ex
+
+## **Streams, files, i/o**
+
++ filesystem
++ fstream
++ iomanip
++ ios
++ iosfwd
++ iostream
++ istream
++ ostream
++ sstream
++ streambuf
+  
+## **Multithreading**
+
++ conditional_variable
++ future
++ mutex
++ shared_mutex
++ thread
+
+## **Numeric**
+
++ complex
++ random
++ ratio
++ valarray
++ numeric
+
+
+# TODO
+
+? Реорганизовать структуру:
+
+0) Ключевые слова
+https://en.cppreference.com/w/cpp/keyword
+
+1) Стандартная библиотека
+Все Хэддеры описаны и некоторые представленны
+
+2) Особенности языка
+
+3) Метапрограммирование
