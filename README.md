@@ -19,7 +19,7 @@
 	- [**POD-type**](#pod-type)
 	- [**Спецификаторы**](#спецификаторы)
 		- [***'default' + 'deleted' specifiers***](#default--deleted-specifiers)
-		- [***'overrdie' + 'final' sepcifiers***](#overrdie--final-sepcifiers)
+		- [***'override' + 'final' sepcifiers***](#override--final-sepcifiers)
 	- [**Move semantics**](#move-semantics)
 	- [**Perfect forwarding**](#perfect-forwarding)
 	- [**noexcept**](#noexcept)
@@ -47,7 +47,7 @@
 	- [**__has_include(<io>)**](#__has_includeio)
 	- [**allignas (32)**](#allignas-32)
 	- [**static_assert(true)**](#static_asserttrue)
-	- [**Nasted namespaces**](#nasted-namespaces)
+	- [**Nested namespaces**](#nested-namespaces)
 - [Атрибуты](#атрибуты)
 	- [C++11](#c11-4)
 	- [C++14](#c14-4)
@@ -85,7 +85,7 @@
 			- [**Multithreading**](#multithreading)
 			- [**Обновления вызванные новым стандартом**](#обновления-вызванные-новым-стандартом)
 		- [**std::tuple**](#stdtuple)
-			- [**Accosicative unordered containers**](#accosicative-unordered-containers)
+			- [**Associative unordered containers**](#associative-unordered-containers)
 			- [**Smart pointers**](#smart-pointers)
 			- [**std::function**](#stdfunction)
 			- [**std::reference_wrapper**](#stdreference_wrapper)
@@ -113,7 +113,6 @@
 			- [**std::not_fn**](#stdnot_fn)
 			- [**emplace_back**](#emplace_back)
 			- [**std::scoped_lock**](#stdscoped_lock)
-			- [**shared_poiter для массивов**](#shared_poiter-для-массивов)
 			- [**Математические функции**](#математические-функции)
 			- [**Paralel algorithms**](#paralel-algorithms)
 	- [Базовая структура STL](#базовая-структура-stl)
@@ -253,15 +252,22 @@
 	- [**pImpl**](#pimpl)
 	- [**Non-copyable**](#non-copyable)
 	- [**Copy and Swap**](#copy-and-swap)
+	- [**Remove-erase**](#remove-erase)
 	- [**SBO, SOO, SSO**](#sbo-soo-sso)
 	- [**Curiously recurring template pattern**](#curiously-recurring-template-pattern)
 		- [**Barton–Nackman trick**](#bartonnackman-trick)
-- [Шоргалки](#шоргалки)
-	- [filesystem](#filesystem)
-	- [threads](#threads)
-		- [Потокобезопасность контейнеров STL](#потокобезопасность-контейнеров-stl)
-	- [regex](#regex-1)
-	- [streams](#streams)
+- [Стандартная библиотека С++](#стандартная-библиотека-с)
+	- [**General**](#general)
+	- [**Memory**](#memory)
+	- [**Language support**](#language-support)
+	- [**Containers**](#containers)
+	- [**Iterators and algorithms**](#iterators-and-algorithms)
+	- [**Localization**](#localization)
+	- [**Strings**](#strings)
+	- [**Streams, files, i/o**](#streams-files-io)
+	- [**Multithreading**](#multithreading-1)
+	- [**Numeric**](#numeric)
+- [TODO](#todo)
 
 
 # Lambda
@@ -606,7 +612,7 @@ POD = Тривиальный класс + Класс со стандартным
 Если компилятор может - он постарается вывести noexcept версии функций
 
 
-###  ***'overrdie' + 'final' sepcifiers***
+###  ***'override' + 'final' sepcifiers***
 
 ***
 
@@ -912,7 +918,7 @@ if (int a = f(5); a > 2)
 Теперь можно использовать без строки, просто 1 условие
 
 
-## **Nasted namespaces**
+## **Nested namespaces**
 
 ```cpp
 namespace A::B::C {
@@ -1520,7 +1526,7 @@ std::tie(name, surname) =  get_person(1);
 
 std::tie(year, month, day) > std::tie(year2, month2, day2);
 
-#### **Accosicative unordered containers**
+#### **Associative unordered containers**
 
 unordered_
 _set, _multiset,
@@ -1690,6 +1696,8 @@ std::byte a { 0 };
 int x = std::to_integer<int>(a);
 ```
 
+Вычисления могут происходить на этапе компиляции.
+
 #### **std::apply**
 
 Применение функции к tuple\pair:
@@ -1761,9 +1769,6 @@ Wrapper возвращающий отрицательное\обратное з�
 
 Возможность использовать несколько мьютексов в одном локе.
 
-#### **shared_poiter для массивов**
-
-TODO дополнить.
 
 #### **Математические функции** 
 
@@ -3609,11 +3614,10 @@ template <class... Args>
 void emplace_back(Args&... args) 
 {
 	T* ptr = ....; //Memory region from allocator
-	new (ptr) T { std::forward<Args>(args)...}; //TODO placement new в конспект
+	new (ptr) T { std::forward<Args>(args)...}; 
 }
 ```
 
-TODO более детально про std::forward.
 
 ## **Правила вывода для auto**
 
@@ -5652,22 +5656,34 @@ int main(void)
 
 ## **Copy and Swap**
 
-Идиома позволяющая разрабатывать устойчивые к исключениям конструкторы копирования.
+Идиома позволяющая реализовывать устойчивые к исключениям операции присвоения.
 
 ```cpp
-class Copyable {
+class Copyable 
+{
 public:
-   Copyable& operator=(const Copyable& value) {
-      if(this != &value)
-          Copyable(value).swap(*this);
-      return *this;
-   }
 
-   void swap(Copyable& value) noexcept;
+	Copyable& operator=(Copyable value)
+	{
+		std::swap(value, *this);
+		return *this;
+	}
 };
 ```
 
-Устойчивость к исключениям заключается в том, что в операторе присваивания Copyable& operator=(const Copyable&) нет точки, где генерация исключения могла бы привести к утечке памяти.
+## **Remove-erase**
+
+Метод для быстрого прореживания вектора\строки:
+
+```cpp
+std::string remove_from = "Some    spaces    were    here"
+remove_from.erase(std::remove_if(remove_from.begin(), remove_from.end(),
+                              [](unsigned char x) { return std::isspace(x); }),
+```
+
+ 
+
+Устойчивость к исключениям заключается в том, что в операторе присваивания нет точки, где генерация исключения могла бы привести к утечке памяти.
 
 
 ## **SBO, SOO, SSO**
@@ -5704,34 +5720,112 @@ TODO: найти список наиболее значимых идиом + в�
 ***
 
 
-# Шоргалки
+# Стандартная библиотека С++
 
-## filesystem
+## **General**
 
-https://en.cppreference.com/w/cpp/filesystem
-
-## threads
-
-https://github.com/methylDragon/coding-notes/blob/master/C%2B%2B/07%20C%2B%2B%20-%20Threading%20and%20Concurrency.md
-
-### Потокобезопасность контейнеров STL
-
-https://en.cppreference.com/w/cpp/container
-
-## regex
-
-https://cpprocks.com/files/c++11-regex-cheatsheet.pdf
-
-## streams
-
-Базовые примеры + модификаторы.
++ any
++ atomic
++ chrono
++ functional
++ stdexcept
++ system_error
++ optional
++ tuple
++ type_traits
++ typeindex
++ utility
++ variant
 
 
-***
-TODO: С++20
+## **Memory**
 
-https://youtu.be/KPuYn_fUdxc
++ new
++ memory
++ memory_resource
++ scoped_allocator
 
-https://github.com/constcut/modern-cpp-features
+## **Language support**
+ 
++ exception
++ initializer_list
++ limits
++ typeinfo
+  
 
-***
+## **Containers**
+
++ array
++ bitset
++ deque
++ forward_list
++ list
++ map
++ queue
++ set
++ stack
++ unordered_map
++ unordered_set
++ vector
+
+## **Iterators and algorithms**
+
++ algorithm
++ execution
++ iterator
+  
+## **Localization**
+
++ locale
+
+## **Strings**
+
++ charconv
++ format
++ string
++ string_view
++ reg_ex
+
+## **Streams, files, i/o**
+
++ filesystem
++ fstream
++ iomanip
++ ios
++ iosfwd
++ iostream
++ istream
++ ostream
++ sstream
++ streambuf
+  
+## **Multithreading**
+
++ conditional_variable
++ future
++ mutex
++ shared_mutex
++ thread
+
+## **Numeric**
+
++ complex
++ random
++ ratio
++ valarray
++ numeric
+
+
+# TODO
+
+? Реорганизовать структуру:
+
+0) Ключевые слова
+https://en.cppreference.com/w/cpp/keyword
+
+1) Стандартная библиотека
+Все Хэддеры описаны и некоторые представленны
+
+2) Особенности языка
+
+3) Метапрограммирование
