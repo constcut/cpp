@@ -4,6 +4,7 @@
     - [Операторы](#операторы)
     - [Lambda](#lambda)
     - [Функторы](#функторы)
+    - [Пользовательские литералы](#пользовательские-литералы)
   - [Типы данных](#типы-данных)
     - [Статическая типизация](#статическая-типизация)
     - [Динамическая типезация](#динамическая-типезация)
@@ -167,9 +168,204 @@
 
 ### Операторы
 
+Большинство операторов могут быть переопределены. Список не переопределяемых:
+
+```cpp
+// . выбор члена класса
+// .* выбор указателя на член класса
+// :: разрешение области
+// ?: тернарный оператор
+// # препроцессор: преобразование в строку
+// ## препроцессор: конкатенация
+```
+
+Операторы могут быть определены как член класса, или глобальная функция. Во втором случае функция принимает первым аргументом константную ссылку на объект.
+Рекомендации:
+
+```cpp
+// Все унарные операторы - Член класса
+// = () [] -> ->* - Обязательно член класса
+// += -= /= *= ^= &= |= %= >>= <<= - Член класса
+// Остальные бинарные операторы - Не член класса
+```
+
+Если оператор не является членом классом, он должен быть помечен как friend, для того чтобы работать с private\protected содержимым классов.
+
+Примеры переопределений:
+
+```cpp
+class A 
+{
+    int a;
+
+public:
+
+    A(int a) : a(a) {}
+
+    // Как глобальная функция
+    friend const A operator+(const A& lhs, const A& rhs);
+
+    // Как функция класса
+    A operator-(A& other) {
+        return A(a - other.a);
+    }
+};
+
+const A operator+(const A& lhs, const A& rhs) {
+    return A(lhs.a + rhs.b);
+}
+```
+
+Перегрузка префиксных и постфиксных инкрементов и декриментов отличается тем, что постификсная форма принимает вторым аргументом int, который не используется
+
+
 ### Lambda
 
+Общий вид:
+```cpp
+auto lambda = [capture-list](arguments) mutable
+{
+    ...
+}; //Создание
+
+//Если не указывать mutable - по дефолту аргументы не изменяемы
+
+lambda(arguments); //Вызов
+```
+
+Списки захвата:
+```cpp
+[] // ничего не захватывается
+[=] // локальные переменные по значению
+[&] // локальные переменные по ссылке
+[this] // this по ссылке
+[*this] // объект по копии, нужен mutable для вызова не const f()
+[a, &b] // захват отдельных перменных, по значению и ссылке
+[&r = x] // захват переименованной ссылки
+[x = x + 1] // инициализация переменной, может быть std::move()
+```
+
+Как возвращаемое значение, так и аргументы могут быть типа auto.
+
+Если необходимо хранить переменную или контейнер lambd:
+
+```cpp
+std::function<return_type(arguments_types)> lamda;
+
+std::vector<std::function<int(int)>> lambas_vector;
+```
+
+Cуществует возможность использовать обобщенные лямбды с переменным числом аргументов:
+
+```cpp
+auto variadic_lambda = [](auto... args) { function(args...); }
+// Perfect forwarding:
+auto variadic_lambda_ = [](auto&&... args) { std::forward<decltype(args)>(args)...; }
+```
+
+Так же они могут быть помечены как constexpr, если возможно вычисления будут выполненны на этапе компиляции.
+
 ### Функторы
+
+Функтор это объект, у которого перегружен оператор ().
+Они активно используются в STL, наравне с lambda, и например могут быть переданы в качестве аргумента в функцию сортировки.
+
+Могут быть помечены как constexpr.
+
+Так же существуют функторы из стандартной библиотеки:
+
+```cpp
+// Арифметические
+std::plus<int>{};
+std::minus<int>{};
+std::multiplies<int>{};
+std::divides<int>{};
+std::modulus<int>{};
+std::negate<int>{};
+
+// Логические
+std::less<int>{}(1, 0);
+std::greater<int>{}(1, 0);
+std::equal_to<type>{};
+std::not_equal_to<type>{};
+std::greater_equal<type>{};
+std::less_equal<type>{};
+
+std::logical_and<type>{};
+std::logical_or<type>{};
+std::logical_not<type>{};
+
+// Побитовые
+std::bit_and<type>{};
+std::bit_or<type>{};
+std::bit_xor<type>{};
+std::bit_not<type>{};
+
+// Хэширование
+std::hash<Arithmetic>{};
+std::hash<Enum>{};
+std::hash<std::nullptr_t>{};
+std::hash<T*>{};
+
+// Searchers
+std::default_searcher<ForwardIt, BinaryPredicate>{};
+std::boyer_moore_searcher<ForwardIt, BinaryPredicate>{};
+std::boyer_moore_horspool_searcher<ForwardIt, BinaryPredicate>{};
+
+// Отрицание функции (функция как аргумент)
+std::not_fn<F>{};
+```
+
+### Пользовательские литералы
+
+Стандартные строковые литералы:
+
+```cpp
+"Text" //char 
+L"Text" //wchar_t
+
+u8"Text" //char - utf8
+u"Text" //char16_t
+U"Text"//char32_t
+
+//Сырые строки обрамляются в () в "" и могут иметь произвольный delemiter
+R"delimiter( raw string )delimeter" 
+LR"delimiter( raw string )delimeter"
+
+u8R"delimiter( raw string )delimeter"
+uR"delimiter( raw string )delimeter"
+UR"delimiter( raw string )delimeter"
+```
+
+Помимо стандартных литеральных типов, можно определять пользовательские.
+
+Пример пользовательского литерала преобразования радиан в градусы.
+
+```cpp
+long double operator""_degrees(long double value)
+{
+	return value * M_PI / 180.0;
+}
+
+double degrees = 0.38__degrees
+```
+
+Список возможных аргументов, при определении пользовательского литерала:
+
+```cpp
+( const char * )
+( unsigned long long int )	
+( long double )	
+( char )
+( wchar_t )	
+( char16_t )	
+( char32_t )
+( const char * , std::size_t )	
+( const wchar_t * , std::size_t )	
+( const char16_t * , std::size_t )	
+( const char32_t * , std::size_t )
+```
+
 
 ***
 
@@ -280,6 +476,8 @@
 ***
 
 ## Неопределенное и неуточненное поведение
+
+https://en.cppreference.com/w/cpp/language/eval_order
 
 ***
 
