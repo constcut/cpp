@@ -74,7 +74,8 @@
     - [Erase-remove](#erase-remove)
     - [Copy and swap](#copy-and-swap)
     - [Copy on write](#copy-on-write)
-    - [CRTP](#crtp)
+    - [CRTP (Curiously recurring template pattern)](#crtp-curiously-recurring-template-pattern)
+  - [**IILE**](#iile)
   - [Принципы разработки](#принципы-разработки)
     - [SOLID](#solid)
     - [KISS](#kiss)
@@ -1134,19 +1135,146 @@ https://en.cppreference.com/w/cpp/language/eval_order
 
 ### RAII
 
+Resource Acquisition Is Initialization: получение некоторого ресурса связанно с созданием объекта, а высвобождение с разрушением.
+
+Т.к. при выходе из области видимости происходит разрушение локальныйх объектов, RAII безопасно использовать с исключениями.
+
+Примеры в стандартной библиотеке: std::unique_ptr, std::ifstream, std::mutex, std::string, std::vector.
+
 ### pImpl
+
+Private implementation: используется для того чтобы скрыть детали от других разработчиков, а так же помогают уменьшить нагрузку на компилятор при рекомпиляции скрытой реализации за счёт минимизация зависимостей компиляции и разделения интерфейса и реализации.
+
+```cpp
+// my_class.h
+class my_class {
+   //  ... all public and protected stuff goes here ...
+private:
+   class impl; 
+   std::unique_ptr<impl> pimpl; // opaque type here
+};
+
+// my_class.cpp
+class my_class::impl {  // defined privately here
+  // ... all private data and functions: all of these
+  //     can now change without recompiling callers ...
+};
+
+my_class::my_class(): pimpl( new impl )
+{
+  // ... set impl values ...
+}
+```
 
 ### Non-copyable/non-movable
 
+
 ### Erase-remove
+
+Метод для быстрого прореживания массива данных:
+
+```cpp
+std::string remove_from = "Some    spaces    were    here"
+remove_from.erase(std::remove_if(remove_from.begin(), remove_from.end(),
+                              [](unsigned char x) { return std::isspace(x); }),
+```
+
+
+Устойчивость к исключениям заключается в том, что в операторе присваивания нет точки, где генерация исключения могла бы привести к утечке памяти.
 
 ### Copy and swap
 
+Идиома позволяющая реализовывать устойчивые к исключениям операции присвоения.
+
+```cpp
+class Copyable 
+{
+public:
+
+	Copyable& operator=(Copyable value)
+	{
+		std::swap(value, *this);
+		return *this;
+	}
+};
+```
+
 ### Copy on write
 
-### CRTP
+### CRTP (Curiously recurring template pattern)
 
-+???
+```cpp
+template <class T>
+struct Base
+{
+};
+
+struct Derived : Base<Derived>
+{
+};
+```
+
+Проблемная ситуация, для которой нужна такая странная композиция:
+
+```cpp
+template <class T = intmax_t>
+class Rational
+{
+  ...
+public:
+	Rational() = default;
+
+	friend bool operator<(const Rational<T>& l, const Rational<T>& r) noexcept
+	{
+		return ....;
+	}
+}
+//Однако возникает сложность, если требуется оператор >
+```
+
+Пример:
+
+```cpp
+template <class T>
+struct less_than_comparable
+{
+	friend bool operator>(const T& l, const T& r) noexcept
+	{
+		return r < l;
+	}
+	friend bool operator<=(const T& l, const T& r) noexcept
+	{
+		return !(r < l);
+	}
+	friend bool operator>=(const T& l, const T& r) noexcept
+	{
+		return !(l < r);
+	}
+	
+};
+
+template <class T = uint64_t>
+class Rational : less_than_comparable<Rational<T>>
+{ //Класс объявленый выше с операцией < 
+};
+
+//Обобщенная задача решена!
+```
+
+Эта идеома применима при статическом полиморфизме, но это не даёт большого прироста производительности.
+
+
+## **IILE**
+
+Immediately Invoked Lambda Expression: идеома используется для комплексной инициализации ресурсов.
+
+Её суть заключается в создании lambd'ы, которая немедленно вызывается.
+
+Код ниже создаёт константный вектор, который может быть заполнен произвольным образом.
+
+```cpp
+const std::vector<int> some_vector = [](){ return std::vector<int>(10);}();
+```
 
 ## Принципы разработки
 
