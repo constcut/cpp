@@ -4,7 +4,7 @@
     - [Операторы](#операторы)
     - [Lambda](#lambda)
     - [Функторы](#функторы)
-    - [Пользовательские литералы](#пользовательские-литералы)
+    - [Стандарные и пользовательские литералы](#стандарные-и-пользовательские-литералы)
   - [Типы данных](#типы-данных)
     - [Преобразования типов](#преобразования-типов)
     - [Динамическая типизация](#динамическая-типизация)
@@ -66,13 +66,22 @@
     - [Дата и время](#дата-и-время)
     - [Контейнеры](#контейнеры)
     - [Итераторы](#итераторы)
+      - [**InputIterator**](#inputiterator)
+      - [**ForwardIterator**](#forwarditerator)
+      - [**BidirectionalIterator**](#bidirectionaliterator)
+      - [**RandomAccessIterator**](#randomaccessiterator)
+      - [**OutputIterator**](#outputiterator)
+      - [**std::iterator_trait**](#stditerator_trait)
+      - [**Адаптеры итераторов**](#адаптеры-итераторов)
+        - [**std::reverse_iterator**](#stdreverse_iterator)
+        - [**std::back_insert_iterator**](#stdback_insert_iterator)
+        - [**std::move_iterator**](#stdmove_iterator)
     - [Алгоритмы](#алгоритмы)
     - [Многопоточность и concurency](#многопоточность-и-concurency)
       - [Потоки](#потоки)
       - [Модель памяти и std::atomic](#модель-памяти-и-stdatomic)
       - [Конкурентное выполнение](#конкурентное-выполнение)
   - [Неопределенное и неуточненное поведение](#неопределенное-и-неуточненное-поведение)
-  - [С++20](#с20)
   - [Идеомы](#идеомы)
     - [RAII](#raii)
     - [pImpl](#pimpl)
@@ -90,23 +99,7 @@
     - [BDUF](#bduf)
     - [APO](#apo)
     - [Бритва Окама](#бритва-окама)
-    - [Разделяй и властвуй](#разделяй-и-властвуй)
-  - [Паттерны проектирования](#паттерны-проектирования)
   - [Жизненный цикл ПО](#жизненный-цикл-по)
-  - [Библоитеки](#библоитеки)
-    - [boost](#boost)
-    - [google test\mock](#google-testmock)
-  - [Инструменты](#инструменты)
-    - [Сборка - CMake](#сборка---cmake)
-    - [Разработка - VSCode](#разработка---vscode)
-    - [Отладка - gdb](#отладка---gdb)
-    - [Версирование - git](#версирование---git)
-    - [Линтер](#линтер)
-    - [Анализаторы](#анализаторы)
-      - [Статические](#статические)
-      - [Динамические](#динамические)
-  - [Архитектура](#архитектура)
-  - [Операционные системы](#операционные-системы)
 
 
 # С++
@@ -311,7 +304,7 @@ std::hash<Enum>{};
 std::hash<std::nullptr_t>{};
 std::hash<T*>{};
 
-// Searchers
+// Searchers (для строк)
 std::default_searcher<ForwardIt, BinaryPredicate>{};
 std::boyer_moore_searcher<ForwardIt, BinaryPredicate>{};
 std::boyer_moore_horspool_searcher<ForwardIt, BinaryPredicate>{};
@@ -320,7 +313,7 @@ std::boyer_moore_horspool_searcher<ForwardIt, BinaryPredicate>{};
 std::not_fn<F>{};
 ```
 
-### Пользовательские литералы
+### Стандарные и пользовательские литералы
 
 Стандартные строковые литералы:
 
@@ -773,7 +766,7 @@ bad_variant_access(C++17)
 
 Такие исключительные ситуации не могут быть обработанны при помощи стандартных средств языка C++. 
 
-В компиляторах MS Visual C++ существуют отдельные блоки для этой цели.
+В компиляторах MS Visual C++ существуют отдельные подобные try-catch  блоки для этой цели.
 
 Другой вариант, это обработка POSIX сигналов, например SEG_FAULT.
 
@@ -970,6 +963,8 @@ auto b {2}; //а initializer_list<int>
 #### decltype(auto)
 
 Сохраняет модификаторы.
+
+Но для l-value значений типа T, отличных от имени, всегда даёт T&.
 
 ### type-casting
 
@@ -1229,11 +1224,521 @@ Subsituation Failure Is Not An Error - возможность манипулир
 ### Контейнеры
 ***
 
+**Последовательные контейнеры:**
+
+**std::vector** хранит объекты типа T в динамически выделенной памяти.
+
++ at, operator[] - асимптотическая сложность O(1), at может бросить исключение
++ data - асимптотическая сложность O(1)
++ front, back - асимптотическая сложность O(1)
+
++ empty - асимптотическая сложность O(1)
++ size, max_size, capacity - асимптотическая сложность O(1)
++ resize, reserve, shrink_to_fit - асимптотическая сложность O(n)
+
++ clear, erase - асимптотическая сложность O(n)
++ insert, emplace, push_back - асимптотическая сложность O(1) или O(n)
++ emplace_back, pop_back - асимптотическая сложность O(1)
++ swap - асимптотическая сложность O(1)
+
++ get_allocator - асимптотическая сложность O(1)
+
+**std::array** отличается от std:vector тем, что хранит элементы на стеке, а не в динамически выделенной памяти. В отличии от сырых массивов его можно передавать как по значению, так и по ссылки, и в первом случае он будет копироваться.
+
++ at, operator[] - асимптотическая сложность O(1)
++ data - асимптотическая сложность O(1)
++ front, back - асимптотическая сложность O(1)
+
++ empty - асимптотическая сложность O(1)
++ size, max_size - асимптотическая сложность O(1)
+
++ swap - асимптотическая сложность O(n)
+
+**std::forward_list** представляет собой однонаправленный список. .
+
++ front - асимптотическая сложность O(1)
+
++ empty - асимптотическая сложность O(1)
++ max_size - асимптотическая сложность O(1)
++ resize - асимптотическая сложность O(n)
+
++ clear - асимптотическая сложность O(n)
++ erase_after - асимптотическая сложность O(1)-O(n)
++ insert_after - асимптотическая сложность O(1)-O(n)
++ push_front, emplace_after, emplace_front - асимптотическая сложность O(1)
++ pop_front - асимптотическая сложность O(1)
++ swap - асимптотическая сложность O(1)
++ merge - асимптотическая сложность O(n)
+
++ splice_after - асимптотическая сложность O(1)-O(n)
++ remove, remove_if - асимптотическая сложность O(n)
++ reverse - асимптотическая сложность O(n)
++ sort -  - асимптотическая сложность O(n log n)
++ unique - асимптотическая сложность O(n)
+
++ get_allocator - асимптотическая сложность O(1)
+
+**std::list** двунаправленный список, занимает больше памяти.
+
++ front, back - асимптотическая сложность O(1)
+
++ empty - асимптотическая сложность O(1)
++ max_size - асимптотическая сложность O(1)
++ resize - асимптотическая сложность O(n)
+
++ clear - асимптотическая сложность O(n)
++ erase - асимптотическая сложность O(n)
++ insert - асимптотическая сложность O(1)-O(n)
++ push_front, push_back, emplace, emplace_front, emplace_back - асимптотическая сложность O(1)
++ pop_front, pop_back - асимптотическая сложность O(1)
++ swap - асимптотическая сложность O(1)
++ merge - асимптотическая сложность O(n)
+
++ splice_after - асимптотическая сложность O(1)-O(n)
++ remove, remove_if - асимптотическая сложность O(n)
++ reverse - асимптотическая сложность O(n)
++ sort -  - асимптотическая сложность O(n log n)
++ unique - асимптотическая сложность O(n)
+
++ get_allocator - асимптотическая сложность O(1)
+
+
+**std::deque** - двусторонняя очередь (стек + очередь).
+
++ at, operator[] - асимптотическая сложность O(1)
++ front, back - асимптотическая сложность O(1)
+
++ empty - асимптотическая сложность O(1)
++ size, max_size - асимптотическая сложность O(1)
++ resize, shrink_to_fit - асимптотическая сложность O(n)
+
++ clear, erase - асимптотическая сложность O(n)
++ insert, emplace, push_front, push_back, O(1), O(n)
++ emplace_front, emplace_back, pop_front, pop_back - асимптотическая сложность O(n)
++ swap - асимптотическая сложность O(1)
+
++ get_allocator
+
+
+**Упорядоченные ассоциативные контейнеры:**
+
+**std::set / std::multiset** реализация это красно-черное дерево даёт сбалансированное бинарное дерево поиска, благодаря этом средняя скорость поиска имеет логарифмическую сложность.
+
+std::multiset может хранить повторяющиеся значения, но они так же будут отсортированны.
+
++ empty - асимптотическая сложность O(1)
++ size, max_size - асимптотическая сложность O(1)
+
++ clear - асимптотическая сложность O(n)
++ erase - асимптотическая сложность O(1), O(log n), O(n)
++ insert, emplace - асимптотическая сложность O(log n)
++ emplace_hint - асимптотическая сложность O(1), O(log n)
++ swap - асимптотическая сложность O(1)
++ merge - асимптотическая сложность O(n log n)
++ extract - асимптотическая сложность O(1), O(log n)
+
++ count, find, contains, equal_range - асимптотическая сложность O(log n)
++ lower_bound, upper_bound - асимптотическая сложность O(log n)
+
++ key_comp, value_comp - асимптотическая сложность O(1)
+
++ get_allocator - асимптотическая сложность O(1)
+
+
+**std::map / std::multimap** - словарь.
+
++ at, operator[] - асимптотическая сложность O(log n)
+
++ empty - асимптотическая сложность O(1)
++ size, max_size - асимптотическая сложность O(1)
+
++ clear - асимптотическая сложность O(n)
++ erase  - асимптотическая сложность O(1), O(log n), O(n)
++ insert, insert_or_assign, emplace, try_emplace - O(log n)
++ emplace_hint  - асимптотическая сложность O(1), O(log n)
++ swap - асимптотическая сложность O(1)
++ merge - асимптотическая сложность O(n log n)
++ extract  - асимптотическая сложность O(1), O(log n)
+
++ count, find, contains, equal_range - асимптотическая сложность O(log n)
++ lower_bound, upper_bound - асимптотическая сложность O(log n)
+
++ key_comp, value_comp - асимптотическая сложность O(1)
+
++ get_allocator - асимптотическая сложность O(1)
+
+
+**Неупорядоченные ассоциативные контейнеры:**
+
+Особенность неупорядоченных ассоциативных контейнеров заключается в том, что они используют хэш-функцию, для хранения ключей. Это позволяет добиться более быстрого доступа к элементам, в средем за константное время.
+
+**std::unordered_set:**
+
++ empty - асимптотическая сложность O(1)
++ size, max_size - асимптотическая сложность O(1)
+
++ clear - асимптотическая сложность O(1)
++ erase - асимптотическая сложность O(1), O(log n), O(n)
++ insert, emplace - асимптотическая сложность O(1)
++ emplace_hint - асимптотическая сложность O(1), O(log n)
++ swap - асимптотическая сложность O(1)
++ merge - асимптотическая сложность O(n)
++ extract - асимптотическая сложность O(1), O(n)
+
++ count, find, contains, equal_range - асимптотическая сложность O(log n)
++ lower_bound, upper_bound - асимптотическая сложность O(log n)
+
++ key_eq, hash_function - асимптотическая сложность O(1)
+
++ get_allocator - асимптотическая сложность O(1)
+
+**std::unordered_map:**
+
++ at, operator[] - асимптотическая сложность O(1), O(n)
+
++ empty - асимптотическая сложность O(1)
++ size, max_size - асимптотическая сложность O(1)
++ reserve - асимптотическая сложность O(n), O(n^2)
+
++ clear - асимптотическая сложность O(n)
++ erase  - асимптотическая сложность O(1), O(n)
++ insert, insert_or_assign, emplace, try_emplace - O(log n)
++ emplace_hint  - асимптотическая сложность O(1), O(log n)
++ swap - асимптотическая сложность O(1)
++ merge - асимптотическая сложность O(n)
++ extract  - асимптотическая сложность O(1), O(log n)
+
++ count, find, contains, equal_range - асимптотическая сложность O(log n)
++ lower_bound, upper_bound - асимптотическая сложность O(log n)
+
++ key_eq, hash_function - асимптотическая сложность O(1)
+
++ get_allocator - асимптотическая сложность O(1)
+
+**Рекомендации по выбору:**
+
+
+**Адаптеры контейнеров:**
+
+Это разновидность контейнеров, которые могут использовать для своей реализации другой класс контейнера.
+
+**std::stack:**
+
+Функции:
+
++ top - O(1)
+
++ empty - O(1)
++ size - O(1)
++ swap - как в контейнере ниже
++ push, emplace - как в контейнере ниже push_back, emplace_back
++ pop - как в контейнере pop_back
+
+Ниже лежайщими контейнерами могут быть std::deque, std::vector и std::list.
+
+**std::queue:**
+
++ front, back - O(1)
++ empty - O(1)
++ size - O(1)
++ swap - как в контейнере ниже
++ push, emplace - сложность как в контейнере ниже у функций push_back, emplace_back  
++ pop - сложность как в контейнере ниже у pop_front
+
+Типы нижележащий контейнеров контейнеров: deque, list.
+
+**std::priority_queue:** Очередь с приоритетом, реализуется через кучу.
+
++ top - O(1)
++ empty - O(1)
++ size - O(1)
++ swap - как в контейнере ниже
++ push, emplace - как в контейнере ниже push_back, emplace_back
++ pop - как в контейнере pop_back
+
+Очередь с приоритетом. По умолчанию нижележайший контейнер это std::vector. Помимо него могут быть std::list, std::deque.
+
+
 ### Итераторы
 ***
 
+Итераторы это обобщенные указатели, которые используются для унифицированного доступа к контейнерам и потокам ввода\вывода.
+
+InputIterator:
+
++ std::istream
+
+ForwardIterator:
+
++ std::forward_list
++ std::unordered_set
++ std::unordered_map
++ std::unordered_multiset
++ std::unordered_multimap
+
+BidirectionalIterator:
+
++ std::list
++ std::set
++ std::multiset
++ std::map
++ std::multimap
+
+RandomAccess \ ContinuesIterator (C++17):
+
++ std::array
++ std::vector
++ std::string
++ std::string_view
++ std::valarray
+
+OutputIterator:
+
++ std::ostream
+
+Последовательность первых 5 итераторов иерархична, и каждая следующая группа имеет больше возможностей, чем предшествующая.
+
+#### **InputIterator**
+
+```cpp
+std::istream& is;
+
+std::istreambuf_iterator it {is};
+std::istreambuf_iterator<char> end;
+
+//size_t count = std::distance(it, end); //O(n)
+//Если строчку выше раскоментить, то buf окажется пустой, т.к. it смещён!
+
+std::string buf {it, end};
+```
+
+```cpp
+std::vector<int> v { std::istreambuf_iterator<int> { is }, 
+					 std::istreambuf_iterator<int> {}};
+```
+
+#### **ForwardIterator**
+
+У него есть перегруженная функция ++, но отсутствует --.
+
+Оператор += не перегружен, но его эффекта можно достичь при помощи std::next \ std::advance.
+
+Любой контейнер можно сконструировать используя итераторы, таким образом можно из std::forward_list или std::unordered_map создать вектор, с соответствующей нижележащей структурой.
+
+
+#### **BidirectionalIterator**
+
+В дополнение имеет перегрузку --. Для смещения на несколько элементов можно использовать std::prev // std::advance.
+
+Контейнеры имеют реверсированыне итераторы rbegin \ rend.
+
+
+#### **RandomAccessIterator**
+
+В дополнение перегружены операторы +=, -=. Но prev\next\advance - работают так же.
+
+#### **OutputIterator**
+
+```cpp
+std::string buf { "text" };
+
+std::ostream& os;
+
+std::copy(buf.begin(), buf.end(), os); //Копирует строку в поток
+```
+
+#### **std::iterator_trait**
+
+Структуры для метапрограммирования, позволяющие узнать тип итератора.
+
+#### **Адаптеры итераторов**
+
+##### **std::reverse_iterator**
+
+```cpp
+std::string str {"text"};
+
+std::reverse_iterator rit{str.end()}; // C++17
+auto rit = str.rbegin();
+
+std::reverse_iterator rend{str.begin()}; // C++17
+auto rend = str.rend();
+
+std::string reversed {rit, rend}; // == "txet"
+``` 
+
+##### **std::back_insert_iterator**
+
+Данный адаптер при резименовании приводит к вставке элемента в конец, в данном случае вызовется std::vector::push_back:
+
+```cpp
+std::vector<uint64_t> generate_vector(size_t n, std::functional<uint64_t()> g)
+{
+	std::vector<uint64_t> res;
+	res.reserve(n);
+
+	std::generate_n(std::back_insert_iterator{res}, n, g); //C++17
+}
+```
+
+##### **std::move_iterator**
+
+При разименовывании адаптера std::move_iterator нижележащий тип кастится к r-value&, т.е. будут извлекаться ресурсы.
+
+```cpp
+std::vector<std::string> v1 { "Hello", "my", "beautiful", "world" };
+std::vector<std::string> v2;
+v2.reserve(v1.size());
+
+using iter_t = decltype(v1)::iterator;
+std::copy(std::move_iterator {v.begin() }, 
+		  std::move_iterator {v1.end()}, 
+		  std::back_inserter(v2));
+
+//v1 {"", "", "", ""}
+//v2 { "Hello", "my", "beautiful", "world" }
+```
+
+Так же можно использовать std::make_move_iterator:
+
+```cpp
+std::vector<std::string> v1(vec.begin(), vec.end()); // copy
+
+std::vector<std::string> v2(std::make_move_iterator(vec.begin()),
+							std::make_move_iterator(vec.end())); // move
+```
+
 ### Алгоритмы
 ***
+
+Не модифицирующие последовательные алгоритмы:
+
++ std::all_of
++ std::any_of
++ std::none_of
++ std::count
++ std::count_if
++ std::find
++ std::find_if
++ std::find_if_not
++ std::find_first_of
++ std::find_end
++ std::mismatch
++ std::adjacent_find
++ std::search
++ std::search_n
+
+Следующие 2 алгоритма могут модифицировать последовательность, если передаваемый функтор модифицирует элемент - он будет изменён:
+
++ std::for_each
++ std::for_each_n
+
+Модифицирующие последовательные алгоритмы:
+
++ std::copy
++ std::copy_if
++ std::copy_n
++ std::copy_backward
++ std::move
++ std::move_backward
++ std::fill
++ std::fill_n 
++ std::generate
++ std::generate_n
++ std::transform
++ std::remove
++ std::remove_if
++ std::remove_copy
++ std::remove_copy_if
++ std::replace
++ std::replace_if
++ std::replace_copy
++ std::replace_copy_if
++ std::unique
++ std::unique_copy
++ std::swap_ranges
++ std::reverse
++ std::reverse_copy
++ std::rotate
++ std::rotate_copy
++ std::sample
++ std::shuffle
++ std::shift_left
++ std::shift_right
+
+Разделяющие функции (Partitioning algorithms):
+
++ std::partition
++ std::stable_partition
++ std::is_partitioned
++ std::partition_point
++ std::partition_copy
+
+Алгоритмы с кучей (Heap algorithms): 
+
++ std::make_heap
++ std::is_heap
++ std::is_heap_untill
++ std::push_heap
++ std::pop_heap
++ std::heap_sort
+
+Сортирующие алгоритмы:
+
++ std::sort
++ std::stable_sort
++ std::is_sorted
++ std::is_sorted_untill
++ std::partial_sort
++ std::partial_sort_copy
++ std::nth_element
++ std::merge
++ std::inplace_merge
+
+Бинарные алгоритмы поиска: 
+
++ std::lower_bound
++ std::upper_bound
++ std::equal_range
++ std::binary_search
+
+Алгоритмы для множеств:
+
++ std::includes
++ std::sef_difference
++ std::set_intersection
++ std::set_symmetric_difference
++ std::set_union
+
+Min\max алгоритмы:
+
++ std::min_element
++ std::max_element
++ std::minmax_element
+
+Алгоритмы сравнения:
+
++ std::equal
++ std::lexicographical_compare
+
+Алгоритмы перестановок:
+
++ std::next_permutation
++ std::prev_permutation
++ std::is_permutation
+
+Числовые алгоритмы (Numeric algorithms):
+
++ std::iota
++ std::accumulate
++ std::reduce 
++ std::inner_product
++ std::partial_sum
++ std::inclusive_scan
++ std::exclusive_scan
++ std::transform_reduce
++ std::transform_inclusive_scan
++ std::transform_exclusive_scan
 
 ### Многопоточность и concurency
 ***
@@ -1576,10 +2081,6 @@ int b = (-1) >> 5;
 
 ***
 
-## С++20
-
-***
-
 ## Идеомы
 
 ### RAII
@@ -1787,55 +2288,8 @@ Avoid Premature Optimization / Избегайте преждевременной
 
 Не создавайте ненужных сущностей без необходимости. Будьте прагматичны — подумайте, нужны ли они, поскольку они могут в конечном итоге усложнить вашу кодовую базу.
 
-### Разделяй и властвуй
-
-Парадигма разработки алгоритмов, заключающаяся в рекурсивном разбиении решаемой задачи на две или более подзадачи того же типа, но меньшего размера, и комбинировании их решений для получения ответа к исходной задаче; разбиения выполняются до тех пор, пока все подзадачи не окажутся элементарными.
-
-## Паттерны проектирования
-
-***
 
 ## Жизненный цикл ПО
 
 ***
-
-## Библоитеки
-
-### boost
-
-### google test\mock
-
-***
-
-## Инструменты
-
-### Сборка - CMake
-
-### Разработка - VSCode
-
-### Отладка - gdb
-
-### Версирование - git
-
-### Линтер
-
-### Анализаторы
-
-#### Статические
-
-#### Динамические
-
-
-***
-
-## Архитектура
-
-***
-
-## Операционные системы
-
-***
-***
-
-
 
