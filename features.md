@@ -47,16 +47,6 @@
     - [static_cast](#static_cast)
     - [dynamic_cast](#dynamic_cast)
     - [std::chrono::duration_cast](#stdchronoduration_cast)
-- [Шаблоны](#шаблоны)
-  - [Не типовые шаблонные параметры](#не-типовые-шаблонные-параметры)
-  - [Типовые шаблонные параметры](#типовые-шаблонные-параметры)
-  - [Ключевое слово typename](#ключевое-слово-typename)
-  - [Вариативные шаблоны](#вариативные-шаблоны)
-  - [Специализации шаблонов](#специализации-шаблонов)
-    - [Частичная специализация](#частичная-специализация)
-    - [Полная специализация](#полная-специализация)
-  - [SFINAE](#sfinae)
-  - [type-traits](#type-traits)
 - [Особенности языка](#особенности-языка)
   - [ADL (Argument Dependent Lookup)](#adl-argument-dependent-lookup)
   - [Static intialization fiasco](#static-intialization-fiasco)
@@ -83,6 +73,16 @@
     - [Модель памяти и std::atomic](#модель-памяти-и-stdatomic)
     - [Конкурентное выполнение](#конкурентное-выполнение)
 - [Неопределенное и неуточненное поведение](#неопределенное-и-неуточненное-поведение)
+- [Шаблоны](#шаблоны)
+  - [Не типовые шаблонные параметры](#не-типовые-шаблонные-параметры)
+  - [Типовые шаблонные параметры](#типовые-шаблонные-параметры)
+  - [Ключевое слово typename](#ключевое-слово-typename)
+  - [Вариативные шаблоны](#вариативные-шаблоны)
+  - [Специализации шаблонов](#специализации-шаблонов)
+    - [Частичная специализация](#частичная-специализация)
+    - [Полная специализация](#полная-специализация)
+  - [SFINAE](#sfinae)
+  - [type-traits](#type-traits)
 - [Идеомы](#идеомы)
   - [RAII](#raii)
   - [pImpl](#pimpl)
@@ -996,206 +996,6 @@ std::transform(s.begin(), s.end(), s.begin(), static_cast<int(*)(int)>(std::toup
 
 ***
 
-# Шаблоны
-
-## Не типовые шаблонные параметры
-
-Существует 4 вариации:
-
-```cpp
-template <size_t> // или <size_t N>
-struct int_array { };
-
-template <size_t = 42> // или <size_t N = 42>
-struct array { };
-
-// Начиная с C++11:
-template <size_t ...> // или <size_t ...ints>
-class sizeT_sequence { };
-
-// Начиная с C++17:
-template<auto V> // или <decltype(auto) V>
-struct B {  };
-```
-
-Параметром могут выступать:
-
-+ l-value reference
-+ std::nullptr_t
-+ integral type (bool, char, signed char, unsigned char, short, ...)
-+ pointer
-+ pointer to member
-+ enumeration
-
-## Типовые шаблонные параметры
-
-Три наиболее часто используемых варианта:
-
-```cpp
-template <class> // или <typename T>
-class FalseVector { ... };
-
-template <class T, class Alloc = std::allocator<T>> 
-class TrueVector { ... };
-
-// Начиная с C++11:
-template <class ...> // или <typename ...Types>
-class tuple { .... };
-```
-
-Начиная с C++17 доступны три более экзотических вариантов, шаблон в шаблоне:
-
-```cpp
-template <class K, class T, template <class> class Container>
-class MyMap
-{
-	Container<K> keys;
-	Container<T> values;
-};
-
-template<class T> class my_array { ... };
-
-template<class K, class T, template <class> class Container = my_array>
-class MyMap { ... };
-
-
-template <class K, class T, template <class, class> class ...Map>
-class MyMap : Map<K, T>... { ... };
-```
-
-## Ключевое слово typename
-***
-
-Может быть использованно несколькими разными способами:
-
-```cpp
-template <typename T>
-struct X : B<T> // B<T> is dependent T
-{
-//Если не написать typename T::A может интерпретироваться не верно
-	typename T::A* pa; // T::A зависит T
-
-	void f(B<T>* pb)
-	{
-		static int i = B<T>::i;
-		pb->j++; // pb->j is dependent variable from T ??? B ???
-	}
-}
-```
-
-## Вариативные шаблоны
-
-```cpp
-// C++17:
-
-template <class T1, class T2, class ...TN>
-bool equalsAnyOf(const T1& t1, const T2& t2, const TN&... tN) noexcept
-{
-	// Лаконичное решение через свертку функций, в отличии от рекурсии C++17
-	return ((t1 == t2) || ... || (t1 == tN));
-}
-
-std::cout << equalsAnyOf(0, 'a', 0.0, 42);
-```
-
-Существует четыре вида свёрток функций:
-
-```cpp
-(pack op ...) = (E_1 op (... op (E_N-1 op E_N)))
-(... op pack) = (((E_1 op E_2) op ...) op E_N)
-(pack op ... op init) = (E_1 op (... op (E_N-1 op (E_N op I))))
-(init op ... op pack) = ((((I op E1) op E2) op ...) op E_N)
-```
-
-Операции:
-```cpp
-+,  -,  *,  /,  %,  ^,  &,  |,  =,  <,  >,  <<,  >>,  
-+=,  -=,  *=,  /=,  %=,  ^=, &= |=, 
-<<=, >>=, ==, !=, <=, >=, &&, ||, .*, ->*
-и оператор ,
-```
-
-## Специализации шаблонов
-
-### Частичная специализация
-
-```cpp
-// Шаблонный класс
-template <class T, class Deleter>
-class untique_ptr
-{
-
-public:
-	T* operator->() const noexcept;
-}
-
-// Частичная специализация для шаблонного класса
-// Реалиция unique_ptr для массивов
-template <class T, class Deleter>
-class unique_ptr<T[], Deleter> 
-{
-
-public:
-	T& operator[](size_t idx) noexcept;
-	const T& operator[](size_t idx) const noexcept;
-}
-```
-
-Для функций частичная специализация не доступна.
-
-### Полная специализация
-
-Пример для классов:
-
-```cpp
-template <class T>
-class vector // class template
-{
-	...
-};
-
-// full specialization for vector<bool>:
-template<>
-class vector<bool> 
-{
-	....
-};
-```
-
-Пример для функций:
-
-```cpp
-template <class T>
-void print(const T& obj) // function template
-{
-	std::cout << obj;
-};
-
-class SomeClass {...};
-
-// full specialization for print:
-template<>
-void print<SomeClass>(const SomeClass& obj) 
-{
-	std::cout << obj;
-};
-```
-
-## SFINAE
-
-Subsituation Failure Is Not An Error - возможность манипулировать перегрузками какой-то функции, при необходимости скрывая некоторые из них при помощи создания искусственных ошибок. 
-
-При определении перегрузок функции ошибочные инстанциации шаблонов не вызывают ошибку компиляции, а отбрасываются из списка кандидатов на наиболее подходящую перегрузку. 
-
-В стандартной библиотеке есть метофункция std::enable_if, позволяющая удобно использовать SFINAE.
-
-## type-traits
-
-Позволяют узнать о множестве характеристик шаблонного аргумента.
-
-Подробнее: https://en.cppreference.com/w/cpp/header/type_traits
-
-***
 
 # Особенности языка
 
@@ -1286,15 +1086,15 @@ typedef basic_fstream<wchar_t>     wfstream;
 
 Манипуляторы используются с перегруженным оператором <<, позволя менять внешний вид данных в поток вывода:
 
-* boolalpha :	Alphanumerical bool values 
-* dec :	Use decimal base 
-* endl :	Insert newline and flush 
-* ends :	Insert null character 
-* fixed :	Use fixed floating-point notation 
-* flush :	Flush stream buffer 
-* hex :	Use hexadecimal base 
-* internal :	Adjust field by inserting characters at an internal position 
-* left :	Adjust output to the left 
+* boolalpha :	вывод bool как true\false 
+* dec :	Использовать десятеричную систему счисления 
+* endl :	Добавить переход на новую строку и выполнить flush 
+* ends :	Добавить нулевой символ 
+* fixed :	Использовать фексированную натацию вещественных чисел 
+* flush :	Так же как функция flush 
+* hex :	Использовать шеснадцатеричную систему счисления
+* internal :	Заполняет данные по ширине position 
+* left :	 Заполняет данные слева
 * noboolalpha :	Отменяет ранее установленный манипулятор
 * noshowbase :	Отменяет ранее установленный манипулятор 
 * noshowpoint :	Отменяет ранее установленный манипулятор
@@ -1302,23 +1102,22 @@ typedef basic_fstream<wchar_t>     wfstream;
 * noskipws :	Отменяет ранее установленный манипулятор
 * nounitbuf :	Отменяет ранее установленный манипулятор 
 * nouppercase :	Отменяет ранее установленный манипулятор
-* oct :	Use octal base 
+* oct :	Использовать восмеричную систему счисления 
 * resetiosflags :	Отменяет все ранее установленные манипуляторы
-* right :	Adjust output to the right 
-* scientific :	Use scientific floating-point notation 
-* setbase :	Set basefield flag 
-* setfill :	Set fill character 
-* setiosflags :	Set format flags 
-* setprecision	Set decimal precision 
-* setw :  	Set field width 
-* showbase :	Show numerical base prefixes 
-* showpoint :	Show decimal point 
-* showpos :	Show positive signs 
-* skipws :	Skip whitespaces 
-* unitbuf :	Flush buffer after insertions 
-* uppercase :	Generate upper-case letters 
-* ws :	Extract whitespaces 
-
+* right :	Заполняет данные слева (стандартное поведение)
+* scientific :	Использовать научную нотацию для вещественных чисел
+* setbase :	Установить произвольную систему счислени 
+* setfill :	Заполнять линию указанным символом на setw символов 
+* setiosflags :	Установка флагов из std::ios::
+* setprecision :	Установить количество цифр в вещественном числе 
+* setw : Установить число символов перед выводов, по умолчанию пробел 
+* showbase :	Отображать символы показывающие системы счисления
+* showpoint :	Показывать точку, для вещественных чисел без дробной части
+* showpos :	Показывать значки + и - 
+* skipws :	Пропускать пробелы для потока вывода 
+* unitbuf :	Делать flush после каждой записи
+* uppercase :	Установка верхнего регистра букв 
+* ws : Для потока вывода считывает пробелы, табуляци, переход на новую строку, останавливается на первом "обычном" символе
 
 
 ## Отсчет времени
@@ -2212,6 +2011,208 @@ int b = (-1) >> 5;
 
 
 ***
+
+# Шаблоны
+
+## Не типовые шаблонные параметры
+
+Существует 4 вариации:
+
+```cpp
+template <size_t> // или <size_t N>
+struct int_array { };
+
+template <size_t = 42> // или <size_t N = 42>
+struct array { };
+
+// Начиная с C++11:
+template <size_t ...> // или <size_t ...ints>
+class sizeT_sequence { };
+
+// Начиная с C++17:
+template<auto V> // или <decltype(auto) V>
+struct B {  };
+```
+
+Параметром могут выступать:
+
++ l-value reference
++ std::nullptr_t
++ integral type (bool, char, signed char, unsigned char, short, ...)
++ pointer
++ pointer to member
++ enumeration
+
+## Типовые шаблонные параметры
+
+Три наиболее часто используемых варианта:
+
+```cpp
+template <class> // или <typename T>
+class FalseVector { ... };
+
+template <class T, class Alloc = std::allocator<T>> 
+class TrueVector { ... };
+
+// Начиная с C++11:
+template <class ...> // или <typename ...Types>
+class tuple { .... };
+```
+
+Начиная с C++17 доступны три более экзотических вариантов, шаблон в шаблоне:
+
+```cpp
+template <class K, class T, template <class> class Container>
+class MyMap
+{
+	Container<K> keys;
+	Container<T> values;
+};
+
+template<class T> class my_array { ... };
+
+template<class K, class T, template <class> class Container = my_array>
+class MyMap { ... };
+
+
+template <class K, class T, template <class, class> class ...Map>
+class MyMap : Map<K, T>... { ... };
+```
+
+## Ключевое слово typename
+***
+
+Может быть использованно несколькими разными способами:
+
+```cpp
+template <typename T>
+struct X : B<T> // B<T> is dependent T
+{
+//Если не написать typename T::A может интерпретироваться не верно
+	typename T::A* pa; // T::A зависит T
+
+	void f(B<T>* pb)
+	{
+		static int i = B<T>::i;
+		pb->j++; // pb->j is dependent variable from T ??? B ???
+	}
+}
+```
+
+## Вариативные шаблоны
+
+```cpp
+// C++17:
+
+template <class T1, class T2, class ...TN>
+bool equalsAnyOf(const T1& t1, const T2& t2, const TN&... tN) noexcept
+{
+	// Лаконичное решение через свертку функций, в отличии от рекурсии C++17
+	return ((t1 == t2) || ... || (t1 == tN));
+}
+
+std::cout << equalsAnyOf(0, 'a', 0.0, 42);
+```
+
+Существует четыре вида свёрток функций:
+
+```cpp
+(pack op ...) = (E_1 op (... op (E_N-1 op E_N)))
+(... op pack) = (((E_1 op E_2) op ...) op E_N)
+(pack op ... op init) = (E_1 op (... op (E_N-1 op (E_N op I))))
+(init op ... op pack) = ((((I op E1) op E2) op ...) op E_N)
+```
+
+Операции:
+```cpp
++,  -,  *,  /,  %,  ^,  &,  |,  =,  <,  >,  <<,  >>,  
++=,  -=,  *=,  /=,  %=,  ^=, &= |=, 
+<<=, >>=, ==, !=, <=, >=, &&, ||, .*, ->*
+и оператор ,
+```
+
+## Специализации шаблонов
+
+### Частичная специализация
+
+```cpp
+// Шаблонный класс
+template <class T, class Deleter>
+class untique_ptr
+{
+
+public:
+	T* operator->() const noexcept;
+}
+
+// Частичная специализация для шаблонного класса
+// Реалиция unique_ptr для массивов
+template <class T, class Deleter>
+class unique_ptr<T[], Deleter> 
+{
+
+public:
+	T& operator[](size_t idx) noexcept;
+	const T& operator[](size_t idx) const noexcept;
+}
+```
+
+Для функций частичная специализация не доступна.
+
+### Полная специализация
+
+Пример для классов:
+
+```cpp
+template <class T>
+class vector // class template
+{
+	...
+};
+
+// full specialization for vector<bool>:
+template<>
+class vector<bool> 
+{
+	....
+};
+```
+
+Пример для функций:
+
+```cpp
+template <class T>
+void print(const T& obj) // function template
+{
+	std::cout << obj;
+};
+
+class SomeClass {...};
+
+// full specialization for print:
+template<>
+void print<SomeClass>(const SomeClass& obj) 
+{
+	std::cout << obj;
+};
+```
+
+## SFINAE
+
+Subsituation Failure Is Not An Error - возможность манипулировать перегрузками какой-то функции, при необходимости скрывая некоторые из них при помощи создания искусственных ошибок. 
+
+При определении перегрузок функции ошибочные инстанциации шаблонов не вызывают ошибку компиляции, а отбрасываются из списка кандидатов на наиболее подходящую перегрузку. 
+
+В стандартной библиотеке есть метофункция std::enable_if, позволяющая удобно использовать SFINAE.
+
+## type-traits
+
+Позволяют узнать о множестве характеристик шаблонного аргумента.
+
+Подробнее: https://en.cppreference.com/w/cpp/header/type_traits
+
+***
+
 
 # Идеомы
 
