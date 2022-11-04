@@ -493,6 +493,59 @@ std::shared_ptr<int> sp(new int[10], [](int *p) { delete[] p; });
 std::unique_ptr<int[]> unique_array(new int[10]);
 ```
 
+Так же для объектов существует возможность возвращать shared_ptr. Для этого требуется используя CRTP унаследоваться от enable_shared_from_this. Тогда становится возможным вызывать функцию shared_from_this. Которая вернёт shared_ptr на this.
+
+
+```cpp
+struct A : public std::enable_shared_from_this<A> {
+    A() { std::cout << "+\n"; }
+    ~A() { std::cout << "-\n"; } 
+    std::shared_ptr<A> getA() { return shared_from_this(); }
+};
+ 
+int main() {
+    A *a = new A;
+    std::shared_ptr<A> p1;
+ 
+    {
+        std::shared_ptr<Foo> p2(f);
+        p1 = p2->getA();  // Разделяет владение объектом с p2
+    }
+ 
+    std::cout << "p2 is gone\n";   
+}
+```cpp
+
+
+## Object slicing
+
+Операция присвоения\конструктора копирования, при которой теряется часть данных и виртуальные функции изначального объекта.
+
+```cpp
+class A 
+{
+  int a;
+};
+
+class B : public A
+{
+  int b;
+};
+
+
+B normal;
+
+//Объект будет срезан:
+A sliced = normal;
+
+B another;
+//Все будет в порядке:
+A& fine = another;
+
+//Объект будет содержать смесь normal и another:
+another = normal;
+```
+
 ***
 
 # Структуры и классы: ООП
@@ -673,6 +726,80 @@ class A : public Y, public Z
 * Деструкторы виртуальных базовых классов выполняются после деструкторов не виртуальных базовых классов.
 
 Если у нескольких наследуемых классов есть одинаковые функции, то для доступа к ним нужно либо использовать явное расширение области видимости, либо же использовать ссылку\указатель на требуемый класс, для вызова соответствующей функции.
+
+
+```cpp
+class A 
+{
+  public:
+  
+  A(){ cout << "+A"; }
+  ~A() { cout << "-A" << endl;; }
+};
+
+class B : public A
+{
+  public:
+  
+  B(){ cout << "+B"; }
+  ~B() { cout << "-B"; }
+};
+
+class C : public B 
+{
+public:
+  
+    C() { cout << "+C"; }
+    ~C() { cout << "-C"; }
+};
+
+
+class D : public C, public B
+{
+    D(){ cout << "+D"; }
+    ~D() { cout << "-D"; }
+};
+
+
+class A2 
+{
+  public:
+  
+  A2(){ cout << "+A2"; }
+  virtual ~A2() { cout << "-A2" << endl;; }
+};
+
+class B2 : virtual public A2
+{
+  public:
+  
+  B2(){ cout << "+B2"; }
+  virtual ~B2() { cout << "-B2"; }
+};
+
+class C2 : virtual public B2 
+{
+public:
+
+    C2() { cout << "+C2"; }
+    virtual ~C2() { cout << "-C2"; }
+};
+
+
+class E : public C2, virtual public B2
+{
+    public:
+        
+    E() { cout << "+E"; }
+    virtual ~E() { cout << "-E"; }
+};
+
+
+//Вывод: +A+B+C+A+B+D
+// +A2+B2+C2+E
+// _E_C2_B2_A2
+// _D_B_A_C_B_A
+```
 
 ***
 
