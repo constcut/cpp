@@ -594,3 +594,242 @@ o С другой стороны, Стратегия описывает разн
 алгоритма. Стратегия использует делегирование, чтобы изменять 
 выполняемые алгоритмы на лету. Шаблонный метод работает на уровне 
 классов. Стратегия позволяет менять логику отдельных объектов
+
+
+# Реализация
+
+## Фабричный метод
+
+```cpp
+#include <string>
+#include <memory>
+#include <iostream>
+
+using namespace std;
+
+
+class AbstractProduct 
+{
+public:
+
+    virtual ~AbstractProduct() {}
+    virtual string Operation() const = 0;
+};
+
+
+class ProductFirst : public AbstractProduct 
+{
+public:
+    string Operation() const override {
+        return "First";
+    }
+};
+
+class ProductSecond : public AbstractProduct 
+{
+public:
+    string Operation() const override {
+        return "Second";
+    }
+};
+
+
+class AbstractCreator 
+{
+public:
+    virtual ~AbstractCreator(){};
+    virtual unique_ptr<AbstractProduct> FactoryMethod() const = 0;
+    
+    string Action() const 
+    {
+        auto product = this->FactoryMethod();
+        return product->Operation();
+    }
+};
+
+
+class CreatorFirst : public AbstractCreator 
+{
+public:
+    unique_ptr<AbstractProduct> FactoryMethod() const override {
+        return make_unique<ProductFirst>();
+    }
+};
+
+class CreatorSecond : public AbstractCreator 
+{
+public:
+    unique_ptr<AbstractProduct> FactoryMethod() const override {
+        return make_unique<ProductSecond>();
+    }
+};
+
+
+void ClientCode(const AbstractCreator& creator) {
+    cout << "From creator: " << creator.Action() << endl;
+}
+
+
+int main() 
+{
+    auto creator = make_unique<CreatorFirst>();
+    ClientCode(*creator);
+    cout << "From main: " << creator->FactoryMethod()->Operation() << endl;
+    
+    auto creator2 = make_unique<CreatorSecond>();
+    ClientCode(*creator2);
+    cout << "From main: " << creator2->FactoryMethod()->Operation() << endl;
+    
+    return 0;
+}
+```
+
+
+```
+From creator: First
+From main: First
+From creator: Second
+From main: Second
+```
+
+## Абстрактная фабрика
+
+
+```cpp
+#include <string>
+#include <memory>
+#include <iostream>
+
+using namespace std;
+
+
+class AbstractProductA 
+{
+public:
+    virtual ~AbstractProductA() {};
+    virtual string UsefulFunctionA() const = 0;
+};
+
+
+class ProductA1 : public AbstractProductA 
+{
+public:
+    string UsefulFunctionA() const override {
+        return "A1";
+    }
+};
+
+class ProductA2 : public AbstractProductA 
+{
+    string UsefulFunctionA() const override {
+        return "A2";
+    }
+};
+
+
+class AbstractProductB 
+{
+public:
+    virtual ~AbstractProductB(){};
+    virtual string UsefulFunctionB() const = 0;
+    
+    virtual string AnotherUsefulFunctionB(const AbstractProductA &collaborator) const = 0;
+};
+
+
+class ProductB1 : public AbstractProductB {
+ public:
+  std::string UsefulFunctionB() const override {
+    return "B1";
+  }
+
+  std::string AnotherUsefulFunctionB(const AbstractProductA &collaborator) const override {
+    const std::string result = collaborator.UsefulFunctionA();
+    return "B1 ( " + result + " )";
+  }
+};
+
+
+class ProductB2 : public AbstractProductB 
+{
+public:
+    std::string UsefulFunctionB() const override  {
+        return "B2";
+    }
+    
+    std::string AnotherUsefulFunctionB(const AbstractProductA &collaborator) const override 
+    {
+        const std::string result = collaborator.UsefulFunctionA();
+        return "B2 ( " + result + " )";
+    }   
+};
+
+
+class AbstractFactory 
+{
+public:
+    virtual unique_ptr<AbstractProductA> CreateProductA() const = 0;
+    virtual unique_ptr<AbstractProductB> CreateProductB() const = 0;
+};
+
+
+class Factory1 : public AbstractFactory 
+{
+public:
+    unique_ptr<AbstractProductA> CreateProductA() const override {
+        return make_unique<ProductA1>();
+    }
+    
+    unique_ptr<AbstractProductB> CreateProductB() const override {
+        return make_unique<ProductB1>();
+    }   
+};
+
+
+class Factory2 : public AbstractFactory 
+{
+public:
+    unique_ptr<AbstractProductA> CreateProductA() const override {
+         return make_unique<ProductA2>();
+    }
+    
+    unique_ptr<AbstractProductB> CreateProductB() const override {
+        return make_unique<ProductB2>();
+    }
+};
+
+
+
+void ClientCode(const AbstractFactory &factory) 
+{
+  auto a = factory.CreateProductA();
+  auto b = factory.CreateProductB();
+  
+  std::cout << a->UsefulFunctionA() << endl;
+  std::cout << b->AnotherUsefulFunctionB(*a) << endl;
+}
+
+int main() 
+{
+
+  auto factory1 = make_unique<Factory1>();
+  ClientCode(*factory1);
+
+  auto factory2 = make_unique<Factory2>();
+  ClientCode(*factory2);
+  
+  return 0;
+}
+```
+
+```
+A1
+B1 ( A1 )
+A2
+B2 ( A2 )
+```
+
+## Строитель
+
+
++ про вирт конструктор
